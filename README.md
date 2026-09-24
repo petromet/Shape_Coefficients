@@ -1,0 +1,4967 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Los λ de O'Neill</title>
+<meta name="description" content="Curso por lecciones: ajuste polinómico de patrones REE y coeficientes ortogonales (O'Neill, 2016).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,600&display=swap">
+<style>
+:root{
+  --bg:#f3f4f1; --surface:#fcfcfb; --surface-2:#eceeea; --line:#d5d9d4; --hair:#e2e5e0;
+  --ink:#16202a; --ink-2:#465061; --muted:#626a75; --axis:#aab0ab;
+  --r:#00897a; --r-text:#006d61; --r-wash:rgba(0,137,122,.085); --on-r:#ffffff;
+  --y:#6c4aa8; --y-text:#6c4aa8; --y-wash:rgba(108,74,168,.075);
+  --chip:#16202a; --on-chip:#fcfcfb;
+  --k2:#8a9099; --k3:#2a78d6; --k4:#eb6834; --k5:#16202a;
+  --shadow:0 1px 2px rgba(22,32,42,.06),0 8px 24px rgba(22,32,42,.06);
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0f1216; --surface:#171b20; --surface-2:#1e232a; --line:#303741; --hair:#262c33;
+    --ink:#eef1f4; --ink-2:#b8c0c9; --muted:#8f98a3; --axis:#48515b;
+    --r:#1aa38f; --r-text:#45c7b0; --r-wash:rgba(26,163,143,.12); --on-r:#0f1216;
+    --y:#9372d8; --y-text:#b39bef; --y-wash:rgba(147,114,216,.12);
+    --chip:#eef1f4; --on-chip:#0f1216;
+    --k2:#8f98a3; --k3:#3987e5; --k4:#d95926; --k5:#eef1f4;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0f1216; --surface:#171b20; --surface-2:#1e232a; --line:#303741; --hair:#262c33;
+  --ink:#eef1f4; --ink-2:#b8c0c9; --muted:#8f98a3; --axis:#48515b;
+  --r:#1aa38f; --r-text:#45c7b0; --r-wash:rgba(26,163,143,.12); --on-r:#0f1216;
+  --y:#9372d8; --y-text:#b39bef; --y-wash:rgba(147,114,216,.12);
+  --chip:#eef1f4; --on-chip:#0f1216;
+  --k2:#8f98a3; --k3:#3987e5; --k4:#d95926; --k5:#eef1f4;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.3);
+}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:17.5px;line-height:1.62;font-optical-sizing:auto;-webkit-font-smoothing:antialiased}
+.page{max-width:1200px;margin:0 auto;padding-inline:20px;padding-block:28px 72px}
+.ui{font-family:var(--sans)}
+h1,h2,h3{font-family:var(--serif);text-wrap:balance;line-height:1.18;margin:0}
+h1{font-size:clamp(2.3rem,5.4vw,3.6rem);font-weight:700;letter-spacing:-.015em;font-variation-settings:"opsz" 60}
+h2{font-size:clamp(1.6rem,3.2vw,2.2rem);font-weight:650;letter-spacing:-.01em;font-variation-settings:"opsz" 48}
+h3{font-size:1.28rem;font-weight:650;margin-top:2.1rem;margin-bottom:.5rem}
+p{margin:.65rem 0}
+a{color:inherit;text-decoration-color:var(--line);text-underline-offset:3px}
+a:hover{text-decoration-color:currentColor}
+b,strong{font-weight:650}
+sub,sup{line-height:0;font-size:.72em}
+code,pre{font-family:var(--mono);font-size:.84em}
+:focus-visible{outline:2px solid var(--r);outline-offset:2px;border-radius:4px}
+
+/* variables coloreadas: radio (verde azulado) y datos (violeta) */
+.vr{color:var(--r-text);font-style:italic;font-weight:600}
+.vy{color:var(--y-text);font-style:italic;font-weight:600}
+.kr{color:var(--r-text);font-weight:600}
+.ky{color:var(--y-text);font-weight:600}
+
+/* ---------- Cabecera ---------- */
+.masthead{display:grid;gap:18px;padding-bottom:22px}
+.eyebrow{font-family:var(--sans);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;margin:0}
+.lead{font-size:1.13rem;color:var(--ink-2);max-width:66ch;margin:0}
+.tiles{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.tile{position:relative;width:62px;height:70px;border:1px solid var(--line);background:var(--surface);border-radius:7px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--sans)}
+.tile .z{position:absolute;top:4px;left:6px;font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}
+.tile .sym{font-family:var(--serif);font-weight:650;font-size:21px;line-height:1;margin-top:6px}
+.tile .rv{font-size:11px;color:var(--r-text);font-weight:600;margin-top:5px;font-variant-numeric:tabular-nums}
+.tile.eu{border-style:dashed;border-color:var(--muted)}
+.tile.eu .rv{color:var(--muted)}
+.tile.pm{opacity:.42;border-style:dotted}
+.tiles-note{font-family:var(--sans);font-size:.8rem;color:var(--muted);margin:2px 0 0}
+
+/* ---------- Navegación ---------- */
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line);margin-inline:-20px;padding-inline:20px}
+.tabs-scroll{display:flex;gap:6px;overflow-x:auto;padding-block:10px;scrollbar-width:thin}
+.tab{font-family:var(--sans);font-size:.86rem;font-weight:500;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;white-space:nowrap;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+.tab .n{font-weight:700;font-variant-numeric:tabular-nums}
+.tab[aria-selected="true"]{background:var(--chip);color:var(--on-chip);border-color:var(--chip)}
+.tab:disabled{cursor:default;color:var(--muted);background:transparent;border-style:dashed;padding-inline:12px}
+.tab:not(:disabled):not([aria-selected="true"]):hover{border-color:var(--ink-2)}
+
+main{padding-top:30px}
+.panel{scroll-margin-top:70px}
+.prose{max-width:68ch}
+.wide{max-width:1000px}
+
+/* ---------- Cajas ---------- */
+.note{background:var(--surface-2);border-radius:10px;padding:14px 18px;margin:1.1rem 0}
+.note p{margin:.35rem 0}
+.analogy{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 18px 12px;margin:1.2rem 0}
+.analogy .tag,.tagline{display:block;font-family:var(--sans);font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:2px}
+.analogy p{margin:.2rem 0}
+.eq{font-size:1.12rem;padding:10px 0 10px 18px;margin:.6rem 0;overflow-x:auto;white-space:nowrap}
+.warn{font-family:var(--sans);font-size:.92rem;background:var(--surface-2);border-radius:8px;padding:10px 14px}
+details.curious{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:10px 0;margin:1.3rem 0}
+details.curious summary{cursor:pointer;font-family:var(--sans);font-weight:600;font-size:.92rem;color:var(--ink-2)}
+details.curious[open] summary{margin-bottom:.4rem}
+.goto{font-family:var(--sans);font-size:.84rem;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:6px 13px;cursor:pointer;margin:.2rem .3rem .2rem 0}
+.goto::before{content:"◧ ";color:var(--muted)}
+.goto:hover{border-color:var(--ink-2)}
+
+table{border-collapse:collapse;font-family:var(--sans);font-size:.88rem;font-variant-numeric:tabular-nums}
+th,td{padding:6px 10px;text-align:right;border-bottom:1px solid var(--hair)}
+thead th{font-weight:600;color:var(--ink-2);border-bottom:1px solid var(--line);vertical-align:bottom;background:var(--surface-2)}
+tbody th{text-align:left;font-family:var(--serif);font-weight:650;font-size:1rem}
+.table-wrap{overflow-x:auto;margin:1rem 0;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.table-wrap table{width:100%}
+td.cy{color:var(--y-text);font-weight:600}
+td.cr{color:var(--r-text);font-weight:600}
+tr.excl td,tr.excl th{color:var(--muted);font-weight:400}
+tr.excl td.cy,tr.excl td.cr{color:var(--muted)}
+tfoot td,tfoot th{border-bottom:none;font-weight:600;background:var(--surface-2)}
+.mini{font-size:.95rem;margin:.8rem 0}
+.mini th,.mini td{padding:4px 12px;text-align:center}
+.mini tbody th{font-family:var(--sans);font-size:.85rem;font-weight:600;color:var(--ink-2);text-align:left}
+
+/* ---------- Programa ---------- */
+.legend-row{display:flex;flex-wrap:wrap;gap:10px 22px;font-family:var(--sans);font-size:.9rem;margin:1rem 0 1.4rem}
+.legend-row span{display:inline-flex;align-items:center;gap:8px}
+.sw{width:22px;height:10px;border-radius:3px;display:inline-block}
+.sw.r{background:var(--r)} .sw.y{background:var(--y)}
+.syllabus{list-style:none;margin:1.2rem 0;padding:0;display:grid;gap:10px}
+.syllabus li{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:6px 16px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.syllabus .num{font-family:var(--serif);font-weight:700;font-size:2rem;line-height:1;color:var(--ink-2);font-variant-numeric:lining-nums}
+.syllabus li.avail{border-color:var(--ink-2);box-shadow:var(--shadow)}
+.syllabus li.avail .num{color:var(--ink)}
+.syllabus li.opt{background:transparent;border-style:dashed}
+.syllabus h3{margin:0;font-size:1.12rem}
+.syllabus p{margin:.3rem 0 .5rem;color:var(--ink-2);font-size:1rem}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:2px 12px;margin:0;font-family:var(--sans);font-size:.82rem}
+.meta dt{color:var(--muted);font-weight:600}
+.meta dd{margin:0;color:var(--ink-2)}
+.status{font-family:var(--sans);font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:4px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.avail .status{background:var(--chip);color:var(--on-chip);border-color:var(--chip)}
+.materials{font-size:1rem;padding-left:1.1rem}
+.materials li{margin:.35rem 0}
+@media (max-width:640px){
+  .syllabus li{grid-template-columns:40px minmax(0,1fr)}
+  .syllabus .status{grid-column:2;justify-self:start}
+  .syllabus .num{font-size:1.6rem}
+}
+
+/* ---------- Mapa ---------- */
+.map-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;margin:1.2rem 0 .6rem}
+.map{display:block;width:100%;min-width:780px;height:auto;color:var(--ink)}
+.map .lane-r{fill:var(--r-wash)} .map .lane-y{fill:var(--y-wash)} .map .lane-n{fill:var(--surface-2)}
+.map .box{fill:var(--surface);stroke:var(--line);stroke-width:1}
+.map .box.rb{stroke:var(--r)}
+.map .t1{font:600 13px var(--sans);fill:var(--ink)}
+.map .t2{font:400 12px var(--sans);fill:var(--ink-2)}
+.map .t2.r{fill:var(--r-text);font-weight:600}
+.map .tl{font:700 10.5px var(--sans);letter-spacing:.08em;fill:var(--muted)}
+.map .ar{stroke:var(--ink-2);stroke-width:1.4;fill:none}
+.map .ar.r{stroke:var(--r);stroke-width:1.8}
+.map .ah{fill:var(--ink-2)} .map .ahr{fill:var(--r)}
+.map .bd circle{fill:var(--r)} .map .bd text{font:700 12px var(--sans);fill:var(--on-r)}
+.map .al{font:600 12px var(--sans);fill:var(--r-text)}
+.map .alk{font:500 12px var(--sans);fill:var(--ink-2)}
+.stations{list-style:none;padding:0;margin:1.2rem 0;display:grid;gap:12px}
+.stations li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:12px;align-items:start}
+.bdg{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--r);color:var(--on-r);font-family:var(--sans);font-weight:700;font-size:.85rem;margin-top:2px}
+.bdg.ext{background:transparent;color:var(--r-text);border:1.5px dashed var(--r)}
+.stations b{font-weight:650}
+.stations .where{font-family:var(--sans);font-size:.8rem;color:var(--muted);font-weight:600;white-space:nowrap}
+
+/* ---------- Lección ---------- */
+.lesson-head{display:grid;gap:12px;max-width:74ch}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-top:8px;overflow:hidden}
+.facts div{padding:12px 16px;border-left:1px solid var(--line)}
+.facts div:first-child{border-left:none}
+.facts dt{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.facts dd{margin:3px 0 0;font-size:.93rem;color:var(--ink)}
+@media (max-width:760px){.facts{grid-template-columns:1fr}.facts div{border-left:none;border-top:1px solid var(--line)}.facts div:first-child{border-top:none}}
+
+.lesson-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.06fr);grid-template-areas:"a fig" "b fig";column-gap:44px;margin-top:10px}
+.lg-a{grid-area:a}.lg-b{grid-area:b}.lg-fig{grid-area:fig;min-width:0}
+.lg-fig .sticky{position:sticky;top:calc(env(safe-area-inset-top,0px) + 70px)}
+@media (max-width:1020px){
+  .lesson-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"a" "fig" "b"}
+  .lg-fig .sticky{position:static}
+}
+.after{max-width:78ch}
+
+/* figura laboratorio */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow)}
+figure{margin:1.2rem 0}
+.lab{padding:14px 14px 12px;scroll-margin-top:72px}
+.lab-head{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:.86rem}
+.lab-head label{font-weight:600;color:var(--ink-2)}
+select{font-family:var(--sans);font-size:.88rem;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.lab-meta{color:var(--muted);font-size:.8rem}
+.ctrl-row{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin-top:10px}
+.seg{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+.seg-label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-right:2px}
+.seg button{font-family:var(--sans);font-size:.82rem;font-weight:600;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:5px 10px;border-radius:7px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--chip);color:var(--on-chip);border-color:var(--chip)}
+.chk{display:inline-flex;align-items:center;gap:6px;font-size:.84rem;color:var(--ink-2);cursor:pointer}
+.chk input{accent-color:var(--y);width:16px;height:16px}
+.plot{position:relative;margin-top:8px;min-height:270px}
+.plot svg{display:block;overflow:visible}
+.plot .gl{stroke:var(--hair);stroke-width:1}
+.plot .axis{stroke:var(--axis);stroke-width:1}
+.plot .tick{font:400 11.5px var(--sans);fill:var(--muted);font-variant-numeric:tabular-nums}
+.plot .atitle{font:600 11.5px var(--sans);fill:var(--ink-2)}
+.plot .elab{font:600 11.5px var(--sans);fill:var(--ink-2)}
+.plot .elab.ghost{fill:var(--muted);opacity:.55;font-weight:500}
+.plot .elab.eu{fill:var(--muted)}
+.plot .pline{stroke:var(--y);stroke-width:1.5;opacity:.38}
+.plot .eb line{stroke:var(--y);stroke-width:1.5;opacity:.75}
+.plot .pt .dot{fill:var(--y);stroke:var(--surface);stroke-width:2}
+.plot .pt.eu .dot{fill:var(--surface);stroke:var(--muted);stroke-width:1.8}
+.plot .pt .hit{fill:transparent;cursor:default}
+.plot .pt:focus{outline:none}
+.plot .pt:focus .dot,.plot .pt:hover .dot{stroke:var(--ink);stroke-width:2}
+.tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:8px;padding:8px 10px;font-family:var(--sans);font-size:.8rem;line-height:1.35;display:grid;gap:2px;max-width:250px;z-index:5}
+.tip strong{font-size:.95rem;color:var(--ink)}
+.tip .muted{color:var(--muted)}
+.lab figcaption,.fig-cap{font-family:var(--sans);font-size:.86rem;color:var(--ink-2);line-height:1.45;margin-top:6px}
+.lab figcaption b{color:var(--ink)}
+#rulers{width:100%;min-height:196px}
+#rulers svg{display:block}
+#rulers .rule{stroke:var(--ink-2);stroke-width:1.5}
+#rulers .rule.r{stroke:var(--r);stroke-width:2}
+#rulers .rtick{stroke:var(--ink-2);stroke-width:1.2}
+#rulers .rtick.r{stroke:var(--r)}
+#rulers .conn{stroke:var(--r);stroke-width:1.2;opacity:.6}
+#rulers .ghost{opacity:.4}
+#rulers .rsym{font:600 12px var(--sans);fill:var(--ink)}
+#rulers .rnum{font:400 10.5px var(--sans);fill:var(--muted);font-variant-numeric:tabular-nums}
+#rulers .rtitle{font:700 10.5px var(--sans);letter-spacing:.06em;fill:var(--muted)}
+#rulers .rtitle.r{fill:var(--r-text)}
+.fig-plain{padding:12px 12px 10px}
+
+ol.reasons{padding-left:1.3rem}
+ol.reasons li{margin:.55rem 0}
+.aside-note{font-size:1rem;color:var(--ink-2)}
+
+.lambda0{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 22px;align-items:center;background:var(--surface);border:1px solid var(--ink-2);border-radius:14px;padding:18px 22px;margin:1.4rem 0;box-shadow:var(--shadow)}
+.lambda0 .big{font-family:var(--serif);font-size:2.4rem;font-weight:700;line-height:1;white-space:nowrap}
+.lambda0 p{margin:.2rem 0}
+@media (max-width:560px){.lambda0{grid-template-columns:1fr}}
+
+pre.vba{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;line-height:1.55;font-size:.8rem;color:var(--ink)}
+pre.vba .c{color:var(--muted)}
+pre.vba .hr{color:var(--r-text);font-weight:500}
+pre.vba .hy{color:var(--y-text);font-weight:500}
+
+.practice{display:grid;gap:14px;margin:1rem 0}
+.ex{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+.ex p{margin:.2rem 0 .6rem}
+.ex form{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-family:var(--sans)}
+.ex input{font-family:var(--sans);font-size:.95rem;width:120px;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.ex button{font-family:var(--sans);font-size:.88rem;font-weight:600;padding:7px 14px;border-radius:8px;border:1px solid var(--chip);background:var(--chip);color:var(--on-chip);cursor:pointer}
+.ex button.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.fb{font-family:var(--sans);font-size:.9rem;margin-top:8px;color:var(--ink-2)}
+.fb.ok::before{content:"✓ ";color:var(--r-text);font-weight:700}
+.fb.no::before{content:"↻ ";color:var(--y-text);font-weight:700}
+
+.summary{padding-left:1.2rem}
+.summary li{margin:.4rem 0}
+.next{background:var(--surface-2);border-radius:12px;padding:16px 20px;margin:1.6rem 0}
+.sources{font-size:.92rem;color:var(--ink-2);padding-left:1.2rem}
+.sources li{margin:.3rem 0}
+/* ---------- Lección 2 ---------- */
+.sliders{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 18px;margin-top:12px}
+.sliders label{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:.8rem;font-weight:600;color:var(--ink-2)}
+.sliders output{font-variant-numeric:tabular-nums;color:var(--ink);font-weight:700;font-size:.9rem}
+.sliders input[type=range]{width:100%;accent-color:var(--ink);margin:4px 0 0}
+@media (max-width:520px){.sliders{grid-template-columns:1fr}}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.btn{font-family:var(--sans);font-size:.84rem;font-weight:600;padding:6px 12px;border-radius:8px;border:1px solid var(--chip);background:var(--chip);color:var(--on-chip);cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.readouts{display:grid;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));gap:8px;margin-top:6px;font-family:var(--sans)}
+.ro{background:var(--surface-2);border-radius:8px;padding:7px 10px}
+.ro .k{font-size:.68rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.ro .v{font-size:1.05rem;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.3}
+.ro .s{font-size:.72rem;color:var(--muted);line-height:1.35}
+.meter{position:relative;height:7px;border-radius:4px;background:var(--hair);margin:7px 0 2px}
+.meter .fill{position:absolute;left:0;top:0;bottom:0;border-radius:4px;background:var(--ink-2)}
+.meter .mk{position:absolute;top:-4px;width:2px;height:15px;margin-left:-1px;background:var(--ink)}
+.meter .mk.h{background:var(--muted);opacity:.8}
+.eqline{font-family:var(--serif);font-size:.95rem;margin:8px 0 0;color:var(--ink-2)}
+.eqline b{color:var(--ink)}
+.plot .fitline{stroke:var(--ink);stroke-width:2;stroke-linecap:round}
+.plot .spring{stroke:var(--ink-2);stroke-width:1.1;fill:none;opacity:.8}
+.plot .rbar{stroke:var(--r);stroke-width:1.2}
+.plot .rbar-t{font:600 11px var(--sans);fill:var(--r-text)}
+.plot .pivot{fill:var(--r);stroke:var(--surface);stroke-width:2}
+.plot .resbar{fill:var(--y);opacity:.85}
+.plot .clipmk{fill:var(--surface)}
+.plot .halo{paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round}
+.plot .zero{stroke:var(--axis);stroke-width:1}
+.plot .band{fill:var(--surface-2)}
+.plot .band-t{font:700 10.5px var(--sans);letter-spacing:.06em;fill:var(--muted)}
+.plot .extrap{stroke:var(--ink-2);stroke-width:1.5;stroke-dasharray:5 4;opacity:.75}
+.plot .odot{fill:var(--ink);stroke:var(--surface);stroke-width:2}
+.plot .olab{font:600 11.5px var(--sans);fill:var(--ink)}
+.table-wrap table.mini{margin:0}
+
+/* ---------- Lección 3 ---------- */
+.shapes{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px;margin:1rem 0}
+.shape{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 8px 7px;text-align:center;font-family:var(--sans)}
+.shape svg{display:block;width:100%;height:auto;max-width:150px;margin:0 auto 4px}
+.shape .sc{stroke:var(--ink);stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.shape .sb{fill:var(--surface-2)}
+.shape b{display:block;font-size:.8rem}
+.shape span{font-size:.74rem;color:var(--muted)}
+.mtx-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px 10px;margin:1rem 0}
+.mtx-top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px;font-family:var(--sans);font-size:.82rem;color:var(--ink-2)}
+.mtx-row{display:flex;align-items:center;gap:10px;min-width:max-content;font-family:var(--sans);font-variant-numeric:tabular-nums}
+.mblk{display:flex;flex-direction:column;align-items:flex-start;gap:5px}
+.mlab{font-size:.76rem;font-weight:700;color:var(--muted);white-space:nowrap}
+.mtx{display:grid;gap:3px;padding:4px 5px;border-left:2px solid var(--ink-2);border-right:2px solid var(--ink-2);border-radius:7px}
+.mtx span{padding:3px 5px;border-radius:4px;font-size:.78rem;text-align:right;white-space:nowrap;transition:background .15s}
+.mtx.al span{background:var(--r-wash)}
+.mtx.al span.hl{background:var(--r);color:var(--on-r)}
+.mtx.be span{background:var(--y-wash)}
+.mtx.un span{font-family:var(--serif);font-style:italic;font-weight:600;font-size:.92rem;text-align:center}
+.mtx-op{font-size:1.25rem;color:var(--ink-2);padding-top:18px}
+.mtx-sol{font-family:var(--sans);font-size:.84rem;margin-top:10px;color:var(--ink-2);line-height:1.5}
+.mtx-sol b{color:var(--ink);font-variant-numeric:tabular-nums}
+.coefs{font-family:var(--sans);font-size:.8rem;color:var(--ink-2);margin-top:8px;line-height:1.55}
+.coefs b{font-variant-numeric:tabular-nums;color:var(--ink);white-space:nowrap}
+.plot .band2{fill:var(--y-wash)}
+.plot .band2-t{font:600 10px var(--sans);fill:var(--y-text)}
+.plot .curve{stroke:var(--ink);stroke-width:2;fill:none;stroke-linejoin:round}
+/* ---------- Lección 4 ---------- */
+.flow{max-width:900px}
+.flow > .prose{max-width:68ch}
+.figbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:14px 14px 12px;margin:1.3rem 0}
+.figbox .ctrl-row{margin-top:0}
+.figbox figcaption{font-family:var(--sans);font-size:.86rem;color:var(--ink-2);line-height:1.45;margin-top:8px}
+.slider-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-family:var(--sans);font-size:.84rem;color:var(--ink-2);margin:4px 0 6px}
+.slider-row input[type=range]{flex:1 1 220px;accent-color:var(--ink)}
+.slider-row output{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;min-width:7ch}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-family:var(--sans);font-size:.8rem;color:var(--ink-2);margin:6px 0 2px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{display:inline-block;width:18px;height:3px;border-radius:2px}
+.lk2{background:var(--k2)}.lk3{background:var(--k3)}.lk4{background:var(--k4)}.lk5{background:var(--k5)}
+.plot .k2{stroke:var(--k2)}.plot .k3{stroke:var(--k3)}.plot .k4{stroke:var(--k4)}.plot .k5{stroke:var(--k5)}
+.plot .kline{fill:none;stroke-width:2;stroke-linejoin:round}
+.plot .dref{fill:none;stroke:var(--k2);stroke-width:2;stroke-dasharray:6 5}
+.plot .mcpt{fill:var(--ink);opacity:.32}
+.plot .mc0{fill:var(--surface);stroke:var(--ink);stroke-width:2.5}
+.mc-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:8px}
+@media (max-width:700px){.mc-grid{grid-template-columns:1fr}}
+.mc-panel h4{font-family:var(--sans);font-size:.86rem;margin:0 0 2px;color:var(--ink)}
+.mc-panel .mc-sub{font-family:var(--sans);font-size:.76rem;color:var(--muted);margin:0}
+.mc-stats{font-family:var(--sans);font-size:.8rem;color:var(--ink-2);margin-top:4px;line-height:1.5}
+.mc-stats b{color:var(--ink);font-variant-numeric:tabular-nums}
+.readline{font-family:var(--sans);font-size:.82rem;color:var(--ink-2);margin-top:6px;line-height:1.55}
+.readline b{color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.coef th,table.coef td{text-align:right;padding:5px 10px}
+table.coef td.diag{box-shadow:inset 0 0 0 2px var(--ink-2)}
+table.coef td.same{color:var(--ink)}
+table.coef td.dash{color:var(--muted);text-align:center}
+table.dd td,table.dd th{text-align:right;padding:5px 10px}
+table.dd td.lam{background:var(--surface-2)}
+table.plain{margin:.8rem 0}
+table.plain th,table.plain td{text-align:center;padding:5px 12px}
+.sums td,.sums th{text-align:center}
+.mc{display:flex;flex-wrap:wrap;gap:8px}
+
+footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);font-family:var(--sans);font-size:.82rem;color:var(--muted);max-width:90ch}
+
+@media (max-width:640px){
+  body{font-size:16.5px}
+  .page{padding-inline:16px}
+  .tabs{margin-inline:-16px;padding-inline:16px}
+  .tile{width:50px;height:60px}
+  .tile .sym{font-size:18px}
+  .tile .rv{font-size:10px}
+  .eq{padding-left:6px;font-size:1.02rem}
+}
+
+/* Lección 5 */
+.lky{background:var(--y)}.lkp{background:var(--k3)}.lkn{background:var(--k4)}.lkr{background:var(--r)}
+.plot .pbar{fill:var(--k3);opacity:.85}
+.plot .nbar{fill:var(--k4);opacity:.85}
+.plot .zl{stroke:var(--axis);stroke-width:1.2}
+.plot .rootmk{fill:var(--r);stroke:var(--surface);stroke-width:2}
+.plot .roott{font:600 11.5px var(--sans);fill:var(--r-text)}
+.plot .fdot{fill:var(--ink);stroke:var(--surface);stroke-width:1.5}
+.plot .agrid{stroke:var(--hair);stroke-width:1}
+.plot .dirl{stroke:var(--axis);stroke-width:1;stroke-dasharray:4 4}
+.plot .dirt{font:600 11px var(--sans);fill:var(--muted)}
+.plot .arw{fill:none;stroke-width:2.6;stroke-linecap:round}
+.plot .arw.a3{stroke:var(--k3)}.plot .arw.a4{stroke:var(--k4)}
+.plot .mh3{fill:var(--k3)}.plot .mh4{fill:var(--k4)}
+.plot .ghost{opacity:.28}
+.plot .pdot{fill:var(--y);stroke:var(--surface);stroke-width:2}
+.plot .pdot0{fill:none;stroke:var(--y);stroke-width:1.6;stroke-dasharray:2 2}
+.plot .o0{fill:var(--ink)}
+.plot .alab{font:600 12px var(--sans)}
+.plot .alab.a3{fill:var(--k3)}.plot .alab.a4{fill:var(--k4)}
+.pick{display:inline-flex;align-items:center;gap:8px;font-family:var(--sans);font-size:.84rem;font-weight:600;color:var(--ink-2)}
+.stepline{font-family:var(--sans);font-size:.88rem;color:var(--ink-2);margin:10px 0 4px;line-height:1.5}
+#l5-sl .slider-row label{min-width:2.2em;font-weight:700;color:var(--r-text)}
+#l5-sl .slider-row output{color:var(--r-text)}
+#l5-sl .slider-row input[type=range]{accent-color:var(--r)}
+.tests{display:grid;gap:7px;margin:10px 0 6px;font-family:var(--sans);font-size:.84rem;color:var(--ink-2)}
+.trow{display:grid;grid-template-columns:18px minmax(0,1fr) minmax(90px,150px) 62px;gap:4px 10px;align-items:center}
+.trow .tk{font-weight:700;text-align:center;color:var(--muted)}
+.trow.ok .tk{color:var(--r-text)}
+.trow b{color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.trow .ta{text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink)}
+.tmeter{position:relative;height:8px;border-radius:4px;background:var(--hair)}
+.tmeter::after{content:"";position:absolute;left:50%;top:-4px;width:2px;height:16px;margin-left:-1px;background:var(--ink-2)}
+.tmeter i{position:absolute;top:50%;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;background:var(--k4);border:2px solid var(--surface)}
+.trow.ok .tmeter i{background:var(--r)}
+@media (max-width:560px){.trow{grid-template-columns:18px minmax(0,1fr) 62px}.trow .tmeter{grid-column:2/-1;grid-row:2}}
+.ro.chg .v{color:var(--k4)}
+table.recipe th,table.recipe td{text-align:left;white-space:nowrap;padding:6px 12px}
+table.recipe td.dash{color:var(--muted)}
+table.ftab th:first-child{text-align:left}
+table.ftab tr.eu th,table.ftab tr.eu td{color:var(--muted);font-style:italic}
+table.ftab tfoot th,table.ftab tfoot td{border-top:2px solid var(--line);font-weight:700;color:var(--ink)}
+table.ftab tfoot th{text-align:left}
+table.ctab th:first-child,table.ctab td:first-child{text-align:left}
+table.ctab td.dif{font-weight:700;color:var(--k4)}
+table.ctab td.same{color:var(--muted)}
+.chips{margin-bottom:4px}
+.chips button{min-width:42px}
+#leccion-5 .plot{min-height:200px}
+.ro .k.sym{text-transform:none;letter-spacing:0;font-family:var(--serif);font-style:italic;font-size:.98rem;font-weight:600;color:var(--ink-2)}
+#l5-sl .slider-row{flex-wrap:nowrap}
+@media (max-width:640px){table.recipe td:nth-child(4),table.recipe td:nth-child(5){white-space:normal;min-width:6.5em}}
+#l5-sl .slider-row input[type=range]{flex:1 1 120px;min-width:0}
+
+/* Lección 6 */
+#leccion-6 .plot{min-height:170px}
+.lksh{background:var(--k2);opacity:.6;height:6px!important}
+.plot .shbar{stroke:var(--k2);stroke-width:7;stroke-linecap:round;opacity:.55}
+.plot .shdrop{stroke:var(--ink-2);stroke-width:1.2;stroke-dasharray:4 3}
+.plot .shlab{font:600 12px var(--sans);fill:var(--ink-2)}
+table.ptab tr.cur th,table.ptab tr.cur td{background:var(--surface-2);font-weight:700;color:var(--ink)}
+table.conv th,table.conv td{text-align:left;padding:6px 12px;white-space:nowrap}
+table.conv tbody th{font-weight:500;font-family:var(--serif);font-size:.98rem;color:var(--ink)}
+table.conv td{font-variant-numeric:tabular-nums}
+table.mean th,table.mean td{text-align:left;padding:6px 12px;vertical-align:top}
+table.mean td:nth-child(4){text-align:right;white-space:nowrap}
+table.mean tbody th,table.mean thead th{white-space:nowrap}
+@media (max-width:640px){table.mean td:nth-child(3){min-width:12em}}
+.mtx span.z0{color:var(--muted);background:transparent!important}
+.mtx span.nz{color:var(--k4);font-weight:700}
+.mtx span.dg{box-shadow:inset 0 0 0 1.5px var(--r)}
+table#l6-mtab tr.bad td{color:var(--k4);font-weight:700}
+table#l6-mtab tr.sys td{font-weight:700;color:var(--ink)}
+.shape-grid{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(0,1fr);gap:4px 18px;margin-top:4px}
+@media (max-width:760px){.shape-grid{grid-template-columns:1fr}}
+.panel-t{font-family:var(--sans);font-size:.8rem;font-weight:700;color:var(--ink-2);margin:.7rem 0 0}
+.legend i.dot-ofb,.legend i.dot-oib{width:8px;height:8px;border-radius:50%}
+.legend i.dot-ofb{background:var(--ink);opacity:.4}
+.legend i.dot-oib{background:var(--k3);opacity:.7}
+.legend i.dash{background:repeating-linear-gradient(90deg,var(--k2) 0 5px,transparent 5px 8px)}
+.plot .ofb{fill:var(--ink);opacity:.2}
+.plot .oib{fill:var(--k3);opacity:.45}
+.plot .trend{stroke:var(--k2);stroke-width:1.8;stroke-dasharray:6 4;fill:none}
+.plot .trendt{font:600 11px var(--sans);fill:var(--muted)}
+.plot .exm{fill:var(--surface);stroke:var(--ink);stroke-width:2;cursor:pointer}
+.plot .exm.on{fill:var(--y);stroke:var(--ink);stroke-width:2}
+.plot .exl{font:700 11.5px var(--sans);fill:var(--ink);cursor:pointer}
+.plot .handle{fill:var(--y);stroke:var(--ink);stroke-width:2.5;cursor:grab}
+.plot.drag{touch-action:none;cursor:crosshair}
+.plot .l0line{stroke:var(--k2);stroke-width:1.5;stroke-dasharray:5 4}
+#l6-free .slider-row label{min-width:1.6em;font-weight:700;color:var(--ink)}
+
+/* Lección 7 */
+#leccion-7 .plot{min-height:180px}
+.legend i.lkres{background:var(--ink-2)}
+.legend i.lkeu{background:transparent;border:2px solid var(--y);height:9px;width:14px;border-radius:2px;box-sizing:border-box}
+.legend i.lkbar{background:var(--k3);opacity:.6;height:9px}
+.plot .rbar5{fill:var(--ink-2);opacity:.78}
+.plot .rbarx{fill:var(--k4)}
+.plot .rbareu{fill:var(--surface);stroke:var(--y);stroke-width:2}
+.plot .band5{fill:var(--surface-2)}
+.plot .band5t{font:700 10px var(--sans);fill:var(--muted);letter-spacing:.04em}
+.plot .hbar{fill:var(--k3);opacity:.55}
+.plot .theo{fill:none;stroke:var(--ink);stroke-width:2}
+.plot .chord{stroke:var(--k2);stroke-width:2;stroke-dasharray:6 4}
+.plot .euline{stroke:var(--r);stroke-width:1.5;stroke-dasharray:3 3}
+.plot .eustar{fill:var(--surface);stroke:var(--ink);stroke-width:2.2}
+.plot .eustar2{fill:var(--surface);stroke:var(--k2);stroke-width:2.2}
+.plot .ghostpt{fill:none;stroke:var(--y);stroke-width:1.5;stroke-dasharray:2 2}
+.plot .plab{font:600 11.5px var(--sans);fill:var(--ink-2)}
+.plot .plab.eu{fill:var(--y-text)}
+.plot .rlab{font:600 11px var(--sans);fill:var(--r-text)}
+table.sigtab td.mcol,table.sigtab th.mcol{width:36%}
+table.sigtab td.yes{font-weight:700;color:var(--ink)}
+table.sigtab td.no{color:var(--muted)}
+.smeter{position:relative;height:10px;min-width:110px;background:var(--hair);border-radius:5px}
+.smeter i{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--k2)}
+.smeter.ok i{background:var(--ink)}
+.smeter::after{content:"";position:absolute;left:25%;top:-4px;width:2px;height:18px;margin-left:-1px;background:var(--k4)}
+table.zeta td,table.zeta th{white-space:nowrap}
+.ro .k.nc{text-transform:none}
+.plot .defl{stroke:var(--y);stroke-width:2}
+.plot .defl-t{font:700 11.5px var(--sans);fill:var(--y-text)}
+
+/* Lección 8 */
+#leccion-8 .plot{min-height:180px}
+ul.plainlist{padding-left:1.2rem}
+ul.plainlist li{margin:.45rem 0}
+table.ctrl8 th,table.ctrl8 td{text-align:center;padding:5px 8px;font-size:.84rem}
+table.cols8 th,table.cols8 td{text-align:left;padding:6px 12px;vertical-align:top}
+table.cols8 tbody th{white-space:nowrap}
+pre.script8{max-height:420px;overflow:auto;font-size:.74rem}
+table#l8-tab tr.ref td{color:var(--muted)}
+table#l8-tab tr.fix td{font-weight:700;color:var(--ink)}
+table#l8-tab tr.err td{color:var(--ink-2);font-size:.82rem}
+table#l8-tab tr.rec td{color:var(--ink-2);font-style:italic;font-weight:600}
+table#l8-tab td{white-space:nowrap}
+.plot .xpt{fill:var(--surface);stroke:var(--y);stroke-width:1.8}
+
+/* Lección 9 */
+#leccion-9 .plot{min-height:160px}
+table.add9 th,table.add9 td{padding:6px 12px}
+table.add9 tbody th{text-align:left;font-weight:500;white-space:nowrap}
+table.add9 tr.sum td,table.add9 tr.sum th{font-weight:700;color:var(--ink)}
+table.add9 tr.fit td,table.add9 tr.fit th{font-weight:700;color:var(--r-text)}
+table.t7 th,table.t7 td{padding:5px 10px;white-space:nowrap}
+table.t7 tbody th{text-align:left;font-weight:600}
+table.t7 td:nth-child(2){text-align:left;color:var(--ink-2)}
+table.t7 thead th:nth-child(-n+2){text-align:left}
+table.t5 th,table.t5 td{padding:5px 10px;white-space:nowrap}
+table.t5 tbody th{text-align:left;font-weight:600;vertical-align:top;white-space:normal;min-width:10em}
+table.t5 td.lbl{text-align:left;color:var(--ink-2)}
+table.t5 td:last-child,table.t5 thead th:first-child,table.t5 thead th:last-child{text-align:left}
+table.t5 td:last-child{color:var(--ink-2)}
+table.t5 tr.grp th,table.t5 tr.grp td{border-top:1px solid var(--line)}
+.legend i.dash5{background:repeating-linear-gradient(90deg,var(--k5) 0 5px,transparent 5px 8px)}
+.legend i.s1{background:var(--r)}.legend i.s2{background:var(--y)}.legend i.s3{background:var(--k4)}
+.legend i.b1{background:var(--k4)}.legend i.b2{background:var(--y)}
+.legend i.pa{background:var(--k3)}.legend i.pm{background:var(--ink);height:4px}
+.plot .l9c{stroke:var(--k4);stroke-width:2.2;fill:none;stroke-linejoin:round}
+.plot .l9dot{fill:var(--k4);stroke:var(--surface);stroke-width:1.6}
+.plot .l9one{stroke:var(--k2);stroke-width:1.4;stroke-dasharray:5 4}
+.plot .l9t1{font:600 11px var(--sans);fill:var(--muted)}
+.plot .l9mean{stroke:var(--k4);stroke-width:1.4;stroke-dasharray:5 4;opacity:.85}
+.plot .l9arr{stroke:var(--k4);stroke-width:3.2;stroke-linecap:round}
+.plot .l9arrf{stroke:var(--k2);stroke-width:1.8;stroke-linecap:round}
+.plot .mh9k{fill:var(--k4)}.plot .mh9g{fill:var(--k2)}.plot .mh9i{fill:var(--ink-2)}
+.plot .l9lab{font:700 11.5px var(--sans);fill:var(--ink)}
+.plot .l9labf{font:600 10.5px var(--sans);fill:var(--muted)}
+.plot .l9start{fill:var(--surface);stroke:var(--ink);stroke-width:2}
+.plot .l9bulk{stroke:var(--ink);stroke-width:2;fill:none}
+.plot .l9bulk.p{stroke-dasharray:6 4}
+.plot .l9fit{stroke:var(--ink);stroke-width:2;fill:none}
+.plot .l9lnf{stroke:var(--k2);stroke-width:1.5;stroke-dasharray:5 4}
+.plot .l9tr{fill:none;stroke-width:1.6;opacity:.45;stroke-linejoin:round}
+.plot .l9tr.on{stroke-width:3;opacity:1}
+.plot .s1{stroke:var(--r)}.plot .s2{stroke:var(--y)}.plot .s3{stroke:var(--k4)}
+.plot .l9tk{stroke-width:2.2}
+.plot .l9tl{font:700 10.5px var(--sans);fill:var(--ink-2)}
+.plot .l9cur{fill:var(--surface);stroke:var(--ink);stroke-width:2.4}
+.plot .l9vec{stroke:var(--ink);stroke-width:1.6;stroke-dasharray:4 3}
+.plot .l9S{fill:var(--surface);stroke:var(--ink);stroke-width:2}
+.plot .l9M{fill:var(--ink)}
+.plot .l9am{stroke:var(--ink-2);stroke-width:2}
+.plot .l9amc{stroke:var(--ink-2);stroke-width:2;stroke-dasharray:6 4}
+.plot .l9tip{fill:none;stroke:var(--ink);stroke-width:1.6}
+.plot .l9x{fill:none;stroke-width:2.2;stroke-linejoin:round;opacity:.55}
+.plot .l9x.on{stroke-width:3;opacity:1}
+.plot .b1{stroke:var(--k4)}.plot .b2{stroke:var(--y)}
+.plot .l9ch{stroke-width:1.4;stroke-dasharray:5 4;opacity:.7}
+.plot .l9xd{stroke:var(--surface);stroke-width:1.4}
+.plot .l9xd.b1{fill:var(--k4)}.plot .l9xd.b2{fill:var(--y)}
+.plot .l9pa{stroke:var(--k3);stroke-width:1.8;fill:none}
+.plot .l9pb{stroke-width:1.8;fill:none}
+.plot .l9pm{stroke:var(--ink);stroke-width:2.8;fill:none}
+.plot .l9pd{stroke:var(--surface);stroke-width:1.2}
+.plot .l9pd.pa{fill:var(--k3)}.plot .l9pd.b1{fill:var(--k4)}.plot .l9pd.b2{fill:var(--y)}.plot .l9pd.pm{fill:var(--ink)}
+.plot .l9st{fill:var(--surface);stroke:var(--ink-2);stroke-width:1.6;stroke-dasharray:2 2}
+.plot .l9gap{stroke:var(--ink-2);stroke-width:1.2;stroke-dasharray:2 3}
+#l9-msg.hit{color:var(--r-text);font-weight:600}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+
+<div class="page">
+  <header class="masthead">
+    <p class="eyebrow">Curso por lecciones · a partir de O'Neill (2016), <i>Journal of Petrology</i> 57, 1463–1508</p>
+    <h1>Los λ de O'Neill</h1>
+    <p class="lead">Cómo ajusta O'Neill un patrón de tierras raras normalizado al condrito a un polinomio en el radio iónico, y cómo reordena ese polinomio en coeficientes ortogonales (λ<sub>0</sub>, λ<sub>1</sub>, λ<sub>2</sub>…). Paso a paso, con números reales de su propia hoja de cálculo.</p>
+    <div>
+      <div class="tiles" id="tiles" aria-label="Las REE con su radio iónico"></div>
+      <p class="tiles-note">Número atómico, símbolo y <span class="kr">radio iónico r (Å)</span> del catión 3+ en coordinación 8 (Shannon, 1976; Tabla 1 de O'Neill). Pm: no se analiza. Eu (borde discontinuo): fuera del ajuste.</p>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Secciones del curso">
+    <div class="tabs-scroll" role="tablist">
+      <button class="tab" role="tab" data-tab="programa" aria-controls="programa">Programa</button>
+      <button class="tab" role="tab" data-tab="mapa" aria-controls="mapa">Mapa del radio</button>
+      <button class="tab" role="tab" data-tab="leccion-1" aria-controls="leccion-1"><span class="n">1</span> Preparar los datos</button>
+      <button class="tab" role="tab" data-tab="leccion-2" aria-controls="leccion-2"><span class="n">2</span> Ajustar una recta</button>
+      <button class="tab" role="tab" data-tab="leccion-3" aria-controls="leccion-3"><span class="n">3</span> El polinomio</button>
+      <button class="tab" role="tab" data-tab="leccion-4" aria-controls="leccion-4"><span class="n">4</span> Los a no sirven</button>
+      <button class="tab" role="tab" data-tab="leccion-5" aria-controls="leccion-5"><span class="n">5</span> Polinomios ortogonales</button>
+      <button class="tab" role="tab" data-tab="leccion-6" aria-controls="leccion-6"><span class="n">6</span> Calcular los λ</button>
+      <button class="tab" role="tab" data-tab="leccion-7" aria-controls="leccion-7"><span class="n">7</span> Calidad del ajuste</button>
+      <button class="tab" role="tab" data-tab="leccion-8" aria-controls="leccion-8"><span class="n">8</span> Hazlo tú</button>
+      <button class="tab" role="tab" data-tab="leccion-9" aria-controls="leccion-9"><span class="n">9</span> Vectores ψ</button>
+    </div>
+  </nav>
+
+  <main>
+  <!-- ======================= PROGRAMA ======================= -->
+  <section class="panel" id="programa" role="tabpanel" aria-label="Programa">
+    <div class="prose">
+      <h2>El programa</h2>
+      <p>El cálculo de O'Neill tiene dos mitades. Primero, un <b>ajuste por mínimos cuadrados</b>: se busca la curva suave (un polinomio) que mejor pasa por los 13 puntos del patrón. Después, una <b>reorganización</b> de ese mismo polinomio en piezas independientes —los polinomios ortogonales—, cuyos coeficientes son los λ. Cada lección añade <em>una</em> idea matemática nueva y la aplica a una muestra real de la hoja de cálculo de O'Neill.</p>
+      <div class="legend-row" aria-label="Código de colores">
+        <span><i class="sw r"></i><span>Verde azulado: <b class="kr">radio iónico r</b></span></span>
+        <span><i class="sw y"></i><span>Violeta: <b class="ky">datos de la muestra y</b></span></span>
+      </div>
+      <p>El color te permitirá seguir con la vista en qué parte de cada fórmula entra el radio, que es una de tus preguntas. La otra pestaña, <a href="#mapa" data-tab="mapa">Mapa del radio</a>, lo resume en un solo dibujo.</p>
+    </div>
+
+    <ol class="syllabus wide">
+      <li class="avail">
+        <span class="num">1</span>
+        <div>
+          <h3><a href="#leccion-1" data-tab="leccion-1">Preparar los datos: de las ppm a 13 puntos</a></h3>
+          <p>Normalizar al condrito CI, tomar logaritmos, elegir el radio como eje X y apartar el Eu.</p>
+          <dl class="meta"><dt>Idea nueva</dt><dd>dividir y el logaritmo neperiano (ln)</dd><dt>Radio</dt><dd>① se convierte en el eje X</dd></dl>
+        </div>
+        <span class="status">Disponible</span>
+      </li>
+      <li class="avail">
+        <span class="num">2</span>
+        <div>
+          <h3><a href="#leccion-2" data-tab="leccion-2">¿Qué es «ajustar»? Mínimos cuadrados con una recta</a></h3>
+          <p>Residuos, por qué se suman sus cuadrados (con una analogía de muelles) y la receta de la recta. Medir el radio desde su media convierte la ordenada en λ<sub>0</sub> y la pendiente en λ<sub>1</sub>. Incluye la primera mitad de la Fig. 1a de O'Neill.</p>
+          <dl class="meta"><dt>Idea nueva</dt><dd>el sumatorio Σ, el residuo y el χ²</dd><dt>Radio</dt><dd>en las sumas Σr, Σr², Σr·y; al centrar, ② r̄ y ③ f<sub>1</sub> = r − r̄</dd></dl>
+        </div>
+        <span class="status">Disponible</span>
+      </li>
+      <li class="avail">
+        <span class="num">3</span>
+        <div>
+          <h3><a href="#leccion-3" data-tab="leccion-3">De la recta a la curva: el polinomio y su sistema de ecuaciones</a></h3>
+          <p>Qué forma aporta cada término (r², r³, r⁴), de dónde salen 5 ecuaciones con 5 incógnitas y cómo las resuelve Excel con MINVERSA y MMULT, exactamente como la macro de O'Neill.</p>
+          <dl class="meta"><dt>Idea nueva</dt><dd>ecuaciones normales y matrices, sin miedo</dd><dt>Radio</dt><dd>④ la tabla del sistema solo contiene sumas de potencias de r</dd></dl>
+        </div>
+        <span class="status">Disponible</span>
+      </li>
+      <li class="avail">
+        <span class="num">4</span>
+        <div>
+          <h3><a href="#leccion-4" data-tab="leccion-4">Por qué los coeficientes «normales» a<sub>0</sub>…a<sub>4</sub> no sirven para comparar</a></h3>
+          <p>Con la muestra guía: a<sub>0</sub> salta de 3.19 a −2367 al añadir términos, y los coeficientes están correlacionados al 99.99 %. Una simulación de análisis repetidos y la segunda mitad de la Fig. 1a de O'Neill (los patrones D y D†), explicada.</p>
+          <dl class="meta"><dt>Idea nueva</dt><dd>correlación entre parámetros (el «brazo de palanca»)</dd><dt>Radio</dt><dd>el origen r = 0 queda a 1.05 Å de los datos; entre 0.98 y 1.16 Å, r, r², r³ y r⁴ casi coinciden</dd></dl>
+        </div>
+        <span class="status">Disponible</span>
+      </li>
+      <li class="avail">
+        <span class="num">5</span>
+        <div>
+          <h3><a href="#leccion-5" data-tab="leccion-5">Los polinomios ortogonales: fabricarlos con los radios</a></h3>
+          <p>Qué significa «ortogonal» (piezas que no se pisan) y cómo salen, solo de los 13 radios, las constantes 1.05477, 1.00533, 1.12824… de la Tabla 2 (Bevington & Robinson, §7.3).</p>
+          <dl class="meta"><dt>Idea nueva</dt><dd>ortogonalidad</dd><dt>Radio</dt><dd>② las constantes y ③ la tabla de valores f<sub>n</sub>(r)</dd></dl>
+        </div>
+        <span class="status">Disponible</span>
+      </li>
+      <li class="avail">
+        <span class="num">6</span>
+        <div>
+          <h3><a href="#leccion-6" data-tab="leccion-6">Calcular los λ: tres caminos, un resultado</a></h3>
+          <p>La fórmula directa λ<sub>n</sub> = Σ y·f<sub>n</sub> / Σ f<sub>n</sub>², el sistema que resuelve la macro y la conversión desde un ajuste normal (ESTIMACION.LINEAL). Qué significa cada λ y cómo leer el diagrama λ<sub>2</sub>–λ<sub>1</sub>.</p>
+          <dl class="meta"><dt>Idea nueva</dt><dd>proyección (la «sombra» de los datos sobre cada pieza)</dd><dt>Radio</dt><dd>④ la tabla de la macro y los f<sub>n</sub>(r)</dd></dl>
+        </div>
+        <span class="status">Disponible</span>
+      </li>
+      <li class="avail">
+        <span class="num">7</span>
+        <div>
+          <h3><a href="#leccion-7" data-tab="leccion-7">¿Es bueno el ajuste? Residuos, Eu/Eu*, χ² e incertidumbres</a></h3>
+          <p>Cocientes observado/calculado, la anomalía de Eu calculada en r = 1.066 Å, el χ² reducido, el s(ln[REE])* inferido y los factores ζ que dan el error de cada λ.</p>
+          <dl class="meta"><dt>Idea nueva</dt><dd>χ² reducido y propagación de errores</dd><dt>Radio</dt><dd>⑤ el Eu* y ⑥ los factores ζ</dd></dl>
+        </div>
+        <span class="status">Disponible</span>
+      </li>
+      <li class="opt avail">
+        <span class="num">8</span>
+        <div>
+          <h3><a href="#leccion-8" data-tab="leccion-8">Opcional · Hazlo tú con tus datos</a></h3>
+          <p>El cálculo completo en Excel o en Python, y qué hacer si te falta un elemento o quieres dejar fuera otro (por ejemplo el Ce, algo habitual en circón): mantener los polinomios de la Tabla 2, como recomienda O'Neill, o recalcularlos, y qué cambia en cada caso.</p>
+          <dl class="meta"><dt>Radio</dt><dd>si se recalculan con otro conjunto de REE, cambian todas las constantes</dd></dl>
+        </div>
+        <span class="status">Disponible</span>
+      </li>
+      <li class="opt avail">
+        <span class="num">9</span>
+        <div>
+          <h3><a href="#leccion-9" data-tab="leccion-9">Opcional · Vectores petrogenéticos ψ</a></h3>
+          <p>Por qué λ = λ⁰ + ψ: la fusión y la cristalización se describen con los mismos polinomios y se suman como flechas en el diagrama λ<sub>2</sub>–λ<sub>1</sub>.</p>
+          <dl class="meta"><dt>Radio</dt><dd>⑦ coeficientes de reparto frente a r</dd></dl>
+        </div>
+        <span class="status">Disponible</span>
+      </li>
+    </ol>
+
+    <div class="prose">
+      <h3>Qué vas a necesitar</h3>
+      <p>Nada de cálculo diferencial. Sumar, multiplicar, dividir y, en la Lección 1, el logaritmo neperiano, que explico desde cero. Donde el libro de Bevington usa derivadas o matrices, te lo contaré con una analogía y te daré el resultado comprobado con números.</p>
+      <h3>Materiales</h3>
+      <ul class="materials">
+        <li>O'Neill (2016), pp. 1464–1467: el método, las Tablas 1 y 2 y la Fig. 1.</li>
+        <li>Apéndice 1 del material suplementario: por qué logaritmos y cómo se evalúan las incertidumbres (ecs. A1–A4).</li>
+        <li>La hoja <code>LstSq_REE_OrthogPolynomial_April2015.xls</code> y su macro <code>REE_OrthogRegress_5term</code>. La he extraído para ver exactamente qué calcula; iré mostrando sus líneas en cada lección.</li>
+        <li><code>REEshapes_reference_datasets_for_plots.xls</code>: los 616 vidrios de Jenner & O'Neill (2012b) y los basaltos HSDP2 de Hawái.</li>
+        <li>Bevington & Robinson (2003), 3.ª ed.: cap. 6 (la recta), cap. 7 §7.1–7.3 (polinomios, matrices y «Independent parameters», pp. 116–131), §7.4 (logaritmos) y cap. 11 (χ²).</li>
+      </ul>
+      <div class="note"><p><b>Curso completo.</b> Las siete lecciones y las dos opcionales están en esta página. Si algo no queda claro, o quieres aplicarlo a tus propios datos, pregúntame.</p></div>
+    </div>
+  </section>
+
+  <!-- ======================= MAPA ======================= -->
+  <section class="panel" id="mapa" role="tabpanel" aria-label="Mapa del radio" hidden>
+    <div class="prose">
+      <h2>Dónde entra el radio iónico</h2>
+      <p>El radio aparece en seis lugares del cálculo, y en un séptimo si seguimos hasta los modelos petrogenéticos. La clave está en este dibujo: <b>todo lo que depende solo de los radios se calcula una vez y vale para todas las muestras</b>. Lo único que cambia de un análisis a otro son los valores <i class="vy">y</i>.</p>
+    </div>
+    <figure>
+      <div class="map-wrap">
+        <svg class="map" viewBox="0 0 960 462" role="img" aria-label="Diagrama del cálculo de O'Neill en tres franjas: arriba, lo que depende solo de los radios (radios, constantes de los polinomios ortogonales, tabla de valores y factores de incertidumbre); en medio, los datos de cada muestra (ppm, división por el condrito y logaritmo, 13 puntos); abajo, el ajuste, la curva calculada y el error de cada lambda. Seis marcas numeradas señalan dónde entra el radio.">
+          <defs>
+            <marker id="mk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ah" d="M0,0 L10,5 L0,10 z"/></marker>
+            <marker id="mkr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="ahr" d="M0,0 L10,5 L0,10 z"/></marker>
+          </defs>
+          <!-- franjas -->
+          <rect class="lane-r" x="8" y="8" width="944" height="160" rx="14"/>
+          <rect class="lane-y" x="8" y="188" width="610" height="110" rx="14"/>
+          <rect class="lane-n" x="8" y="316" width="944" height="138" rx="14"/>
+          <text class="tl" x="24" y="31">SOLO RADIOS · SE CALCULA UNA VEZ Y VALE PARA TODAS LAS MUESTRAS</text>
+          <text class="tl" x="24" y="210">DATOS · CAMBIA EN CADA ANÁLISIS</text>
+          <text class="tl" x="24" y="340">AJUSTE Y RESULTADOS</text>
+
+          <!-- franja radios -->
+          <rect class="box rb" x="24" y="46" width="190" height="104" rx="8"/>
+          <text class="t1" x="119" y="80" text-anchor="middle">Radios iónicos rᵢ</text>
+          <text class="t2" x="119" y="100" text-anchor="middle">14 REE, Shannon (1976)</text>
+          <text class="t2" x="119" y="118" text-anchor="middle">Tabla 1 de O'Neill</text>
+
+          <rect class="box rb" x="254" y="46" width="236" height="104" rx="8"/>
+          <text class="t1" x="372" y="74" text-anchor="middle">Constantes de los</text>
+          <text class="t1" x="372" y="92" text-anchor="middle">polinomios ortogonales</text>
+          <text class="t2 r" x="372" y="113" text-anchor="middle">1.05477 = media de 13 rᵢ</text>
+          <text class="t2" x="372" y="131" text-anchor="middle">1.00533, 1.12824, 0.99141…</text>
+
+          <rect class="box rb" x="530" y="46" width="190" height="104" rx="8"/>
+          <text class="t1" x="625" y="80" text-anchor="middle">Valores fₙ(rᵢ)</text>
+          <text class="t2" x="625" y="100" text-anchor="middle">f₁…f₄ en cada REE</text>
+          <text class="t2" x="625" y="118" text-anchor="middle">Tabla 1, columnas f</text>
+
+          <rect class="box rb" x="760" y="46" width="176" height="104" rx="8"/>
+          <text class="t1" x="848" y="80" text-anchor="middle">Factores ζₙ</text>
+          <text class="t2 r" x="848" y="100" text-anchor="middle">ζₙ = 1/√Σ fₙ(rᵢ)²</text>
+          <text class="t2" x="848" y="118" text-anchor="middle">Tabla 2, columna s(λ)</text>
+
+          <path class="ar" d="M214,98 H248" marker-end="url(#mk)"/>
+          <path class="ar" d="M490,98 H524" marker-end="url(#mk)"/>
+          <path class="ar" d="M720,98 H754" marker-end="url(#mk)"/>
+
+          <!-- franja datos -->
+          <rect class="box" x="24" y="224" width="150" height="60" rx="8"/>
+          <text class="t1" x="99" y="250" text-anchor="middle">[REE] en ppm</text>
+          <text class="t2" x="99" y="269" text-anchor="middle">14 valores</text>
+
+          <rect class="box" x="204" y="224" width="160" height="60" rx="8"/>
+          <text class="t1" x="284" y="250" text-anchor="middle">÷ CI y ln</text>
+          <text class="t2" x="284" y="269" text-anchor="middle">→ yᵢ</text>
+
+          <rect class="box" x="394" y="224" width="196" height="60" rx="8"/>
+          <text class="t1" x="492" y="250" text-anchor="middle">13 puntos (rᵢ, yᵢ)</text>
+          <text class="t2" x="492" y="269" text-anchor="middle">sin el Eu</text>
+
+          <path class="ar" d="M174,254 H198" marker-end="url(#mk)"/>
+          <path class="ar" d="M364,254 H388" marker-end="url(#mk)"/>
+
+          <!-- ① eje X: del radio al punto -->
+          <path class="ar r" d="M190,150 V178 H286"/>
+          <path class="ar r" d="M352,178 H492 V218" marker-end="url(#mkr)"/>
+          <g class="bd"><circle cx="300" cy="178" r="11"/><text x="300" y="182" text-anchor="middle">1</text></g>
+          <text class="al" x="316" y="182">eje X</text>
+
+          <!-- resultados -->
+          <rect class="box" x="394" y="350" width="196" height="88" rx="8"/>
+          <text class="t1" x="492" y="378" text-anchor="middle">Ajuste por</text>
+          <text class="t1" x="492" y="396" text-anchor="middle">mínimos cuadrados</text>
+          <text class="t2" x="492" y="418" text-anchor="middle">→ λ₀, λ₁ … λ₄</text>
+
+          <rect class="box" x="626" y="350" width="172" height="88" rx="8"/>
+          <text class="t1" x="706" y="380" text-anchor="middle">Curva calculada</text>
+          <text class="t2" x="706" y="400" text-anchor="middle">obs/calc · Eu/Eu*</text>
+          <text class="t2 r" x="706" y="420" text-anchor="middle">Eu en r = 1.066 Å</text>
+
+          <rect class="box" x="826" y="350" width="110" height="88" rx="8"/>
+          <text class="t1" x="881" y="380" text-anchor="middle">Error de</text>
+          <text class="t1" x="881" y="398" text-anchor="middle">cada λ</text>
+          <text class="t2" x="881" y="418" text-anchor="middle">s(λₙ)</text>
+
+          <path class="ar" d="M492,284 V344" marker-end="url(#mk)"/>
+          <path class="ar r" d="M660,150 V330 H560 V344" marker-end="url(#mkr)"/>
+          <text class="al" x="668" y="246">fₙ(rᵢ)</text>
+          <path class="ar" d="M590,394 H620" marker-end="url(#mk)"/>
+          <text class="alk" x="605" y="386" text-anchor="middle">λₙ</text>
+          <path class="ar" d="M798,394 H821" marker-end="url(#mk)"/>
+          <text class="alk" x="810" y="386" text-anchor="middle">χ²</text>
+          <path class="ar r" d="M900,150 V344" marker-end="url(#mkr)"/>
+          <text class="al" x="908" y="246">ζₙ</text>
+
+          <!-- marcas -->
+          <g class="bd"><circle cx="476" cy="62" r="11"/><text x="476" y="66" text-anchor="middle">2</text></g>
+          <g class="bd"><circle cx="706" cy="62" r="11"/><text x="706" y="66" text-anchor="middle">3</text></g>
+          <g class="bd"><circle cx="576" cy="366" r="11"/><text x="576" y="370" text-anchor="middle">4</text></g>
+          <g class="bd"><circle cx="784" cy="362" r="10"/><text x="784" y="366" text-anchor="middle">5</text></g>
+          <g class="bd"><circle cx="922" cy="62" r="11"/><text x="922" y="66" text-anchor="middle">6</text></g>
+
+          <!-- leyenda -->
+          <g class="bd"><circle cx="36" cy="378" r="9"/><text x="36" y="382" text-anchor="middle" style="font-size:10px">n</text></g>
+          <text class="alk" x="54" y="382">lugar donde entra el radio</text>
+          <path class="ar r" d="M26,408 H58" marker-end="url(#mkr)"/>
+          <text class="alk" x="68" y="412">flujo que lleva información del radio</text>
+          <path class="ar" d="M26,432 H58" marker-end="url(#mk)"/>
+          <text class="alk" x="68" y="436">resto del cálculo</text>
+        </svg>
+      </div>
+      <figcaption class="fig-cap">Arriba, lo que solo depende de los radios; en medio, lo que depende de cada análisis; abajo, donde se juntan. En el móvil, desliza el dibujo en horizontal.</figcaption>
+    </figure>
+
+    <ol class="stations prose">
+      <li><span class="bdg">1</span><div><b>Eje X.</b> Cada <i class="vy">y</i><sub>i</sub> se dibuja y se ajusta frente a su radio <i class="vr">r</i><sub>i</sub>. Es el único papel del radio que se ve a simple vista. <span class="where">Lección 1</span></div></li>
+      <li><span class="bdg">2</span><div><b>Constantes de los polinomios ortogonales.</b> 1.05477 es la media de los 13 radios (sin el Eu); 1.00533 y 1.12824, 0.99141… salen de exigir que cada pieza del polinomio sea independiente de las demás. Solo dependen de los radios: por eso la Tabla 2 sirve para cualquier muestra. <span class="where">Lección 5</span></div></li>
+      <li><span class="bdg">3</span><div><b>Tabla de valores f<sub>n</sub>(r<sub>i</sub>).</b> Cada radio se sustituye en f<sub>1</sub>…f<sub>4</sub>: son las columnas f de la Tabla 1 de O'Neill. Por ejemplo, f<sub>1</sub>(La) = 1.160 − 1.05477 = 0.1052. <span class="where">Lección 5</span></div></li>
+      <li><span class="bdg">4</span><div><b>El ajuste.</b> La macro suma <i class="vr">r</i><sub>i</sub><sup>k</sup>·f<sub>n</sub>(<i class="vr">r</i><sub>i</sub>) (una tabla de 5 × 5 que solo depende de los radios) y <i class="vr">r</i><sub>i</sub><sup>k</sup>·<i class="vy">y</i><sub>i</sub> (radios por datos), y resuelve el sistema. Con la fórmula directa: λ<sub>n</sub> = Σ <i class="vy">y</i><sub>i</sub> f<sub>n</sub>(<i class="vr">r</i><sub>i</sub>) / Σ f<sub>n</sub>(<i class="vr">r</i><sub>i</sub>)². <span class="where">Lecciones 3 y 6</span></div></li>
+      <li><span class="bdg">5</span><div><b>La curva calculada.</b> Se evalúa en los 14 radios. En el del Eu (1.066 Å) da el Eu* con el que se calcula Eu/Eu*, aunque el Eu no haya entrado en el ajuste. <span class="where">Lección 7</span></div></li>
+      <li><span class="bdg">6</span><div><b>Incertidumbres.</b> ζ<sub>n</sub> = 1/√Σ f<sub>n</sub>(<i class="vr">r</i><sub>i</sub>)² depende solo de los radios y convierte el error analítico en el error de cada λ: para un 1 %, s(λ) = 0.0028, 0.046, 0.99, 19.8 y 424 (Tabla 2). <span class="where">Lección 7</span></div></li>
+      <li><span class="bdg ext">7</span><div><b>Extensión.</b> Los coeficientes de reparto mineral/fundido también son funciones suaves de r y se ajustan con los mismos polinomios: así nacen los vectores de proceso ψ. <span class="where">Lección 9</span></div></li>
+    </ol>
+    <div class="prose note"><p><b>Dónde no entra el radio:</b> en la normalización al condrito, en el logaritmo ni en la definición del χ² (solo indirectamente, a través de la curva calculada).</p></div>
+  </section>
+
+  <!-- ======================= LECCIÓN 1 ======================= -->
+  <section class="panel" id="leccion-1" role="tabpanel" aria-label="Lección 1" hidden>
+    <header class="lesson-head">
+      <p class="eyebrow">Lección 1 · de 7 (+ 2 opcionales)</p>
+      <h2>Preparar los datos: de las ppm a 13 puntos</h2>
+      <p class="lead">Antes de ajustar nada, O'Neill convierte cada análisis en 13 parejas de números (<i class="vr">r</i>, <i class="vy">y</i>). Aquí vemos de dónde sale cada una: la <i class="vy">y</i>, de la concentración; la <i class="vr">r</i>, del tamaño del ion.</p>
+      <dl class="facts ui">
+        <div><dt>Idea matemática nueva</dt><dd>Dividir y el logaritmo neperiano (ln)</dd></div>
+        <div><dt>Dónde entra el radio</dt><dd><span class="kr">①</span> Como eje X de cada punto</dd></div>
+        <div><dt>Muestra guía</dt><dd>Vidrio VG 189, dorsal Mesoatlántica</dd></div>
+      </dl>
+    </header>
+
+    <div class="lesson-grid">
+      <div class="lg-a prose">
+        <h3>La muestra guía</h3>
+        <p>Seguiremos un vidrio basáltico real: <b>VG 189</b>, de la dorsal Mesoatlántica (21.9° S, 7.98 % MgO). Es la primera fila de la hoja de cálculo de O'Neill, que reúne los 616 vidrios de Jenner & O'Neill (2012b). En la figura puedes cambiar a otras tres muestras que O'Neill usa en su Fig. 17d: una empobrecida (VG 304), una enriquecida (VG 4080) y un basalto de Hawái (8-2.70).</p>
+      </div>
+
+      <div class="lg-fig">
+        <div class="sticky">
+          <figure class="lab card" id="lab1">
+            <div class="lab-head ui">
+              <label for="lab1-sample">Muestra</label>
+              <select id="lab1-sample"></select>
+              <span class="lab-meta" id="lab1-meta"></span>
+            </div>
+            <div class="ctrl-row ui">
+              <div class="seg" role="group" aria-label="Qué se representa en el eje Y">
+                <span class="seg-label">Eje Y</span>
+                <button type="button" data-y="ppm">1 · ppm</button>
+                <button type="button" data-y="norm">2 · ÷ CI</button>
+                <button type="button" data-y="ln">3 · ln</button>
+              </div>
+              <div class="seg" role="group" aria-label="Qué se representa en el eje X">
+                <span class="seg-label">Eje X</span>
+                <button type="button" data-x="Z">Z</button>
+                <button type="button" data-x="rL">r (La izq.)</button>
+                <button type="button" data-x="rO">r (como O'Neill)</button>
+              </div>
+              <label class="chk" for="lab1-err"><input type="checkbox" id="lab1-err" checked> barras de ±5 %</label>
+            </div>
+            <div class="plot" id="lab1-plot"><svg role="img" aria-label="Patrón de tierras raras de la muestra seleccionada"></svg><div class="tip" hidden></div></div>
+            <figcaption id="lab1-cap"></figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="lg-b prose">
+        <h3 id="l1-paso1">Paso 1 · Dividir por el condrito CI</h3>
+        <p>Si dibujas las ppm tal cual (botón <b>1 · ppm</b>), sale un zigzag: los elementos de número atómico par (Ce, Nd, Sm, Gd…) son siempre más abundantes que sus vecinos impares. No es geología: es cómo se fabricaron los núcleos en las estrellas (efecto Oddo–Harkins), y los condritos lo tienen igual.</p>
+        <p>Por eso se divide cada REE por su concentración en el condrito CI (columna «CI» de la Tabla 1 de O'Neill). El zigzag se cancela (botón <b>2 · ÷ CI</b>) y queda lo que interesa: cuántas veces más —o menos— concentrado está cada elemento que en el material del que se formó la Tierra.</p>
+        <div class="eq">[La] / [La]<sub>CI</sub> = 3.622 / 0.2472 = <b>14.65</b></div>
+        <aside class="analogy"><span class="tag">Analogía</span><p>Es como un índice de precios. No interesa que el jamón cueste más que el pan (eso es el zigzag), sino cuántas veces ha subido cada producto respecto al año de referencia. El condrito es el «año de referencia» de las tierras raras.</p></aside>
+        <button type="button" class="goto" data-y="norm">Ver en la figura: 2 · ÷ CI</button>
+
+        <h3 id="l1-paso2">Paso 2 · Tomar el logaritmo neperiano (ln)</h3>
+        <p>El logaritmo convierte <em>multiplicar</em> en <em>sumar</em>. Con el neperiano (ln), multiplicar por 2 equivale siempre a sumar 0.69; multiplicar por 10, a sumar 2.30; y multiplicar por <i>e</i> ≈ 2.718, a sumar exactamente 1.</p>
+        <div class="table-wrap" style="display:inline-block;max-width:100%">
+          <table class="mini">
+            <tbody>
+              <tr><th scope="row">Veces el condrito</th><td>1</td><td>2</td><td>2.718</td><td>10</td><td>20</td><td>100</td></tr>
+              <tr><th scope="row">ln</th><td>0</td><td>0.69</td><td>1</td><td>2.30</td><td>3.00</td><td>4.61</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Es la misma idea que el pH o la magnitud de un terremoto: una escala de «veces». Los diagramas habituales usan log<sub>10</sub>; ln y log<sub>10</sub> solo se diferencian en un factor fijo (ln = 2.303 × log<sub>10</sub>), como centímetros y pulgadas, así que la forma del patrón no cambia.</p>
+        <div class="eq"><i class="vy">y</i><sub>La</sub> = ln(14.65) = <b>2.685</b></div>
+        <p><b>¿Por qué usa O'Neill el ln y no las concentraciones normalizadas tal cual?</b> Lo razona en el Apéndice 1 del material suplementario:</p>
+        <ol class="reasons">
+          <li><b>Los errores analíticos son porcentajes.</b> Un ±5 % es ±1.4 en un valor de 28, pero ±0.7 en uno de 14. En ln, ese mismo ±5 % mide ≈ ±0.05 en <em>todos</em> los elementos. Activa las barras de error y pasa de <b>2</b> a <b>3</b>: en ln todas miden igual. Así el ajuste puede dar a los 13 puntos el mismo peso, y el cálculo se simplifica muchísimo. (Bevington & Robinson, §7.4: al tomar ln, la incertidumbre de cada punto se convierte en su error relativo, σ/<i>y</i>.)</li>
+          <li><b>El ajuste se vuelve un problema «lineal»</b>: se resuelve con una receta directa de sumas y divisiones (lecciones 2 y 3), sin tanteos. Con las concentraciones sin logaritmo y errores porcentuales sería un problema no lineal (ecs. A3a y A3b del Apéndice).</li>
+          <li><b>Una concentración nunca puede ser negativa; su ln, sí.</b> Por eso es razonable suponer que los ln de medidas repetidas se reparten como una campana de Gauss, que es justo lo que supone el método de mínimos cuadrados. Las concentraciones, en rigor, no pueden hacerlo.</li>
+        </ol>
+        <p class="aside-note">Y un regalo para más adelante: la fusión y la cristalización <em>multiplican</em> las concentraciones por factores; en ln esos factores se <em>suman</em>. Es lo que permitirá sumar «vectores de proceso» en la Lección 9.</p>
+        <button type="button" class="goto" data-y="ln" data-err="1">Ver en la figura: 3 · ln con barras de ±5 %</button>
+
+        <h3 id="l1-paso3">Paso 3 · El eje X: radio iónico en vez de número atómico</h3>
+        <p>El diagrama clásico coloca las REE por orden de número atómico <i>Z</i>, a distancias iguales. O'Neill usa otra regla: el <b class="kr">radio iónico</b> del catión 3+ en coordinación 8 (Shannon, 1976), la columna <i class="vr">r</i> de su Tabla 1. Son los números verdes de las fichas de arriba.</p>
+        <p>¿Por qué? Porque la química de las REE depende sobre todo de su <b>tamaño</b>. Los electrones 4f que se van añadiendo del La al Lu quedan escondidos bajo las capas 5s y 5p y no participan en los enlaces; lo único que cambia de un elemento al siguiente es que el ion se encoge (<b>contracción lantánida</b>). Además, los coeficientes de reparto mineral/fundido se describen en función del radio (modelo de deformación de red, <i>lattice strain</i>).</p>
+        <p>La contracción no es uniforme: se va frenando. Del La al Ce el radio baja 0.017 Å; del Yb al Lu, solo 0.008 Å. O'Neill la resume con una parábola:</p>
+        <div class="eq"><i class="vr">r</i> (Å) = 3.2419 − 0.0553 <i>Z</i> + 3.2945 × 10<sup>−4</sup> <i>Z</i><sup>2</sup></div>
+        <figure class="card fig-plain">
+          <div id="rulers"></div>
+          <figcaption class="fig-cap">Las mismas posiciones en dos reglas. Arriba, equiespaciadas por <i>Z</i>. Abajo, colocadas según su radio real, con el La a la izquierda. En el centro las líneas se inclinan: con el radio, las REE ligeras quedan más separadas y las pesadas se apiñan al final. (El Pm no se analiza; su posición está interpolada con la parábola de O'Neill.)</figcaption>
+        </figure>
+        <aside class="analogy"><span class="tag">Analogía</span><p>Piensa en las REE como las cuentas de un collar. Con <i>Z</i>, todas están a la misma distancia. Con <i class="vr">r</i>, cada cuenta se coloca según el tamaño real de su ion: el hilo es el mismo, pero las cuentas del final se juntan.</p></aside>
+        <p><b>Ojo con la orientación.</b> En las figuras de O'Neill el radio crece hacia la derecha, así que el <b>La queda a la derecha</b> y el Lu a la izquierda: es un espejo del diagrama clásico. Un patrón enriquecido en REE ligeras «sube» hacia la derecha y tiene pendiente positiva; en la Lección 6 veremos que eso es λ<sub>1</sub> &gt; 0.</p>
+        <button type="button" class="goto" data-x="rL" data-y="ln">Ver en la figura: r con el La a la izquierda</button>
+        <button type="button" class="goto" data-x="rO" data-y="ln">… y como en O'Neill</button>
+        <details class="curious">
+          <summary>Para curiosos: ¿de verdad se ajusta mejor con el radio?</summary>
+          <p>En los 616 vidrios de Jenner & O'Neill, el error típico que queda tras el ajuste baja así al usar 2, 3, 4 y 5 términos (O'Neill, p. 1471): con el radio, 11.7 → 3.9 → 2.4 → 2.14 %; con <i>Z</i>, 14.0 → 5.6 → 3.09 → 2.56 %. Con el radio hace falta un término menos para la misma calidad.</p>
+          <p>He repetido el cálculo con su hoja de datos y reproduzco esas cifras. Un matiz: las de <i>Z</i> salen colocando las 14 REE equiespaciadas, como en el diagrama clásico, sin hueco para el Pm. Con el <i>Z</i> real, dejando el hueco, la ventaja del radio es algo menor (13.2, 5.3, 2.7 y 2.16 %), pero se mantiene con 2 y 3 términos, que son los que importan en basaltos.</p>
+        </details>
+
+        <h3 id="l1-paso4">Paso 4 · Apartar el Eu (y no echar de menos al Pm)</h3>
+        <p>El europio puede estar como Eu²⁺, que la plagioclasa acepta mucho mejor que el Eu³⁺. Eso produce anomalías que no forman parte de la forma suave del patrón, así que O'Neill <b>excluye el Eu del ajuste</b> y lo recupera al final para calcular Eu/Eu* (Lección 7). En la figura es el círculo hueco.</p>
+        <p>El Ce también puede tener anomalías (Ce⁴⁺), pero en basaltos O'Neill lo mantiene. El prometio no se analiza nunca porque no tiene isótopos estables, y como el eje es el radio y no una posición «de lista», su hueco no molesta.</p>
+        <p>Resultado: <b>13 puntos</b>, cada uno con su <i class="vr">r</i> y su <i class="vy">y</i>.</p>
+      </div>
+    </div>
+
+    <div class="after">
+      <h3>El resultado: 13 parejas (<i class="vr">r</i>, <i class="vy">y</i>)</h3>
+      <p>Esta tabla es todo lo que entra en el ajuste. Cambia con la muestra elegida en la figura (<b id="l1-sname">VG 189</b>).</p>
+      <div class="table-wrap">
+        <table id="l1-table">
+          <thead><tr><th scope="col" style="text-align:left">REE</th><th scope="col">Z</th><th scope="col">ppm</th><th scope="col">CI (ppm)</th><th scope="col">[REE]/CI</th><th scope="col"><span class="ky">y</span> = ln(…)</th><th scope="col"><span class="kr">r</span> (Å)</th></tr></thead>
+          <tbody></tbody>
+          <tfoot><tr><th scope="row" colspan="5" style="text-align:right;font-family:var(--sans);font-size:.88rem">Media de las 13 <span class="ky">y</span> (sin Eu)</th><td class="cy" id="l1-mean"></td><td></td></tr></tfoot>
+        </table>
+      </div>
+      <div class="lambda0">
+        <div class="big">λ<sub>0</sub> = <span id="l1-lam0">3.19</span></div>
+        <div>
+          <p><b>Tu primer λ.</b> λ<sub>0</sub> es simplemente la media de las 13 <i class="vy">y</i> (Tabla 2 de O'Neill: «average ln([REE]/[REE]<sub>CI</sub>)»). Como <i>e</i><sup><span id="l1-lam0b">3.19</span></sup> ≈ <b id="l1-exp">24</b>, las REE de esta muestra están, de media, unas <span id="l1-exp2">24</span> veces por encima del condrito.</p>
+          <p class="aside-note">La hoja de O'Neill da λ<sub>0</sub> = <span id="l1-xls">3.19</span> para esta muestra. Coincide.</p>
+        </div>
+      </div>
+
+      <h3>Lo mismo, dentro de la macro de O'Neill</h3>
+      <p>La hoja <code>LstSq_REE_OrthogPolynomial_April2015.xls</code> hace todo esto con una macro de Visual Basic, <code>REE_OrthogRegress_5term</code>. Estas son las líneas que corresponden a esta lección (extracto; los comentarios en español son míos):</p>
+<pre class="vba"><code><span class="c">' Radios iónicos en Å, Shannon (1976)  ← aquí entran los radios en la macro</span>
+<span class="hr">RR(1) = 1.16</span>      <span class="c">' La</span>
+<span class="hr">RR(2) = 1.143</span>     <span class="c">' Ce   … y así hasta …</span>
+<span class="hr">RR(14) = 0.977</span>    <span class="c">' Lu</span>
+
+<span class="c">' Condrito CI en ppm (Tabla 1)</span>
+CI(1) = 0.2472    <span class="c">' La   … y así hasta …</span>
+CI(14) = 0.0251   <span class="c">' Lu</span>
+
+<span class="c">' Para cada REE (M = 1 a 14) de cada muestra:</span>
+If DataIn.Cells(Sample%, M%) &lt;= 0 Then GoTo Skip     <span class="c">' vacío o ≤ 0: se salta</span>
+X(M%) = DataIn.Cells(Sample%, M%)
+<span class="hy">If Normalize = 1 Then X(M%) = Log(X(M%) / CI(M%)) Else X(M%) = Log(X(M%))</span>
+                                                      <span class="c">' ÷ CI y ln (con B3 = 0, solo ln)</span>
+If M% = 6 Then GoTo Skip                              <span class="c">' el 6.º (Eu) no entra en el ajuste</span></code></pre>
+      <p class="warn"><b>Trampa frecuente:</b> en VBA, <code>Log()</code> es el logaritmo neperiano; en una celda de Excel, <code>LOG()</code> es en base 10 y el neperiano es <code>LN()</code>. Y la celda B3 de la hoja decide si se normaliza: 1 para concentraciones, 0 para coeficientes de reparto (solo ln, sin dividir).</p>
+
+      <h3>Practica</h3>
+      <div class="practice">
+        <div class="ex">
+          <p><b>1.</b> Calcula la <i class="vy">y</i> del Yb de VG 189: 3.996 ppm, con CI = 0.1684 ppm.</p>
+          <form id="ex1" autocomplete="off">
+            <label for="ex1-in" class="ui" style="font-size:.88rem">y<sub>Yb</sub> =</label>
+            <input id="ex1-in" inputmode="decimal" placeholder="p. ej. 2.5">
+            <button type="submit">Comprobar</button>
+            <button type="button" class="ghost" data-sol="ex1">Ver solución</button>
+          </form>
+          <div class="fb" id="ex1-fb" aria-live="polite"></div>
+        </div>
+        <div class="ex">
+          <p><b>2.</b> VG 304 tiene λ<sub>0</sub> = 2.65. ¿Cuántas veces el condrito es su concentración media de REE?</p>
+          <form id="ex2" autocomplete="off">
+            <label for="ex2-in" class="ui" style="font-size:.88rem">veces =</label>
+            <input id="ex2-in" inputmode="decimal" placeholder="p. ej. 10">
+            <button type="submit">Comprobar</button>
+            <button type="button" class="ghost" data-sol="ex2">Ver solución</button>
+          </form>
+          <div class="fb" id="ex2-fb" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <h3>Resumen</h3>
+      <ul class="summary">
+        <li><b>÷ CI</b> quita el zigzag de la nucleosíntesis y deja el enriquecimiento de cada REE respecto al condrito.</li>
+        <li><b>ln</b> convierte errores porcentuales en errores iguales para todos los elementos: los 13 puntos pesan lo mismo y el ajuste es lineal.</li>
+        <li><b>Eje X = radio iónico</b>: la variable que controla la química de las REE. En las figuras de O'Neill crece hacia la derecha, con el La a la derecha.</li>
+        <li><b>Sin Eu</b>: quedan 13 puntos (<i class="vr">r</i><sub>i</sub>, <i class="vy">y</i><sub>i</sub>). Su media ya es el primer coeficiente, λ<sub>0</sub>.</li>
+      </ul>
+      <p><b>Dónde ha aparecido el radio en esta lección:</b> solo en un sitio (<span class="kr">①</span> del mapa), como coordenada x de cada punto. Los <i class="vy">y</i> no dependen del radio en absoluto.</p>
+      <div class="next">
+        <p><b>Próxima lección · ¿Qué es «ajustar»?</b> Buscaremos la recta que mejor pasa por estos 13 puntos, veremos por qué se suman los cuadrados de las distancias (con una analogía de muelles) y descubriremos que, si medimos el radio desde su valor medio (1.0548 Å), la ordenada en el origen es exactamente λ<sub>0</sub>.</p>
+        <p><a href="#leccion-2" data-tab="leccion-2" class="ui" style="font-weight:600">Ir a la Lección 2 →</a></p>
+      </div>
+
+      <h3>Fuentes de esta lección</h3>
+      <ul class="sources">
+        <li>O'Neill, H. St. C. (2016). The smoothness and shapes of chondrite-normalized rare earth element patterns in basalts. <i>Journal of Petrology</i> 57, 1463–1508: pp. 1464–1465 (contracción lantánida, r frente a Z, Eu y Ce), Tabla 1, p. 1471 (r frente a Z).</li>
+        <li>O'Neill (2016), Apéndice 1 del material suplementario, ecs. A1–A3 (por qué logaritmos).</li>
+        <li>Macro <code>REE_OrthogRegress_5term</code> de la hoja <code>LstSq_REE_OrthogPolynomial_April2015.xls</code>; datos de Jenner & O'Neill (2012b) y Feigenson et al. (2003) de <code>REEshapes_reference_datasets_for_plots.xls</code>.</li>
+        <li>Bevington, P. R. & Robinson, D. K. (2003). <i>Data Reduction and Error Analysis for the Physical Sciences</i>, 3.ª ed., §7.4, ecs. 7.49–7.50.</li>
+        <li>Shannon, R. D. (1976). <i>Acta Crystallographica</i> A32, 751–767 (radios iónicos).</li>
+      </ul>
+    </div>
+  </section>
+  <!-- ======================= LECCIÓN 2 ======================= -->
+  <section class="panel" id="leccion-2" role="tabpanel" aria-label="Lección 2" hidden>
+    <header class="lesson-head">
+      <p class="eyebrow">Lección 2 · de 7 (+ 2 opcionales)</p>
+      <h2>¿Qué es «ajustar»? Mínimos cuadrados con una recta</h2>
+      <p class="lead">Tenemos 13 puntos que no están alineados. ¿Cuál es la recta que mejor los representa? Para contestar hace falta una regla que puntúe cada recta posible. Esa regla es la suma de cuadrados, y al aplicarla aparecerán, casi sin querer, los dos primeros λ de O'Neill.</p>
+      <dl class="facts ui">
+        <div><dt>Idea matemática nueva</dt><dd>Residuo, sumatorio Σ y suma de cuadrados (χ²)</dd></div>
+        <div><dt>Dónde entra el radio</dt><dd>En las sumas Σr, Σr² y Σr·y; al centrar, en <span class="kr">r̄</span> (②) y en <span class="kr">r − r̄</span> (③)</dd></div>
+        <div><dt>Muestra guía</dt><dd>VG 189: los 13 puntos de la Lección 1</dd></div>
+      </dl>
+    </header>
+
+    <div class="lesson-grid">
+      <div class="lg-a prose">
+        <h3>El residuo: cuánto falla la recta en cada punto</h3>
+        <p>Dibuja cualquier recta sobre el patrón. En cada REE, la distancia vertical entre el punto y la recta es el <b>residuo</b>:</p>
+        <div class="eq">residuo<sub>i</sub> = <i class="vy">y</i><sub>i</sub> − (valor de la recta en <i class="vr">r</i><sub>i</sub>)</div>
+        <p>Es positivo si el punto queda por encima de la recta y negativo si queda por debajo. En la figura, cada residuo es un muelle; debajo tienes los mismos residuos en forma de barras.</p>
+        <p>Para puntuar una recta hay que resumir sus 13 residuos en un solo número, y para eso hay que sumar. La letra griega <b>Σ</b> (sigma) significa «suma para todos los puntos»: Σ<i class="vy">y</i> es <i class="vy">y</i><sub>La</sub> + <i class="vy">y</i><sub>Ce</sub> + … + <i class="vy">y</i><sub>Lu</sub>, sin el Eu. Para VG 189, Σ<i class="vy">y</i> = 41.437.</p>
+      </div>
+
+      <div class="lg-fig">
+        <div class="sticky">
+          <figure class="lab card" id="lab2">
+            <div class="lab-head ui">
+              <label for="l2-sample">Muestra</label>
+              <select id="l2-sample"></select>
+              <span class="lab-meta" id="l2-meta"></span>
+            </div>
+            <div class="ctrl-row ui">
+              <div class="seg" role="group" aria-label="Punto de giro de la recta">
+                <span class="seg-label">Pivote</span>
+                <button type="button" data-mode="c">en r̄ (centrado)</button>
+                <button type="button" data-mode="o">en r = 0</button>
+              </div>
+            </div>
+            <div class="sliders ui">
+              <div><label for="l2-a"><span id="l2-alabel">Altura en r̄ (a′)</span><output id="l2-aval" for="l2-a"></output></label><input type="range" id="l2-a"></div>
+              <div><label for="l2-b"><span>Pendiente (b)</span><output id="l2-bval" for="l2-b"></output></label><input type="range" id="l2-b" min="-20" max="20" step="0.01"></div>
+            </div>
+            <div class="btnrow ui">
+              <button type="button" class="btn" id="l2-relax">Soltar los muelles</button>
+              <button type="button" class="btn ghost" id="l2-reset">Descolocar la recta</button>
+            </div>
+            <div class="plot" id="l2-plot"><svg role="img" aria-label="Patrón de la muestra frente al radio con una recta; cada punto está unido a la recta por un muelle. Debajo, barras con los residuos."></svg><div class="tip" hidden></div></div>
+            <div class="readouts">
+              <div class="ro"><div class="k">Fuerza neta</div><div class="v" id="l2-f"></div><div class="s">Σ residuos</div></div>
+              <div class="ro"><div class="k">Giro neto</div><div class="v" id="l2-t"></div><div class="s">Σ (r − r̄)·residuo</div></div>
+              <div class="ro"><div class="k">Suma de cuadrados</div><div class="v" id="l2-ss"></div><div class="meter" aria-hidden="true"><span class="fill" id="l2-meter"></span><span class="mk" id="l2-mkmin"></span><span class="mk h" id="l2-mkh"></span></div><div class="s" id="l2-ssmin"></div></div>
+            </div>
+            <p class="eqline" id="l2-eq"></p>
+            <figcaption>Los 13 puntos (el Eu, hueco, no cuenta) frente al radio, como en O'Neill: el La a la derecha. Cada muelle mide un residuo; las barras de abajo son los mismos residuos. La vertical verde azulada marca r̄. En el medidor, la marca oscura es el mínimo posible y la gris, lo que daría una recta horizontal a la altura media.</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="lg-b prose">
+        <h3>¿Por qué al cuadrado?</h3>
+        <p>La suma de los residuos tal cual no sirve: los positivos y los negativos se compensan. De hecho, <b>cualquier recta que pase por el centro de los datos (r̄, ȳ) tiene suma de residuos cero, esté inclinada como esté</b>. Pruébalo: pulsa «Soltar los muelles», deja el pivote en r̄ y mueve solo la pendiente: la fuerza neta sigue en cero aunque la recta sea malísima.</p>
+        <p>Por eso se suman los <b>cuadrados</b> de los residuos (Bevington & Robinson, §6.2):</p>
+        <ul>
+          <li>Un cuadrado siempre es positivo, así que ya no hay compensaciones.</li>
+          <li>Castiga más los fallos grandes: fallar por 0.2 cuesta cuatro veces lo que fallar por 0.1.</li>
+          <li>Si los errores se reparten como una campana de Gauss, la recta con la menor suma de cuadrados es la más probable (máxima verosimilitud, ecs. 6.5–6.9).</li>
+          <li>Lleva a una receta directa, sin tanteos. Con valores absolutos no la habría (p. 103).</li>
+        </ul>
+        <div class="eq">S = Σ (residuo<sub>i</sub>)<sup>2</sup> &nbsp;→&nbsp; lo más pequeña posible</div>
+        <p>Si antes de elevar al cuadrado divides cada residuo por el error analítico <i>s</i>, la suma se llama <b>χ²</b> (ji cuadrado): χ² = Σ (residuo / <i>s</i>)². Gracias al ln de la Lección 1, <i>s</i> es el mismo para todos los puntos, así que minimizar χ² y minimizar S es lo mismo: <i>s</i> solo cambia la escala (ec. A4 del Apéndice de O'Neill). El χ² nos servirá en la Lección 7 para juzgar si un ajuste es bueno.</p>
+
+        <h3>La analogía de los muelles</h3>
+        <aside class="analogy"><span class="tag">Analogía</span><p>Imagina que la recta es una varilla rígida y que cada punto está unido a ella por un muelle vertical, todos iguales. Un muelle estirado una distancia d guarda una energía proporcional a d². Si sueltas la varilla, se mueve hasta que la energía total —la suma de los d²— es la menor posible. Esa posición de reposo es exactamente la recta de mínimos cuadrados.</p></aside>
+        <button type="button" class="goto" data-act="relax">Ver en la figura: soltar los muelles</button>
+        <p>En reposo, la varilla está en equilibrio, y eso impone dos condiciones. Míralas en los contadores de la figura, que se ponen a cero al soltar:</p>
+        <ol class="reasons">
+          <li><b>No sube ni baja:</b> los muelles que tiran hacia arriba compensan a los que tiran hacia abajo → Σ residuos = 0 (fuerza neta).</li>
+          <li><b>No gira:</b> los tirones a un lado y a otro se compensan, como en un balancín → Σ <i class="vr">r</i><sub>i</sub>·residuo<sub>i</sub> = 0 (giro neto).</li>
+        </ol>
+        <p>Escritas con sumas, son dos ecuaciones con dos incógnitas: la ordenada <i>a</i> y la pendiente <i>b</i> de la recta <i class="vy">y</i> = <i>a</i> + <i>b</i>·<i class="vr">r</i>. Se llaman <b>ecuaciones normales</b> (Bevington, ec. 6.11):</p>
+        <div class="eq">Σ<i class="vy">y</i> = <i>N</i>·<i>a</i> + <i>b</i>·Σ<i class="vr">r</i><br>Σ<i class="vr">r</i><i class="vy">y</i> = <i>a</i>·Σ<i class="vr">r</i> + <i>b</i>·Σ<i class="vr">r</i><sup>2</sup></div>
+
+        <h3>La receta</h3>
+        <p>Resolviendo ese par de ecuaciones se obtiene la receta de la recta cuando todos los puntos tienen el mismo error (Bevington, ec. 6.13):</p>
+        <div class="eq">Δ = <i>N</i>·Σ<i class="vr">r</i><sup>2</sup> − (Σ<i class="vr">r</i>)<sup>2</sup><br><i>b</i> = (<i>N</i>·Σ<i class="vr">r</i><i class="vy">y</i> − Σ<i class="vr">r</i>·Σ<i class="vy">y</i>) / Δ<br><i>a</i> = (Σ<i class="vr">r</i><sup>2</sup>·Σ<i class="vy">y</i> − Σ<i class="vr">r</i>·Σ<i class="vr">r</i><i class="vy">y</i>) / Δ</div>
+        <p>Con VG 189 (N = 13), las cuatro sumas son:</p>
+        <div class="table-wrap" style="display:inline-block;max-width:100%">
+          <table class="mini sums">
+            <thead><tr><th scope="col"><span class="kr">Σr</span></th><th scope="col"><span class="kr">Σr²</span></th><th scope="col"><span class="ky">Σy</span></th><th scope="col">Σ<span class="kr">r</span>·<span class="ky">y</span></th></tr></thead>
+            <tbody><tr><td>13.712</td><td>14.510216</td><td>41.437392</td><td>43.628696</td></tr></tbody>
+          </table>
+        </div>
+        <div class="eq">Δ = 13 × 14.510216 − 13.712<sup>2</sup> = 188.6328 − 188.0189 = 0.6139</div>
+        <div class="eq"><i>b</i> = (567.1730 − 568.1895) / 0.6139 = <b>−1.656</b></div>
+        <div class="eq"><i>a</i> = (601.2655 − 598.2367) / 0.6139 = <b>4.934</b></div>
+        <p>Dos avisos. <b>Δ es una resta de dos números casi iguales</b> (188.63 − 188.02): si redondeas Σr y Σr² a dos decimales, Δ sale 0.666 en vez de 0.614, un 8 % de error por un redondeo inocente. Hay que llevar todos los decimales (Bevington, p. 111). Y <b><i>a</i> = 4.934 es el valor de la recta en r = 0</b>: el ln de la concentración de un ion de tamaño cero. No significa nada geológicamente.</p>
+        <p class="aside-note">Fíjate también en que N, Σr, Σr² y Δ solo dependen de los radios: valen lo mismo para las cuatro muestras de la figura y para las 616 de la hoja de O'Neill.</p>
+
+        <h3>El truco: medir el radio desde su media</h3>
+        <p>Cambiemos de regla: en vez de medir el radio desde cero, midámoslo desde su valor medio, <span class="kr">r̄</span> = Σr / 13 = <b>1.054769 Å</b>. La nueva variable es <i class="vr">x′</i> = <i class="vr">r</i> − r̄. Por definición de media, los radios mayores que r̄ compensan exactamente a los menores, así que Σ<i class="vr">x′</i> = 0. Con eso, las dos ecuaciones normales se <b>separan</b> y cada incógnita se calcula sola:</p>
+        <div class="eq"><i>a′</i> = Σ<i class="vy">y</i> / <i>N</i> = 41.437 / 13 = <b>3.187 = λ<sub>0</sub></b></div>
+        <div class="eq"><i>b</i> = Σ<i class="vr">x′</i><i class="vy">y</i> / Σ<i class="vr">x′</i><sup>2</sup> = −0.07819 / 0.04722 = <b>−1.656 = λ<sub>1</sub></b></div>
+        <p>¡Son los dos primeros coeficientes de O'Neill! La recta centrada es <i class="vy">y</i> = λ<sub>0</sub> + λ<sub>1</sub>·(<i class="vr">r</i> − 1.05477), y <i class="vr">r</i> − 1.05477 es exactamente el primer polinomio ortogonal de su Tabla 2, f<sub>1</sub>. La pendiente es la misma en las dos versiones; lo que cambia es el significado de la ordenada: <i>a′</i> es el nivel medio del patrón.</p>
+
+        <h3>La trampa del origen</h3>
+        <p>O'Neill lo ilustra en su Fig. 1a con cuatro patrones inventados: A = 5 − 3r, B = 3, C = 4 y D = 2 + 3r. Si comparas sus ordenadas en el origen (5, 3, 4 y 2), dirías que A es el más rico en REE… y es el más pobre. Con el radio centrado, las ordenadas son 1.84, 3, 4 y 5.16: el orden real.</p>
+        <figure class="card fig-plain">
+          <div id="l2-origin" class="plot"></div>
+          <figcaption class="fig-cap">Los cuatro patrones de la Fig. 1a de O'Neill. En r = 0 (a la izquierda), sus ordenadas engañan. En <span class="kr">r̄</span> (vertical verde azulada) dan el nivel medio real; es el número entre paréntesis. Discontinuo: la recta prolongada fuera de la zona de datos, que ocupa solo la franja gris.</figcaption>
+        </figure>
+        <aside class="analogy"><span class="tag">Analogía</span><p>Es como nivelar una balda. Si el tornillo sobre el que gira está en el centro, puedes cambiar la inclinación sin que la balda suba ni baje. Si el tornillo está lejísimos —el origen r = 0 está casi seis veces la anchura del patrón a la izquierda—, cada cambio de inclinación sube o baja toda la balda, y hay que corregir la altura una y otra vez.</p></aside>
+        <button type="button" class="goto" data-mode="o">Ver en la figura: pivote en r = 0</button>
+        <p>Pruébalo: con el pivote en r = 0, mueve un poco la pendiente y verás que la recta sale disparada del gráfico. Encontrar la mejor recta así exige ir y volver entre los dos deslizadores. Con el pivote en r̄, basta con ajustar cada uno por separado. En la Lección 4 veremos que esto mismo, multiplicado por cinco términos, es el gran problema de los coeficientes «normales».</p>
+
+        <h3>¿Es buena la recta?</h3>
+        <p>Suelta los muelles con VG 189 y mira las barras de residuos: son negativas en los extremos (La −0.33, Lu −0.19) y positivas en el centro (Sm +0.22). No es ruido al azar: es una joroba, la curvatura del patrón que una recta no puede seguir.</p>
+        <p>En números: el residuo típico es 0.16 en ln (O'Neill lo expresaría como un 16 %), cuando el error analítico ronda el 2 %. Con <i>s</i> = 2 %, χ² = 705, y un buen ajuste debería dar un valor parecido al número de grados de libertad: 13 puntos − 2 parámetros = 11. La recta se queda muy corta: hace falta curvatura, y eso es la Lección 3.</p>
+        <button type="button" class="goto" data-act="relax" data-s="0">Ver en la figura: VG 189 en reposo</button>
+      </div>
+    </div>
+
+    <div class="after">
+      <h3>Compruébalo en Excel</h3>
+      <p>Con las 13 <i class="vy">y</i> (sin Eu) en B2:B14 y sus radios en C2:C14. En Excel en español, los argumentos se separan con punto y coma y los decimales llevan coma:</p>
+<pre class="vba"><code>=PENDIENTE(B2:B14;C2:C14)          <span class="c">→ −1,656    pendiente b = λ₁</span>
+=INTERSECCION.EJE(B2:B14;C2:C14)   <span class="c">→  4,934    la recta en r = 0</span>
+=PROMEDIO(B2:B14)                  <span class="c">→  3,187    ȳ = λ₀</span>
+=PROMEDIO(C2:C14)                  <span class="c">→  1,054769 r̄</span></code></pre>
+      <p>Y si en D2:D14 pones el radio centrado (<code>=C2-PROMEDIO($C$2:$C$14)</code>), <code>=INTERSECCION.EJE(B2:B14;D2:D14)</code> da 3,187: la ordenada se ha convertido en λ<sub>0</sub>.</p>
+
+      <h3>¿Y la macro de O'Neill?</h3>
+      <p>La macro no ajusta rectas: ajusta directamente cinco términos. Pero sus dos primeros coeficientes para VG 189, λ<sub>0</sub> = 3.19 y λ<sub>1</sub> = −1.66, son exactamente los que acabas de calcular con la recta centrada. Que no cambien al añadir más términos es la gracia de los polinomios ortogonales (Lección 5).</p>
+
+      <h3>Practica</h3>
+      <div class="practice">
+        <div class="ex">
+          <p><b>1.</b> Para VG 4080, Σ<i class="vr">x′</i><i class="vy">y</i> = 0.52063 y Σ<i class="vr">x′</i>² = 0.04722. ¿Cuánto vale λ<sub>1</sub>?</p>
+          <form id="l2ex1" autocomplete="off">
+            <label for="l2ex1-in" class="ui" style="font-size:.88rem">λ<sub>1</sub> =</label>
+            <input id="l2ex1-in" inputmode="decimal" placeholder="p. ej. −2.5">
+            <button type="submit">Comprobar</button>
+            <button type="button" class="ghost" data-sol="l2ex1">Ver solución</button>
+          </form>
+          <div class="fb" id="l2ex1-fb" aria-live="polite"></div>
+        </div>
+        <div class="ex">
+          <p><b>2.</b> Una recta pasa exactamente por el centro de los datos (r̄, ȳ), con una pendiente cualquiera. ¿Cuánto vale la suma de sus residuos, sin elevarlos al cuadrado?</p>
+          <form id="l2ex2" autocomplete="off">
+            <label for="l2ex2-in" class="ui" style="font-size:.88rem">Σ residuos =</label>
+            <input id="l2ex2-in" inputmode="decimal" placeholder="un número">
+            <button type="submit">Comprobar</button>
+            <button type="button" class="ghost" data-sol="l2ex2">Ver solución</button>
+          </form>
+          <div class="fb" id="l2ex2-fb" aria-live="polite"></div>
+        </div>
+        <div class="ex">
+          <p><b>3.</b> Dos basaltos tienen exactamente la misma forma de patrón, pero uno tiene todas las REE al doble de concentración que el otro. ¿Qué cambia?</p>
+          <div class="mc ui" role="group" aria-label="Respuestas">
+            <button type="button" class="btn ghost" data-mc="l0">Solo λ₀</button>
+            <button type="button" class="btn ghost" data-mc="l1">Solo λ₁</button>
+            <button type="button" class="btn ghost" data-mc="both">Los dos</button>
+          </div>
+          <div class="fb" id="l2ex3-fb" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <h3>Resumen</h3>
+      <ul class="summary">
+        <li><b>Residuo</b>: distancia vertical entre el punto y la recta (observado − calculado).</li>
+        <li><b>Mínimos cuadrados</b>: la mejor recta es la que hace mínima la suma de los residuos al cuadrado (el χ², si antes se dividen por el error). Los cuadrados evitan que se compensen positivos y negativos.</li>
+        <li><b>Muelles</b>: en reposo, Σ residuos = 0 y Σ r·residuo = 0. Son las dos ecuaciones normales, que dan una receta directa.</li>
+        <li><b>Centrar</b> el radio en r̄ = 1.05477 separa las incógnitas: la ordenada es la media (λ<sub>0</sub>) y la pendiente es λ<sub>1</sub>. La ordenada en r = 0 no significa nada.</li>
+        <li>Para VG 189, la recta deja una joroba en los residuos: hace falta curvatura.</li>
+      </ul>
+      <p><b>Dónde ha aparecido el radio en esta lección:</b> en tres sitios. Primero, en las sumas Σr, Σr² y Σr·y de la receta. Segundo, en <span class="kr">r̄ = 1.05477</span>, la media de los radios, que es la primera constante de los polinomios ortogonales (② del mapa). Tercero, en <span class="kr">r − r̄</span>, que es el primer polinomio ortogonal, f<sub>1</sub> (③ del mapa).</p>
+      <div class="next">
+        <p><b>Próxima lección · De la recta a la curva.</b> Añadiremos términos en r², r³ y r⁴ para seguir la joroba. Las dos ecuaciones normales se convertirán en cinco, que Excel resuelve con MINVERSA y MMULT, igual que la macro de O'Neill. Y veremos que la tabla de ese sistema depende solo de los radios.</p>
+        <p><a href="#leccion-3" data-tab="leccion-3" class="ui" style="font-weight:600">Ir a la Lección 3 →</a></p>
+      </div>
+
+      <h3>Fuentes de esta lección</h3>
+      <ul class="sources">
+        <li>Bevington & Robinson (2003), §6.2 (ec. 6.4 y p. 103: por qué los cuadrados; máxima verosimilitud, ecs. 6.5–6.9), §6.3 (ecs. 6.10–6.13), Tabla 6.1 (un ejemplo resuelto con las cuatro sumas), p. 111 (errores de redondeo) y ejercicio 6.7 (al centrar la variable, la ordenada es la media).</li>
+        <li>O'Neill (2016), Fig. 1a y su pie (pp. 1465–1466) y Tabla 2 (f<sub>1</sub> = r<sub>REE</sub> − 1.05477).</li>
+        <li>O'Neill (2016), Apéndice 1, ecs. A3b y A4 (el χ² que se minimiza).</li>
+        <li>Datos: vidrios VG 189, VG 304 y VG 4080 (Jenner & O'Neill, 2012b) y basalto 8-2.70 (Feigenson et al., 2003), de las hojas de O'Neill.</li>
+      </ul>
+    </div>
+  </section>
+  <!-- ======================= LECCIÓN 3 ======================= -->
+  <section class="panel" id="leccion-3" role="tabpanel" aria-label="Lección 3" hidden>
+    <header class="lesson-head">
+      <p class="eyebrow">Lección 3 · de 7 (+ 2 opcionales)</p>
+      <h2>De la recta a la curva: el polinomio y su sistema de ecuaciones</h2>
+      <p class="lead">La recta dejaba una joroba en los residuos. Para seguirla hay que dejar que la línea se doble, y eso es un polinomio. El criterio sigue siendo el mismo (mínimos cuadrados), pero ahora hay cinco incógnitas y un sistema de cinco ecuaciones. Resolverlo es exactamente lo que hace la macro de O'Neill con dos funciones de Excel.</p>
+      <dl class="facts ui">
+        <div><dt>Idea matemática nueva</dt><dd>El polinomio y un sistema de ecuaciones escrito como tabla (matriz)</dd></div>
+        <div><dt>Dónde entra el radio</dt><dd><span class="kr">④</span> La tabla del sistema solo contiene sumas de potencias de r</dd></div>
+        <div><dt>Muestra guía</dt><dd>VG 189, de la recta a la cuártica</dd></div>
+      </dl>
+    </header>
+
+    <div class="lesson-grid">
+      <div class="lg-a prose">
+        <h3>Una línea que puede doblarse</h3>
+        <p>Un polinomio es una suma de potencias de la variable, cada una multiplicada por su coeficiente:</p>
+        <div class="eq"><i class="vy">y</i> = <i>a</i><sub>0</sub> + <i>a</i><sub>1</sub>·<i class="vr">r</i> + <i>a</i><sub>2</sub>·<i class="vr">r</i><sup>2</sup> + <i>a</i><sub>3</sub>·<i class="vr">r</i><sup>3</sup> + <i>a</i><sub>4</sub>·<i class="vr">r</i><sup>4</sup></div>
+        <p>Cada término que añades le da a la línea una posibilidad más de doblarse:</p>
+        <div class="shapes" role="img" aria-label="Qué forma puede dibujar un polinomio según su número de términos: horizontal, recta, una curva, dos curvas y tres curvas.">
+          <div class="shape"><svg viewBox="0 0 120 64" aria-hidden="true"><rect class="sb" x="0" y="0" width="120" height="64" rx="6"/><path class="sc" d="M8,32 L112,32"/></svg><b>1 término</b><span>solo nivel</span></div>
+          <div class="shape"><svg viewBox="0 0 120 64" aria-hidden="true"><rect class="sb" x="0" y="0" width="120" height="64" rx="6"/><path class="sc" d="M8,51.2 L112,12.8"/></svg><b>2 términos</b><span>recta</span></div>
+          <div class="shape"><svg viewBox="0 0 120 64" aria-hidden="true"><rect class="sb" x="0" y="0" width="120" height="64" rx="6"/><path class="sc" d="M8.0,56.0 L12.3,48.3 L16.7,41.3 L21.0,35.0 L25.3,29.3 L29.7,24.3 L34.0,20.0 L38.3,16.3 L42.7,13.3 L47.0,11.0 L51.3,9.3 L55.7,8.3 L60.0,8.0 L64.3,8.3 L68.7,9.3 L73.0,11.0 L77.3,13.3 L81.7,16.3 L86.0,20.0 L90.3,24.3 L94.7,29.3 L99.0,35.0 L103.3,41.3 L107.7,48.3 L112.0,56.0"/></svg><b>3 términos</b><span>una curva</span></div>
+          <div class="shape"><svg viewBox="0 0 120 64" aria-hidden="true"><rect class="sb" x="0" y="0" width="120" height="64" rx="6"/><path class="sc" d="M8.0,32.0 L12.3,22.9 L16.7,16.1 L21.0,11.5 L25.3,8.9 L29.7,8.0 L34.0,8.6 L38.3,10.5 L42.7,13.5 L47.0,17.4 L51.3,21.9 L55.7,26.8 L60.0,32.0 L64.3,37.2 L68.7,42.1 L73.0,46.6 L77.3,50.5 L81.7,53.5 L86.0,55.4 L90.3,56.0 L94.7,55.1 L99.0,52.5 L103.3,47.9 L107.7,41.1 L112.0,32.0"/></svg><b>4 términos</b><span>dos curvas (S)</span></div>
+          <div class="shape"><svg viewBox="0 0 120 64" aria-hidden="true"><rect class="sb" x="0" y="0" width="120" height="64" rx="6"/><path class="sc" d="M8.0,8.0 L12.3,34.1 L16.7,49.2 L21.0,55.8 L25.3,56.0 L29.7,51.6 L34.0,44.5 L38.3,35.9 L42.7,27.2 L47.0,19.4 L51.3,13.3 L55.7,9.3 L60.0,8.0 L64.3,9.3 L68.7,13.2 L73.0,19.4 L77.3,27.2 L81.7,35.9 L86.0,44.5 L90.3,51.6 L94.7,56.0 L99.0,55.8 L103.3,49.3 L107.7,34.1 L112.0,8.0"/></svg><b>5 términos</b><span>tres curvas (W)</span></div>
+        </div>
+        <aside class="analogy"><span class="tag">Analogía</span><p>Piensa en un alambre. Con un término es una varilla rígida que solo puedes subir o bajar; con dos, además puedes inclinarla. Cada término más es un punto donde el alambre puede doblarse. En su Tabla 2, O'Neill da nombre a cada tipo de doblez: pendiente, curvatura, inflexiones en los extremos y forma de W.</p></aside>
+      </div>
+
+      <div class="lg-fig">
+        <div class="sticky">
+          <figure class="lab card" id="lab3">
+            <div class="lab-head ui">
+              <label for="l3-sample">Muestra</label>
+              <select id="l3-sample"></select>
+              <span class="lab-meta" id="l3-meta"></span>
+            </div>
+            <div class="ctrl-row ui">
+              <div class="seg" role="group" aria-label="Número de términos del polinomio">
+                <span class="seg-label">Términos</span>
+                <button type="button" data-m="1">1 nivel</button>
+                <button type="button" data-m="2">2 recta</button>
+                <button type="button" data-m="3">3 parábola</button>
+                <button type="button" data-m="4">4 cúbica</button>
+                <button type="button" data-m="5">5 cuártica</button>
+              </div>
+            </div>
+            <div class="plot" id="l3-plot"><svg role="img" aria-label="Patrón de la muestra frente al radio con el polinomio ajustado; debajo, los residuos."></svg><div class="tip" hidden></div></div>
+            <div class="readouts">
+              <div class="ro"><div class="k">Residuo típico</div><div class="v" id="l3-s"></div><div class="s">s = √(S / ν), en ln</div></div>
+              <div class="ro"><div class="k">χ² reducido</div><div class="v" id="l3-chi"></div><div class="s">con s = 2 %; lo ideal ≈ 1</div></div>
+              <div class="ro"><div class="k">Grados de libertad</div><div class="v" id="l3-nu"></div><div class="s">ν = 13 − términos</div></div>
+            </div>
+            <p class="coefs" id="l3-coefs"></p>
+            <figcaption>El polinomio de mínimos cuadrados con el número de términos elegido (el La a la derecha, como en O'Neill). Abajo, los residuos; la franja violeta marca ±2 %, el error analítico típico. La escala de los residuos se ajusta sola: mira sus números.</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="lg-b prose">
+        <h3>El mismo criterio, más incógnitas</h3>
+        <p>Buscamos los coeficientes que hacen mínima la suma de los residuos al cuadrado, igual que con la recta. En la analogía de los muelles, la varilla rígida se convierte en una regla flexible. Al soltarla, se queda en reposo cuando cada forma de moverse está equilibrada, y hay una condición por término:</p>
+        <div class="eq">Σ residuo = 0 &nbsp;<span class="aside-note">(subir o bajar)</span><br>Σ <i class="vr">r</i>·residuo = 0 &nbsp;<span class="aside-note">(inclinar)</span><br>Σ <i class="vr">r</i><sup>2</sup>·residuo = 0 &nbsp;<span class="aside-note">(doblar una vez)</span><br>Σ <i class="vr">r</i><sup>3</sup>·residuo = 0<br>Σ <i class="vr">r</i><sup>4</sup>·residuo = 0</div>
+        <p>Dicho de otra forma: en los residuos no puede quedar nada que alguna de las piezas 1, r, r², r³ o r⁴ sea capaz de explicar. Si quedara, el ajuste aún podría mejorar.</p>
+        <p>Sustituyendo residuo = <i class="vy">y</i> − (<i>a</i><sub>0</sub> + <i>a</i><sub>1</sub><i class="vr">r</i> + …) y agrupando, salen las cinco <b>ecuaciones normales</b> (Bevington, ec. 7.7). La primera es:</p>
+        <div class="eq">Σ<i class="vy">y</i> = <i>a</i><sub>0</sub>·<i>N</i> + <i>a</i><sub>1</sub>·Σ<i class="vr">r</i> + <i>a</i><sub>2</sub>·Σ<i class="vr">r</i><sup>2</sup> + <i>a</i><sub>3</sub>·Σ<i class="vr">r</i><sup>3</sup> + <i>a</i><sub>4</sub>·Σ<i class="vr">r</i><sup>4</sup></div>
+        <p>Las otras cuatro son iguales, pero multiplicando todo por <i class="vr">r</i>, <i class="vr">r</i><sup>2</sup>, <i class="vr">r</i><sup>3</sup> y <i class="vr">r</i><sup>4</sup>. En total aparecen las sumas de potencias del radio desde Σ<i class="vr">r</i><sup>0</sup> = N hasta Σ<i class="vr">r</i><sup>8</sup>.</p>
+
+        <h3>El sistema como una tabla (matriz)</h3>
+        <p>Escribir cinco ecuaciones tan largas es incómodo, así que se ordenan en una tabla (Bevington, §7.2, ecs. 7.13–7.15): a la izquierda, los números que multiplican a cada incógnita (la matriz <b>α</b>); en medio, las incógnitas (<b>a</b>); a la derecha, los resultados (el vector <b>β</b>).</p>
+        <div class="eq"><b>α</b> · <b>a</b> = <b>β</b></div>
+        <div class="mtx-wrap">
+          <div class="mtx-top"><span id="l3-mtx-title">El sistema de VG 189</span><button type="button" class="btn ghost" id="l3-sym">Ver con símbolos</button></div>
+          <div id="l3-mtx"></div>
+        </div>
+        <p class="aside-note" style="margin-top:-.4rem">La tabla sigue al laboratorio: cambia el número de términos o la muestra y mira qué parte cambia. Pasa el ratón por una celda de α para ver sus gemelas.</p>
+        <p>Fíjate en tres cosas:</p>
+        <ul>
+          <li><b>α solo contiene sumas de potencias de los radios</b>: en la fila j y la columna k está Σ<i class="vr">r</i><sup>j+k</sup>. No depende de la muestra: es la misma tabla para VG 189, para VG 304 y para los 616 vidrios. Es la marca <span class="kr">④</span> del mapa.</li>
+          <li><b>β mezcla radios y datos</b>: Σ<i class="vy">y</i>, Σ<i class="vr">r</i>·<i class="vy">y</i>, Σ<i class="vr">r</i><sup>2</sup>·<i class="vy">y</i>… Es lo único que cambia de una muestra a otra.</li>
+          <li>Los números se repiten en cada diagonal que baja hacia la izquierda, porque en ella j + k no cambia.</li>
+        </ul>
+
+        <h3>Resolver: la tabla inversa</h3>
+        <p>Con una sola ecuación, 5·<i>a</i> = 10, despejarías dividiendo: <i>a</i> = 10 / 5, que es lo mismo que multiplicar por el inverso, <i>a</i> = (1/5)·10. Con una tabla se hace igual: se calcula la tabla inversa α<sup>−1</sup> y se multiplica por β (Bevington, ec. 7.19):</p>
+        <div class="eq"><b>a</b> = <b>α</b><sup>−1</sup> · <b>β</b></div>
+        <aside class="analogy"><span class="tag">Analogía</span><p>Si α es una máquina que convierte coeficientes en resultados, α<sup>−1</sup> es la misma máquina funcionando al revés: le das los resultados (β) y te devuelve los coeficientes (a).</p></aside>
+        <p>Nadie calcula a mano la inversa de una tabla de 5 × 5. Excel lo hace con <b>MINVERSA</b> (inversa) y <b>MMULT</b> (multiplicar tablas), y eso es exactamente lo que hace la macro de O'Neill, con los nombres en inglés MInverse y MMult.</p>
+        <p>Para VG 189 con cinco términos sale:</p>
+        <div class="eq"><i>a</i><sub>0</sub> ≈ −2366.7 · <i>a</i><sub>1</sub> ≈ 9059.2 · <i>a</i><sub>2</sub> ≈ −13014.3 · <i>a</i><sub>3</sub> ≈ 8326.8 · <i>a</i><sub>4</sub> ≈ −2001.8</div>
+        <p>¡Números enormes, con signos alternos, para describir valores de <i class="vy">y</i> en torno a 3! En r̄ los cinco términos valen −2367, +9555, −14479, +9771 y −2478, y su suma es 3.35: gigantes que casi se anulan. Además, la tabla α es muy delicada, porque sus columnas se parecen muchísimo. Resolviéndola directamente con los 16 dígitos de un ordenador, <i>a</i><sub>0</sub> sale −2366.71; con aritmética exacta, −2366.66. Estos coeficientes son correctos como conjunto, pero uno a uno no significan nada. Es el problema de la Lección 4.</p>
+
+        <h3>¿Cuántos términos?</h3>
+        <p>Pulsa 1, 2, 3, 4 y 5 en la figura. Con VG 189:</p>
+        <div class="table-wrap" style="display:inline-block;max-width:100%">
+          <table class="plain">
+            <thead><tr><th scope="col">Términos</th><th scope="col">Residuo típico s</th><th scope="col">χ² reducido (s = 2 %)</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td>0.185</td><td>86</td></tr>
+              <tr><td>2</td><td>0.160</td><td>64</td></tr>
+              <tr><td>3</td><td>0.043</td><td>4.7</td></tr>
+              <tr><td>4</td><td>0.025</td><td>1.5</td></tr>
+              <tr><td>5</td><td>0.020</td><td>1.0</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Con tres términos desaparece la joroba. Con cinco, el residuo típico (0.020, un 2 %) es del tamaño del error analítico y el χ² reducido vale ≈ 1: ya no queda nada que explicar salvo el ruido de la medida. En los 616 vidrios de Jenner & O'Neill, el término lineal explica el 83.4 % de la variación del patrón (aparte del nivel medio); con la curvatura se llega al 98.2 %, y los dos términos siguientes solo suben al 99.3 % y al 99.4 % (O'Neill, pp. 1470–1471). Por eso tres términos bastan para casi cualquier basalto.</p>
+        <button type="button" class="goto" data-m="3">Ver en la figura: 3 términos</button>
+        <button type="button" class="goto" data-m="5">… y 5 términos</button>
+        <p>Cada coeficiente «gasta» un punto: con 13 REE y 5 términos quedan 13 − 5 = 8 <b>grados de libertad</b> (ν). Con 13 términos, el polinomio pasaría exactamente por los 13 puntos… y dibujaría también el ruido analítico.</p>
+      </div>
+    </div>
+
+    <div class="after">
+      <h3>Dentro de la macro de O'Neill</h3>
+      <p>La macro construye su tabla de 5 × 5 (la llama <code>A</code>) y su vector (<code>Z</code>) sumando REE a REE, y después resuelve. Extracto; los comentarios en español son míos y los radios (<code>RR</code>) van en verde azulado:</p>
+<pre class="vba"><code>For M% = 1 To NoData%                      <span class="c">' recorre las 14 REE (el Eu se salta)</span>
+  A(1, 1) = A(1, 1) + 1                                          <span class="c">' fila 1: Σ 1</span>
+  A(1, 2) = A(1, 2) + (<span class="hr">RR(M%)</span> - 1.054769)                  <span class="c">' fila 1: Σ f1(r)</span>
+  <span class="c">' …</span>
+  A(2, 1) = A(2, 1) + <span class="hr">RR(M%)</span>                                     <span class="c">' fila 2: Σ r</span>
+  A(2, 2) = A(2, 2) + <span class="hr">RR(M%)</span> * (<span class="hr">RR(M%)</span> - 1.054769)         <span class="c">' fila 2: Σ r·f1(r)</span>
+  <span class="c">' … así hasta A(5, 5)</span>
+  Z(1, 1) = Z(1, 1) + <span class="hy">X(M%)</span>                                      <span class="c">' Σ y</span>
+  Z(2, 1) = Z(2, 1) + <span class="hy">X(M%)</span> * <span class="hr">RR(M%)</span>                           <span class="c">' Σ r·y</span>
+  Z(3, 1) = Z(3, 1) + <span class="hy">X(M%)</span> * <span class="hr">RR(M%)</span> * <span class="hr">RR(M%)</span>                  <span class="c">' Σ r²·y</span>
+  <span class="c">' …</span>
+Next M%
+MatInv = Application.WorksheetFunction.MInverse(A)                <span class="c">' tabla inversa A⁻¹</span>
+SolutionMatrix = Application.WorksheetFunction.MMult(MatInv, Z)   <span class="c">' A⁻¹ · Z</span></code></pre>
+      <p>Hay una diferencia con nuestra tabla: en las columnas, O'Neill no pone r, r², r³ y r⁴, sino sus polinomios ortogonales: (r − 1.054769), (r − 1.005327)·(r − 1.128236), etc. Por eso lo que sale de MMult no son los <i>a</i>, sino directamente los λ. Las filas sí son potencias del radio, como en nuestra tabla. Es la receta de Bevington (ecs. 7.30–7.33), que desmontaremos en la Lección 6. Y como en nuestra α, todos los elementos de <code>A</code> contienen solo radios: la tabla es la misma para todas las muestras.</p>
+
+      <h3>Compruébalo en Excel</h3>
+      <p><b>Opción rápida, con ESTIMACION.LINEAL.</b> Pon las 13 <i class="vy">y</i> en B2:B14, los radios en C2:C14 y, en D, E y F, sus potencias (<code>=C2^2</code>, <code>=C2^3</code>, <code>=C2^4</code>). Entonces:</p>
+<pre class="vba"><code>=ESTIMACION.LINEAL(B2:B14;C2:F14)     <span class="c">→ a₄  a₃  a₂  a₁  a₀   (¡en orden inverso!)</span></code></pre>
+      <p>En Excel 365 el resultado ocupa solo cinco celdas en fila; en versiones antiguas, selecciona cinco celdas, escribe la fórmula y pulsa Ctrl+Mayús+Intro.</p>
+      <p><b>Opción «como la macro».</b> Monta la tabla α con celdas <code>=SUMAPRODUCTO(C2:C14^n)</code> (con n = j + k, de 0 a 8), el vector β con <code>=SUMAPRODUCTO(B2:B14*C2:C14^j)</code> y resuelve con <code>=MMULT(MINVERSA(α);β)</code>. Tendrás los mismos coeficientes, salvo en los últimos decimales: justo la delicadeza de la que hablábamos.</p>
+
+      <h3>Practica</h3>
+      <div class="practice">
+        <div class="ex">
+          <p><b>1.</b> ¿Cuántas curvas (cambios de dirección) puede tener, como máximo, un polinomio de cuatro términos (hasta r³)?</p>
+          <form id="l3ex1" autocomplete="off">
+            <label for="l3ex1-in" class="ui" style="font-size:.88rem">curvas =</label>
+            <input id="l3ex1-in" inputmode="numeric" placeholder="un número">
+            <button type="submit">Comprobar</button>
+            <button type="button" class="ghost" data-sol="l3ex1">Ver solución</button>
+          </form>
+          <div class="fb" id="l3ex1-fb" aria-live="polite"></div>
+        </div>
+        <div class="ex">
+          <p><b>2.</b> La tabla α de VG 304, ¿es distinta de la de VG 189?</p>
+          <div class="mc ui" role="group" aria-label="Respuestas">
+            <button type="button" class="btn ghost" data-mc3="si">Sí, cada muestra tiene la suya</button>
+            <button type="button" class="btn ghost" data-mc3="no">No, es la misma</button>
+          </div>
+          <div class="fb" id="l3ex2-fb" aria-live="polite"></div>
+        </div>
+        <div class="ex">
+          <p><b>3.</b> Con 13 REE y un polinomio de 5 términos, ¿cuántos grados de libertad quedan?</p>
+          <form id="l3ex3" autocomplete="off">
+            <label for="l3ex3-in" class="ui" style="font-size:.88rem">ν =</label>
+            <input id="l3ex3-in" inputmode="numeric" placeholder="un número">
+            <button type="submit">Comprobar</button>
+            <button type="button" class="ghost" data-sol="l3ex3">Ver solución</button>
+          </form>
+          <div class="fb" id="l3ex3-fb" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <h3>Resumen</h3>
+      <ul class="summary">
+        <li>Un <b>polinomio</b> es una línea que puede doblarse: cada término añade una curva posible.</li>
+        <li>El criterio sigue siendo <b>mínimos cuadrados</b>, con una condición de equilibrio por término: Σ r<sup>k</sup>·residuo = 0.</li>
+        <li>Esas condiciones forman un <b>sistema de ecuaciones</b> que se escribe como una tabla: α·a = β.</li>
+        <li><b>α solo contiene sumas de potencias de los radios</b> (es igual para todas las muestras); β mezcla radios y datos.</li>
+        <li>Se resuelve con la <b>tabla inversa</b>, a = α<sup>−1</sup>·β: MINVERSA y MMULT en Excel, igual que la macro.</li>
+        <li>Con tres términos desaparece la joroba de VG 189; con cinco, los residuos quedan al nivel del error analítico.</li>
+        <li>Los coeficientes a<sub>0</sub>…a<sub>4</sub> salen gigantes y se cancelan entre sí: uno a uno no significan nada.</li>
+      </ul>
+      <p><b>Dónde ha aparecido el radio en esta lección:</b> en la tabla α (las sumas Σr<sup>0</sup> … Σr<sup>8</sup>, solo radios: <span class="kr">④</span>), en el vector β (Σr<sup>k</sup>·y) y al evaluar la curva en el radio de cada REE. En la macro, además, dentro de los polinomios de O'Neill (las constantes <span class="kr">②</span>).</p>
+      <div class="next">
+        <p><b>Próxima lección · Por qué los coeficientes «normales» no sirven para comparar.</b> Veremos por qué a<sub>0</sub> salta de 3.19 a −2367 al añadir términos, qué significa que dos coeficientes estén correlacionados al 99.99 % y la segunda mitad de la Fig. 1a de O'Neill (los patrones D y D†).</p>
+        <p><a href="#leccion-4" data-tab="leccion-4" class="ui" style="font-weight:600">Ir a la Lección 4 →</a></p>
+      </div>
+
+      <h3>Fuentes de esta lección</h3>
+      <ul class="sources">
+        <li>Bevington & Robinson (2003), §7.1 (ecs. 7.1–7.9: el polinomio y sus ecuaciones normales), §7.2 (ecs. 7.12–7.20: la forma de tabla y la solución con la inversa; Tablas 7.2 y 7.4, el cálculo en una hoja de cálculo) y p. 121 (grados de libertad, ν = N − m).</li>
+        <li>O'Neill (2016), p. 1467 (el ajuste puede hacerse con LINEST), pp. 1470–1471 (varianza explicada por cada término) y Tabla 2 (significado de cada término).</li>
+        <li>Macro <code>REE_OrthogRegress_5term</code>: construcción de A y Z y uso de MInverse y MMult.</li>
+      </ul>
+    </div>
+  </section>
+  <!-- ======================= LECCIÓN 4 ======================= -->
+  <section class="panel" id="leccion-4" role="tabpanel" aria-label="Lección 4" hidden>
+    <header class="lesson-head">
+      <p class="eyebrow">Lección 4 · de 7 (+ 2 opcionales)</p>
+      <h2>Por qué los coeficientes «normales» no sirven para comparar</h2>
+      <p class="lead">En la Lección 3 el ajuste funcionó: la cuártica sigue a VG 189 con residuos del 2 %. Pero sus coeficientes (a<sub>0</sub> = −2367, a<sub>1</sub> = 9059…) no sirven para describir ni para comparar patrones. Aquí vemos por qué: un síntoma, su causa y su consecuencia. Así entenderemos qué tienen de especial los λ.</p>
+      <dl class="facts ui">
+        <div><dt>Idea matemática nueva</dt><dd>Correlación entre coeficientes</dd></div>
+        <div><dt>Dónde entra el radio</dt><dd>El origen r = 0 está a <span class="kr">1.05 Å</span> de los datos; entre 0.98 y 1.16 Å, r, r², r³ y r⁴ casi coinciden</dd></div>
+        <div><dt>Muestra guía</dt><dd>VG 189, y los patrones D y D† de la Fig. 1a</dd></div>
+      </dl>
+    </header>
+
+    <div class="flow">
+      <div class="prose">
+        <h3>El síntoma: los a cambian al añadir términos</h3>
+        <p>Ajusta VG 189 con 1, 2, 3, 4 y 5 términos y apunta los coeficientes. Los <i>a</i> no se parecen de una fila a otra: a<sub>0</sub> pasa de 3.19 a 4.93, −52.5, 221 y −2367. Los λ de O'Neill, en cambio, no se mueven: cada término nuevo añade su λ y deja los anteriores como estaban.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="coef">
+          <thead><tr><th scope="col" style="text-align:left">Términos</th><th scope="col">a<sub>0</sub></th><th scope="col">a<sub>1</sub></th><th scope="col">a<sub>2</sub></th><th scope="col">a<sub>3</sub></th><th scope="col">a<sub>4</sub></th></tr></thead>
+          <tbody>
+            <tr><th scope="row">1</th><td class="diag">3.187</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+            <tr><th scope="row">2</th><td>4.934</td><td class="diag">−1.656</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+            <tr><th scope="row">3</th><td>−52.46</td><td>106.30</td><td class="diag">−50.60</td><td class="dash">—</td><td class="dash">—</td></tr>
+            <tr><th scope="row">4</th><td>221.30</td><td>−666.93</td><td>676.15</td><td class="diag">−227.29</td><td class="dash">—</td></tr>
+            <tr><th scope="row">5</th><td>−2366.7</td><td>9059.2</td><td>−13014.3</td><td>8326.8</td><td class="diag">−2001.8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="table-wrap">
+        <table class="coef">
+          <thead><tr><th scope="col" style="text-align:left">Términos</th><th scope="col">λ<sub>0</sub></th><th scope="col">λ<sub>1</sub></th><th scope="col">λ<sub>2</sub></th><th scope="col">λ<sub>3</sub></th><th scope="col">λ<sub>4</sub></th></tr></thead>
+          <tbody>
+            <tr><th scope="row">1</th><td class="same">3.187</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+            <tr><th scope="row">2</th><td class="same">3.187</td><td class="same">−1.656</td><td class="dash">—</td><td class="dash">—</td><td class="dash">—</td></tr>
+            <tr><th scope="row">3</th><td class="same">3.187</td><td class="same">−1.656</td><td class="same">−50.60</td><td class="dash">—</td><td class="dash">—</td></tr>
+            <tr><th scope="row">4</th><td class="same">3.187</td><td class="same">−1.656</td><td class="same">−50.60</td><td class="same">−227.29</td><td class="dash">—</td></tr>
+            <tr><th scope="row">5</th><td class="same">3.187</td><td class="same">−1.656</td><td class="same">−50.60</td><td class="same">−227.29</td><td class="same">−2001.8</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <p>Con los <i>a</i> no se pueden comparar dos trabajos que usen distinto número de términos: el a<sub>0</sub> de una recta y el a<sub>0</sub> de una cuártica son cosas distintas. O'Neill lo resume en su Apéndice 1: si se añade un término al polinomio, todos los coeficientes cambian, y eso impide comparar útilmente los coeficientes de un patrón con los de otro.</p>
+        <p class="aside-note">Una curiosidad que aprovecharemos en la Lección 6: el último coeficiente de cada fila (recuadrado) coincide con el λ del mismo orden.</p>
+
+        <h3>La causa: los a describen la curva en r = 0</h3>
+        <p>Un polinomio <i class="vy">y</i> = <i>a</i><sub>0</sub> + <i>a</i><sub>1</sub><i class="vr">r</i> + <i>a</i><sub>2</sub><i class="vr">r</i><sup>2</sup> + … está escrito «desde el origen». <i>a</i><sub>0</sub> es el valor de la curva en <i class="vr">r</i> = 0; <i>a</i><sub>1</sub>, su pendiente en <i class="vr">r</i> = 0; <i>a</i><sub>2</sub> tiene que ver con su curvatura en <i class="vr">r</i> = 0, y así sucesivamente (Bevington & Robinson, §7.3). Pero en <i class="vr">r</i> = 0 no hay datos. El ion más pequeño, el Lu, mide 0.977 Å, y todo el patrón ocupa solo 0.18 Å. El origen está a <span class="kr">1.05 Å</span> del centro de los datos: casi seis veces la anchura del patrón.</p>
+        <p>Para saber cuánto vale la curva allí hay que prolongarla muchísimo, y cada polinomio la prolonga a su manera. Aleja el zoom:</p>
+      </div>
+      <figure class="figbox">
+        <div class="slider-row"><label for="l4-zoom-t">Aleja el zoom hacia r = 0</label><input type="range" id="l4-zoom-t" min="0" max="100" step="1" value="0"><output id="l4-zoom-o" for="l4-zoom-t"></output></div>
+        <div class="legend"><span><i class="lk2"></i>2 términos</span><span><i class="lk3"></i>3 términos</span><span><i class="lk4"></i>4 términos</span><span><i class="lk5"></i>5 términos</span></div>
+        <div class="plot" id="l4-zoom"></div>
+        <p class="readline" id="l4-zoom-read"></p>
+        <figcaption>Los polinomios de 2, 3, 4 y 5 términos de VG 189, con el La a la derecha. La franja gris marca dónde hay datos. Al alejar el zoom hasta r = 0, el valor de cada curva en el borde izquierdo acaba siendo su a<sub>0</sub>.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>Donde hay datos, las curvas de 3, 4 y 5 términos casi coinciden. Fuera, se separan enseguida: a 0.9 Å, solo 0.08 Å por debajo del Lu, ya discrepan en más de un factor 3 en concentración. En r = 0 valen −52.5, 221 y −2367, y esos números son los a<sub>0</sub>. Describen una zona sin datos, así que dependen de cómo se prolongue la curva y no de la muestra. Bevington lo explica igual: los coeficientes dependen del grado del polinomio porque el sistema de coordenadas se ha elegido sin tener en cuenta dónde están los datos.</p>
+        <aside class="analogy"><span class="tag">Analogía</span><p>Es como describir una colina dando su altura y su inclinación en un punto del llano a seis kilómetros. Si la colina cambia un poco de forma, esos dos números cambian muchísimo, y siempre a la vez.</p></aside>
+
+        <h3>Además, las piezas se parecen demasiado</h3>
+        <p>Entre 0.977 y 1.160 Å, las piezas <i class="vr">r</i>, <i class="vr">r</i><sup>2</sup>, <i class="vr">r</i><sup>3</sup> y <i class="vr">r</i><sup>4</sup> son casi la misma curva: una línea que sube. Estiradas a la misma escala, apenas se distinguen:</p>
+      </div>
+      <figure class="figbox">
+        <div class="legend"><span><i class="lk2"></i>r</span><span><i class="lk3"></i>r²</span><span><i class="lk4"></i>r³</span><span><i class="lk5"></i>r⁴</span></div>
+        <div class="plot" id="l4-pieces"></div>
+        <figcaption>Cada pieza, reescalada para que vaya de 0 (en el Lu) a 1 (en el La). Sus correlaciones con los 13 radios van de 0.998 a 0.9998, cuando 1 sería identidad.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>Para distinguir una pieza de otra, el ajuste tiene que usar coeficientes enormes y de signo contrario que casi se anulan. En r̄, los cinco términos de la cuártica valen −2367, +9555, −14479, +9771 y −2478, y suman 3.35. Es la «delicadeza» que vimos en la hoja Excel.</p>
+
+        <h3>La consecuencia: coeficientes correlacionados</h3>
+        <p>¿Qué pasa si repetimos el análisis? Cada medida lleva un error de un 2 %, así que otro análisis de VG 189 daría valores algo distintos, y otros coeficientes. La figura lo simula: añade a cada <i class="vy">y</i> un error al azar del 2 % y reajusta, 300 veces.</p>
+      </div>
+      <figure class="figbox" id="l4-mc">
+        <div class="ctrl-row ui">
+          <div class="seg" role="group" aria-label="Número de términos"><span class="seg-label">Términos</span><button type="button" data-mcm="2">2 (recta)</button><button type="button" data-mcm="5">5 (cuártica)</button></div>
+          <button type="button" class="btn" id="l4-mc-run">Otros 300 análisis</button>
+        </div>
+        <div class="mc-grid">
+          <div class="mc-panel"><h4>Coeficientes normales: a<sub>0</sub> frente a a<sub>1</sub></h4><p class="mc-sub">cada punto es un análisis simulado</p><div class="plot" id="l4-mc-a"></div><p class="mc-stats" id="l4-mc-as"></p></div>
+          <div class="mc-panel"><h4>Coeficientes de O'Neill: λ<sub>0</sub> frente a λ<sub>1</sub></h4><p class="mc-sub">los mismos análisis simulados</p><div class="plot" id="l4-mc-l"></div><p class="mc-stats" id="l4-mc-ls"></p></div>
+        </div>
+        <figcaption>El círculo blanco es el resultado sin ruido. La correlación va de −1 a +1: 0 significa que los dos coeficientes varían por su cuenta; ±1, que uno determina al otro. Cambia a 5 términos: la nube de la izquierda se estira aún más y la de la derecha no cambia. Con solo 300 análisis, la correlación de los λ oscila por azar alrededor de 0 (entre −0.1 y +0.1) cada vez que pulsas el botón.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>Mira las nubes. Con los <i>a</i>, los puntos forman una línea finísima: cuando a<sub>0</sub> sale alto, a<sub>1</sub> sale bajo, siempre en la misma proporción. Eso es una <b>correlación</b> de −0.998 con 2 términos, y de −0.99994 con 5: a<sub>0</sub> y a<sub>1</sub> no son dos datos independientes, sino casi el mismo dato contado dos veces. Con los λ, la nube es redonda y la correlación es ≈ 0: cada λ lleva su propia información.</p>
+        <p>Mira también las escalas. Con 5 términos y un 2 % de ruido, a<sub>0</sub> varía con una desviación típica de unas 1100 unidades (puede salir cualquier cosa entre unos −6000 y +1000), aunque la curva apenas se mueve: entre un 0.9 y un 1.9 % en cada REE. λ<sub>0</sub>, en cambio, solo varía ±0.0055. Es lógico: λ<sub>0</sub> es la media de 13 valores, y el error de una media de 13 valores es el error de cada uno dividido por √13: 0.02 / √13 = 0.0055.</p>
+        <aside class="analogy"><span class="tag">Analogía</span><p>Dos personas llevan una tabla larga por un pasillo. Si una levanta su extremo, la otra lo baja para que la tabla siga a la misma altura en el centro. Mirar solo la mano de una de ellas da una idea muy equivocada de dónde está la tabla.</p></aside>
+        <p>Esto tiene una consecuencia práctica seria. Si alguien publica los <i>a</i> con sus errores por separado (a<sub>0</sub> = −2367 ± 1100, a<sub>1</sub> = 9059 ± 4100…), parece que no sabemos casi nada, cuando la curva está determinada al 2 %. Los errores de coeficientes correlacionados solo sirven acompañados de su tabla completa de covarianzas (Bevington, §7.2, ecs. 7.23–7.27). Bevington lo muestra con un ejemplo en la p. 126: con los errores individuales obtiene V = 2.45 ± 0.14; teniendo en cuenta las correlaciones, 2.45 ± 0.02.</p>
+        <p class="aside-note">Otro detalle en el que entra el radio: esa tabla de covarianzas es la inversa de α (ec. 7.25), y α solo contiene radios. Las correlaciones entre los <i>a</i> son, por tanto, las mismas para todas las muestras.</p>
+
+        <h3>La segunda mitad de la Fig. 1a: D y D†</h3>
+        <p>O'Neill lo resume con dos patrones inventados. D es una recta, <i class="vy">y</i> = 2 + 3<i class="vr">r</i>. D† es casi igual, pero con una ligera curvatura; ajustado con tres términos da <i class="vy">y</i> = 24.7 − 39.7<i class="vr">r</i> + 20<i class="vr">r</i><sup>2</sup>. Mirando los coeficientes (2, 3 y 0 frente a 24.7, −39.7 y 20), nadie diría que se parecen. En la forma de O'Neill: D = 5.16 + 3f<sub>1</sub> + 0f<sub>2</sub> y D† = 5.16 + 3f<sub>1</sub> + 20f<sub>2</sub>. Mismo nivel medio, misma pendiente: solo cambia la curvatura, y el número que la mide es exactamente ese 20.</p>
+      </div>
+      <figure class="figbox">
+        <div class="slider-row"><label for="l4-l2">Curvatura de D† (λ<sub>2</sub>)</label><input type="range" id="l4-l2" min="-60" max="60" step="1" value="20"><output id="l4-l2o" for="l4-l2"></output></div>
+        <div class="legend"><span><i class="lk2"></i>D (recta)</span><span><i class="lk5"></i>D† (con la curvatura elegida)</span></div>
+        <div class="plot" id="l4-dd"></div>
+        <div class="table-wrap" style="margin:.4rem 0 0">
+          <table class="dd" id="l4-dd-tab">
+            <thead><tr><th scope="col" style="text-align:left">Patrón</th><th scope="col">a<sub>0</sub></th><th scope="col">a<sub>1</sub></th><th scope="col">a<sub>2</sub></th><th scope="col">λ<sub>0</sub></th><th scope="col">λ<sub>1</sub></th><th scope="col">λ<sub>2</sub></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <figcaption>Mueve la curvatura: λ<sub>0</sub> y λ<sub>1</sub> no se inmutan, pero a<sub>0</sub> y a<sub>1</sub> saltan con cada movimiento. Con λ<sub>2</sub> = 20 sale el D† de O'Neill. Fíjate en que a<sub>2</sub> = λ<sub>2</sub> siempre: el término más alto coincide.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>Cambiar una sola propiedad del patrón (su curvatura) no debería cambiar los números que describen las otras (su nivel y su pendiente). Con los <i>a</i> las cambia; con los λ, no.</p>
+
+        <h3>Lo que querríamos</h3>
+        <p>Unos coeficientes que:</p>
+        <ol class="reasons">
+          <li>no cambien al añadir o quitar términos;</li>
+          <li>no estén correlacionados entre sí;</li>
+          <li>tengan cada uno un significado claro: nivel medio, pendiente, curvatura…</li>
+        </ol>
+        <p>En la Lección 2 ya lo conseguimos para la recta: bastó medir el radio desde su media (<i class="vr">r</i> − 1.05477), y la correlación entre ordenada y pendiente pasó de −0.998 a 0. Los polinomios ortogonales hacen lo mismo con todos los términos: cada pieza se «centra» respecto a las anteriores. Es la Lección 5.</p>
+      </div>
+
+      <div class="after">
+        <h3>Practica</h3>
+        <div class="practice">
+          <div class="ex">
+            <p><b>1.</b> Un colega publica a<sub>0</sub> = −2100 para su basalto (ajuste de 5 términos) y tú obtienes a<sub>0</sub> = −2400 para el tuyo. ¿Qué puedes concluir sobre sus REE?</p>
+            <div class="mc ui" role="group" aria-label="Respuestas">
+              <button type="button" class="btn ghost" data-mc4="a">El suyo tiene más REE</button>
+              <button type="button" class="btn ghost" data-mc4="b">El tuyo tiene más REE</button>
+              <button type="button" class="btn ghost" data-mc4="c">Nada, con solo a₀</button>
+            </div>
+            <div class="fb" id="l4ex1-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>2.</b> Si el error analítico fuese del 5 % en vez del 2 %, ¿cuál sería la desviación típica de λ<sub>0</sub> (con 13 REE)?</p>
+            <form id="l4ex2" autocomplete="off">
+              <label for="l4ex2-in" class="ui" style="font-size:.88rem">s(λ<sub>0</sub>) =</label>
+              <input id="l4ex2-in" inputmode="decimal" placeholder="p. ej. 0.01">
+              <button type="submit">Comprobar</button>
+              <button type="button" class="ghost" data-sol="l4ex2">Ver solución</button>
+            </form>
+            <div class="fb" id="l4ex2-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>3.</b> D y D† tienen el mismo λ<sub>0</sub> y el mismo λ<sub>1</sub>. ¿En qué se diferencian?</p>
+            <div class="mc ui" role="group" aria-label="Respuestas">
+              <button type="button" class="btn ghost" data-mc4b="nivel">En el nivel medio</button>
+              <button type="button" class="btn ghost" data-mc4b="pend">En la pendiente</button>
+              <button type="button" class="btn ghost" data-mc4b="curv">Solo en la curvatura</button>
+            </div>
+            <div class="fb" id="l4ex3-fb" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <h3>Resumen</h3>
+        <ul class="summary">
+          <li>Los coeficientes <i>a</i> <b>cambian al añadir términos</b>: a<sub>0</sub> pasa de 3.19 a −2367 en VG 189. Los λ no cambian.</li>
+          <li>La causa: los <i>a</i> <b>describen la curva en r = 0</b>, a 1.05 Å de los datos, adonde hay que prolongarla muchísimo. Además, las piezas r, r², r³ y r⁴ son casi idénticas entre 0.98 y 1.16 Å.</li>
+          <li>La consecuencia: los <i>a</i> están <b>correlacionados</b> (−0.998 con 2 términos, −0.99994 con 5) y sus errores individuales son enormes aunque la curva esté determinada al 2 %.</li>
+          <li><b>D y D†</b>: con los <i>a</i> parecen patrones distintos; con los λ se ve que solo difieren en la curvatura (λ<sub>2</sub> = 20).</li>
+          <li>Queremos coeficientes estables, independientes y con significado: eso son los λ.</li>
+        </ul>
+        <p><b>Dónde ha aparecido el radio en esta lección:</b> en la distancia del origen a los datos (r̄ = <span class="kr">1.05 Å</span>, casi seis veces la anchura del patrón), que es el «brazo de palanca» de los <i>a</i>; en que todos los radios se parecen (0.98–1.16 Å), lo que hace casi idénticas las piezas r…r⁴; y en la tabla de covarianzas, la inversa de α, que solo depende de los radios.</p>
+        <div class="next">
+          <p><b>Próxima lección · Los polinomios ortogonales: fabricarlos con los radios.</b> Veremos qué significa «ortogonal» (piezas que no se pisan) y cómo salen, solo de los 13 radios, las constantes 1.05477, 1.00533, 1.12824… de la Tabla 2, paso a paso con la receta de Bevington (§7.3).</p>
+          <p><a href="#leccion-5" data-tab="leccion-5" class="ui" style="font-weight:600">Ir a la Lección 5 →</a></p>
+        </div>
+
+        <h3>Fuentes de esta lección</h3>
+        <ul class="sources">
+          <li>O'Neill (2016), p. 1465 (los coeficientes del polinomio están muy correlacionados), Fig. 1a y su pie (patrones D y D†, p. 1466), y Apéndice 1 (al añadir un término cambian todos los coeficientes).</li>
+          <li>Bevington & Robinson (2003), §7.2 (ecs. 7.23–7.27: la tabla de errores y covarianzas es la inversa de α; ejemplo de la p. 126 y Tabla 7.3) y §7.3, p. 127 (por qué los coeficientes dependen del grado del polinomio).</li>
+          <li>Simulación de análisis repetidos: 300 ajustes de VG 189 con un error aleatorio normal del 2 % en cada ln([REE]/[REE]<sub>CI</sub>). Desviaciones típicas y correlaciones calculadas también de forma exacta a partir de la inversa de α.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= LECCIÓN 5 ======================= -->
+  <section class="panel" id="leccion-5" role="tabpanel" aria-label="Lección 5" hidden>
+    <header class="lesson-head">
+      <p class="eyebrow">Lección 5 · de 7 (+ 2 opcionales)</p>
+      <h2>Los polinomios ortogonales: fabricarlos con los radios</h2>
+      <p class="lead">En la Lección 4 pedimos coeficientes que no cambien al añadir términos y que no estén correlacionados. La solución de O'Neill, tomada de Bevington, es cambiar las piezas del polinomio: en vez de 1, r, r², r³ y r⁴, usa cinco piezas «ortogonales» fabricadas a medida para los 13 radios. Aquí veremos qué significa «ortogonal» y cómo salen, paso a paso, las constantes de su Tabla 2.</p>
+      <dl class="facts ui">
+        <div><dt>Idea matemática nueva</dt><dd>Ortogonalidad: dos listas de números cuya suma de productos es 0</dd></div>
+        <div><dt>Dónde entra el radio</dt><dd><span class="kr">② las constantes β, γ, δ, ε</span> y <span class="kr">③ la tabla de valores f<sub>n</sub>(r<sub>i</sub>)</span></dd></div>
+        <div><dt>Muestra guía</dt><dd>VG 189, solo para comprobar que los λ anteriores no se mueven</dd></div>
+      </dl>
+    </header>
+
+    <div class="flow">
+      <div class="prose">
+        <h3>La idea: caminar en direcciones perpendiculares</h3>
+        <p>Imagina los 13 valores <i class="vy">y</i> de una muestra como un punto, y cada pieza del polinomio como una dirección en la que se puede caminar. Ajustar es decidir cuánto caminar en cada dirección para llegar a ese punto, o lo más cerca posible. Esas distancias son los coeficientes.</p>
+        <p>Con 13 valores harían falta 13 dimensiones, que no se pueden dibujar. Pero con dos piezas todo cabe en un plano. Prueba a cerrar el ángulo entre las dos direcciones:</p>
+      </div>
+      <figure class="figbox" id="l5-arrows">
+        <div class="slider-row"><label for="l5-th">Ángulo entre las direcciones A y B</label><input type="range" id="l5-th" min="2" max="90" step="0.1" value="90"><output id="l5-tho" for="l5-th"></output></div>
+        <div class="ctrl-row ui">
+          <div class="seg" role="group" aria-label="Ángulos de ejemplo"><span class="seg-label">Ejemplos</span><button type="button" data-th="90">90°</button><button type="button" data-th="45">45°</button><button type="button" data-th="10">10°</button><button type="button" data-th="3.27">3.3° (1 y r)</button></div>
+          <button type="button" class="btn ghost" id="l5-move" aria-pressed="false">Repetir el análisis</button>
+        </div>
+        <div class="legend"><span><i class="lk3"></i>a × dirección A (este)</span><span><i class="lk4"></i>b × dirección B</span><span><i class="lky"></i>el punto (los datos)</span></div>
+        <div class="plot" id="l5-ar"></div>
+        <div class="readouts">
+          <div class="ro"><div class="k sym">a</div><div class="v" id="l5-a"></div><div class="s" id="l5-as"></div></div>
+          <div class="ro"><div class="k sym">b</div><div class="v" id="l5-b"></div><div class="s" id="l5-bs"></div></div>
+          <div class="ro"><div class="k">Camino total</div><div class="v" id="l5-len"></div><div class="s" id="l5-lens"></div></div>
+        </div>
+        <figcaption>El punto está en (3, 4). Con 90°, a = 3 y b = 4: cada coeficiente es la distancia en su dirección. Al cerrar el ángulo, el camino da un rodeo enorme: con 3.3°, a = −67 y b = +70 para llegar a un punto que está a 5 del origen. «Repetir el análisis» mueve el punto 0.14, como haría el pequeño error de un nuevo análisis. Con 90°, a y b cambian 0.1; con 3.3°, casi 2, y siempre en sentidos opuestos.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>Esto no es solo una analogía. Las piezas 1 y <i class="vr">r</i>, evaluadas en los 13 radios, forman exactamente un ángulo de <span class="kr">3.27°</span> (enseguida veremos cómo se calcula). Es la recta sin centrar de las Lecciones 2 y 4, y los números encajan: la correlación de −0.998 entre a<sub>0</sub> y a<sub>1</sub> es −cos(3.27°), y el error de a<sub>0</sub> (0.097) era 17.5 veces el de λ<sub>0</sub> (0.0055), justo 1/sen(3.27°). Con <i class="vr">r</i>, <i class="vr">r</i><sup>2</sup>, <i class="vr">r</i><sup>3</sup> y <i class="vr">r</i><sup>4</sup> es aún peor: son cinco direcciones casi paralelas.</p>
+        <p>Con direcciones perpendiculares, en cambio, cada coeficiente dice cuánto caminar en su dirección, sin rodeos, y corregir uno no obliga a corregir los demás. Eso significa <b>ortogonal</b>: perpendicular. La recta centrada de la Lección 2 ya lo era (1 y <i class="vr">r</i> − r̄ forman 90°), y por eso allí la correlación entre ordenada y pendiente era 0.</p>
+        <aside class="analogy"><span class="tag">Analogía</span><p>Un buen ecualizador tiene un mando para los graves, otro para los medios y otro para los agudos, y cada uno actúa sobre su banda: si subes los graves, no tienes que retocar los agudos. Si dos mandos actuaran casi sobre las mismas frecuencias, cada vez que subieras uno tendrías que bajar el otro. Las piezas r, r², r³ y r⁴ son mandos casi iguales. Las piezas ortogonales son mandos con su propia banda: nivel, pendiente, curvatura, S y W.</p></aside>
+
+        <h3>La prueba de la perpendicularidad: multiplicar y sumar</h3>
+        <p>En el papel, dos direcciones son perpendiculares cuando, al multiplicar sus componentes una a una y sumar, sale 0. El este es (1, 0) y el norte, (0, 1): 1 × 0 + 0 × 1 = 0. Con el este y el nordeste, (1, 0) y (1, 1), sale 1 × 1 + 0 × 1 = 1: no son perpendiculares.</p>
+        <p>Con las piezas del polinomio se hace igual, pero con 13 números: el valor de cada pieza en cada REE. Dos piezas f<sub>j</sub> y f<sub>k</sub> son ortogonales si (Bevington & Robinson, nota 1 de la p. 128):</p>
+        <p class="eq">Σ f<sub>j</sub>(<i class="vr">r</i><sub>i</sub>) · f<sub>k</sub>(<i class="vr">r</i><sub>i</sub>) = 0 &nbsp;&nbsp;<span class="ui" style="font-size:.85rem;color:var(--muted)">(sumando las 13 REE, para j ≠ k)</span></p>
+        <p>Es decir: se multiplica el valor de las dos piezas en el La, luego en el Ce, y así hasta el Lu, y se suman los 13 productos. Si los positivos compensan exactamente a los negativos, las piezas no se pisan. Compruébalo:</p>
+      </div>
+      <figure class="figbox" id="l5-prod">
+        <div class="ctrl-row ui">
+          <label class="pick">Pieza A <select id="l5-pa"></select></label>
+          <label class="pick">Pieza B <select id="l5-pb"></select></label>
+        </div>
+        <div class="legend"><span><i class="lkp"></i>producto positivo</span><span><i class="lkn"></i>producto negativo</span></div>
+        <div class="plot" id="l5-pp"></div>
+        <div class="readouts">
+          <div class="ro"><div class="k">Positivos</div><div class="v" id="l5-pos"></div><div class="s">suma de las barras azules</div></div>
+          <div class="ro"><div class="k">Negativos</div><div class="v" id="l5-neg"></div><div class="s">suma de las naranjas</div></div>
+          <div class="ro"><div class="k">Suma total</div><div class="v" id="l5-sum"></div><div class="s">0 = ortogonales</div></div>
+          <div class="ro"><div class="k">Ángulo</div><div class="v" id="l5-ang"></div><div class="s">90° = ortogonales</div></div>
+        </div>
+        <figcaption>Cada barra es el producto de las dos piezas en una REE. Para ver todas las parejas a la misma escala, cada pieza se ha reescalado a «longitud 1» (la raíz de la suma de sus cuadrados vale 1); así, la suma de las barras es directamente el coseno del ángulo. Prueba parejas de piezas simples (1, r, r²…) y de piezas de O'Neill (f<sub>0</sub>…f<sub>4</sub>).</figcaption>
+      </figure>
+      <div class="prose">
+        <p>Con cualquier pareja de piezas de O'Neill, las barras positivas y negativas se compensan y el ángulo es 90.0°. Con las piezas simples no hay compensación posible: todos los radios son positivos, así que todos los productos también lo son. Los ángulos entre ellas van de 3.3° (piezas vecinas, como r y r²) a 13.1° (1 y r⁴): las cinco caben en un cono de 13°.</p>
+        <p class="aside-note">Para curiosos: el ángulo se calcula como en el papel, coseno = suma de productos / (longitud × longitud), donde la longitud de una pieza es la raíz de la suma de sus cuadrados. Para 1 y r: 13.712 / (√13 × √14.5102) = 13.712 / (3.6056 × 3.8092) = 0.9984, que corresponde a 3.27°.</p>
+
+        <h3>La receta: cada pieza nueva, perpendicular a todas las anteriores</h3>
+        <p>La receta de Bevington & Robinson (§7.3) fabrica las piezas una a una. Cada pieza sube un grado y trae tantas constantes libres como piezas hay ya fabricadas, y cada una de esas piezas le impone una prueba:</p>
+      </div>
+      <div class="table-wrap">
+        <table class="recipe">
+          <thead><tr><th scope="col">Pieza</th><th scope="col">Forma</th><th scope="col">Constantes</th><th scope="col">Debe ser ortogonal a</th><th scope="col">Nombre (Tabla 2)</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">f<sub>0</sub></th><td>1</td><td class="dash">—</td><td class="dash">—</td><td>Nivel medio</td></tr>
+            <tr><th scope="row">f<sub>1</sub></th><td>(<i class="vr">r</i> − β)</td><td class="kr">β</td><td>f<sub>0</sub></td><td>Pendiente</td></tr>
+            <tr><th scope="row">f<sub>2</sub></th><td>(<i class="vr">r</i> − γ<sub>1</sub>)(<i class="vr">r</i> − γ<sub>2</sub>)</td><td class="kr">γ<sub>1</sub>, γ<sub>2</sub></td><td>f<sub>0</sub>, f<sub>1</sub></td><td>Curvatura</td></tr>
+            <tr><th scope="row">f<sub>3</sub></th><td>(<i class="vr">r</i> − δ<sub>1</sub>)(<i class="vr">r</i> − δ<sub>2</sub>)(<i class="vr">r</i> − δ<sub>3</sub>)</td><td class="kr">δ<sub>1</sub>, δ<sub>2</sub>, δ<sub>3</sub></td><td>f<sub>0</sub>, f<sub>1</sub>, f<sub>2</sub></td><td>Inflexiones en los extremos (S)</td></tr>
+            <tr><th scope="row">f<sub>4</sub></th><td>(<i class="vr">r</i> − ε<sub>1</sub>)···(<i class="vr">r</i> − ε<sub>4</sub>)</td><td class="kr">ε<sub>1</sub>…ε<sub>4</sub></td><td>f<sub>0</sub>…f<sub>3</sub></td><td>Forma de W</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <p>Siempre hay tantas incógnitas como pruebas, así que la receta nunca se atasca. Cada constante es un radio en el que la pieza vale cero.</p>
+        <p>¿Y por qué estas pruebas? Bevington lo razona así: al añadir una pieza, los coeficientes anteriores no deben cambiar. Si f<sub>1</sub> no sumara 0 en las 13 REE, al añadirla subiría o bajaría el nivel medio, y λ<sub>0</sub> tendría que corregirse. Superar la prueba garantiza que la pieza nueva no «pisa» a las anteriores. La figura lo comprueba con VG 189:</p>
+      </div>
+      <figure class="figbox" id="l5-build">
+        <div class="ctrl-row ui">
+          <div class="seg" role="group" aria-label="Paso de la receta"><span class="seg-label">Paso</span><button type="button" data-st="1">1 · f₁</button><button type="button" data-st="2">2 · f₂</button><button type="button" data-st="3">3 · f₃</button><button type="button" data-st="4">4 · f₄</button></div>
+          <button type="button" class="btn" id="l5-solve">Poner la solución</button>
+        </div>
+        <p class="stepline" id="l5-stepline"></p>
+        <div id="l5-sl">
+          <div class="slider-row" data-k="1"><label for="l5-beta">β</label><input type="range" id="l5-beta" min="0.96" max="1.18" step="0.0001" value="1.1"><output id="l5-betao" for="l5-beta"></output></div>
+          <div class="slider-row" data-k="2"><label for="l5-g1">γ<sub>1</sub></label><input type="range" id="l5-g1" min="0.96" max="1.18" step="0.0001" value="1"><output id="l5-g1o" for="l5-g1"></output></div>
+          <div class="slider-row" data-k="2"><label for="l5-g2">γ<sub>2</sub></label><input type="range" id="l5-g2" min="0.96" max="1.18" step="0.0001" value="1.1"><output id="l5-g2o" for="l5-g2"></output></div>
+        </div>
+        <div class="legend"><span><i class="lk5"></i>la pieza</span><span><i class="lkp"></i>valor positivo en una REE</span><span><i class="lkn"></i>valor negativo</span><span><i class="lkr"></i>constante: donde la pieza vale 0</span></div>
+        <div class="plot" id="l5-bp"></div>
+        <div class="tests" id="l5-tests"></div>
+        <p class="readline" id="l5-lamhead"></p>
+        <div class="readouts" id="l5-lams"></div>
+        <figcaption>Paso 1: mueve β hasta que la prueba marque 90°. Paso 2: ahora hay dos mandos y dos pruebas. Los recuadros de abajo ajustan VG 189 con las piezas que haya en cada momento: mientras alguna prueba falle, al añadir la pieza nueva cambian los λ anteriores; cuando todas se cumplen, se quedan quietos. Los pasos 3 y 4 vienen resueltos, porque afinar tres o cuatro mandos a la vez a mano es desesperante.</figcaption>
+      </figure>
+      <div class="prose">
+        <p><b>Paso 1 (ec. 7.35).</b> La única β que supera la prueba es la media de los 13 radios: Σ<i class="vr">r</i> / 13 = 13.712 / 13 = <span class="kr">1.054769 Å</span>. Con cualquier otra, f<sub>1</sub> no sumaría 0 y, al añadirla, el nivel medio λ<sub>0</sub> se movería. Es la recta centrada de la Lección 2.</p>
+        <aside class="analogy"><span class="tag">Analogía</span><p>Pon 13 monedas iguales sobre una regla, cada una en la posición de su radio. La regla se equilibra sobre un dedo colocado en β = 1.05477. f<sub>1</sub> mide cuánto se aparta cada REE de ese punto de equilibrio: es positiva en las ligeras (iones grandes) y negativa en las pesadas, y los dos lados pesan lo mismo.</p></aside>
+        <p><b>Paso 2 (ec. 7.36).</b> Las dos pruebas solo se cumplen con <span class="kr">γ<sub>1</sub> = 1.00533</span> y <span class="kr">γ<sub>2</sub> = 1.12824 Å</span>. Bevington escribe la segunda prueba con <i class="vr">r</i> en lugar de f<sub>1</sub>; como f<sub>2</sub> ya suma 0, es lo mismo. La pieza f<sub>2</sub> es una U: positiva en los extremos (La, Ce y Er–Lu) y negativa en el centro (Pr–Ho). Fíjate en que λ<sub>2</sub> = −50.60 sale igual con cualquier γ: es el coeficiente del término más alto, que coincide con a<sub>2</sub> (Lección 4). Lo que deciden las γ es si λ<sub>0</sub> y λ<sub>1</sub> se quedan quietos.</p>
+        <p><b>Pasos 3 y 4 (ec. 7.37).</b> Igual, con tres y cuatro constantes: <span class="kr">δ = 0.99141, 1.06055 y 1.14552</span>; <span class="kr">ε = 0.98482, 1.03052, 1.10441 y 1.15343 Å</span>. Bevington lo despacha con una frase: la extensión a órdenes mayores es directa. f<sub>3</sub> tiene forma de S y f<sub>4</sub>, de W. Son las constantes de la Tabla 2 de O'Neill.</p>
+        <details class="curious">
+          <summary>Para curiosos: cómo se calculan las γ sin tanteo</summary>
+          <p>Desarrolla f<sub>2</sub> = <i class="vr">r</i><sup>2</sup> + b·<i class="vr">r</i> + c, donde b = −(γ<sub>1</sub> + γ<sub>2</sub>) y c = γ<sub>1</sub>·γ<sub>2</sub>. Las dos pruebas se convierten en dos ecuaciones corrientes, con las sumas de potencias de los radios de la Lección 3:</p>
+          <p class="eq">Σ<i class="vr">r</i><sup>2</sup> + b·Σ<i class="vr">r</i> + 13·c = 0 &nbsp;→&nbsp; 14.510216 + 13.712·b + 13·c = 0<br>Σ<i class="vr">r</i><sup>3</sup> + b·Σ<i class="vr">r</i><sup>2</sup> + c·Σ<i class="vr">r</i> = 0 &nbsp;→&nbsp; 15.405677 + 14.510216·b + 13.712·c = 0</p>
+          <p>Resolviéndolas, b = −2.133563 y c = 1.134247. Las γ son los dos valores de r en los que f<sub>2</sub> vale 0, que da la fórmula de la ecuación de segundo grado: γ = (2.133563 ∓ √(2.133563² − 4 × 1.134247)) / 2 = (2.133563 ∓ 0.122909) / 2 = 1.005327 y 1.128236.</p>
+          <p>Con f<sub>3</sub> y f<sub>4</sub> se hace lo mismo con 3 y 4 ecuaciones. Desarrolladas, f<sub>3</sub> = r³ − 3.19748 r² + 3.402002 r − 1.204446 y f<sub>4</sub> = r⁴ − 4.27318 r³ + 6.839052 r² − 4.85869 r + 1.292811. Una curiosidad: entre cada dos ceros seguidos de una pieza cae exactamente un cero de la pieza anterior (β entre las dos γ, cada γ entre dos δ, cada δ entre dos ε).</p>
+        </details>
+
+        <h3>Solo hacen falta los radios</h3>
+        <p>Repasa la receta: en ningún momento ha hecho falta una concentración. Las pruebas solo usan los valores de las piezas en los 13 radios, así que las constantes dependen <b class="kr">solo de los radios</b> (y de qué REE se usan). Bevington lo advierte expresamente (p. 129): estos parámetros adicionales son funciones solo de la variable independiente, que aquí es <i class="vr">r</i>.</p>
+        <p>Por eso O'Neill las calcula una sola vez, las publica en su Tabla 2 y sirven para cualquier basalto. Su macro ni siquiera las calcula: las lleva escritas, con hasta nueve decimales. Esta es la línea que reconstruye la curva ajustada, partida en cuatro para que quepa:</p>
+<pre class="vba"><code><span class="c">' RR(M%) = radio de la REE número M;  Q(1)…Q(5) = λ0…λ4</span>
+XCalc(M%) = Q(1) + Q(2) * (RR(M%) - <span class="hr">1.054769</span>) _
+  + Q(3) * (RR(M%) - <span class="hr">1.005327429</span>) * (RR(M%) - <span class="hr">1.128236038</span>) _
+  + Q(4) * (RR(M%) - <span class="hr">1.060548105</span>) * (RR(M%) - <span class="hr">1.145519887</span>) * (RR(M%) - <span class="hr">0.991412204</span>) _
+  + Q(5) * (RR(M%) - <span class="hr">1.104414973</span>) * (RR(M%) - <span class="hr">1.153426708</span>) * (RR(M%) - <span class="hr">0.984820219</span>) * (RR(M%) - <span class="hr">1.030518142</span>)</code></pre>
+        <p>Es la fórmula de O'Neill escrita en Visual Basic, λ<sub>0</sub> + λ<sub>1</sub>·f<sub>1</sub> + λ<sub>2</sub>·f<sub>2</sub> + λ<sub>3</sub>·f<sub>3</sub> + λ<sub>4</sub>·f<sub>4</sub>, con las constantes de la Tabla 2 (el orden de los factores da igual).</p>
+        <aside class="analogy"><span class="tag">Analogía</span><p>Las constantes son como un molde de repostería: se fabrica una vez, a partir de los radios, y después se rellena con cada muestra. Rellenarlo, es decir, calcular los λ de una muestra, será la Lección 6.</p></aside>
+        <p class="aside-note">Un detalle: las fórmulas de Bevington llevan un peso 1/σ² en cada punto. O'Neill da el mismo peso a las 13 REE, y así los pesos no influyen en las constantes. Si cada REE llevara su propio peso, las constantes dependerían también de los pesos.</p>
+
+        <h3>La tabla de valores de cada pieza</h3>
+        <p>Con las constantes fijadas, basta sustituir cada radio en cada pieza. Por ejemplo, para el La (<i class="vr">r</i> = 1.160 Å):</p>
+        <p class="eq">f<sub>1</sub>(La) = 1.160 − 1.054769 = 0.1052<br>f<sub>2</sub>(La) = (1.160 − 1.005327) × (1.160 − 1.128236) = 0.154673 × 0.031764 = 0.004913</p>
+        <p>Así sale toda la tabla, que es la de las columnas f de la Tabla 1 de O'Neill. Los valores de esta página se han calculado a partir de los radios y coinciden con los suyos cifra a cifra:</p>
+      </div>
+      <div class="table-wrap">
+        <table class="ftab" id="l5-ftab">
+          <thead><tr><th scope="col">REE</th><th scope="col"><span class="kr">r</span> (Å)</th><th scope="col">f<sub>1</sub></th><th scope="col">f<sub>2</sub> (×10⁻³)</th><th scope="col">f<sub>3</sub> (×10⁻³)</th><th scope="col">f<sub>4</sub> (×10⁻⁶)</th></tr></thead>
+          <tbody></tbody>
+          <tfoot></tfoot>
+        </table>
+      </div>
+      <div class="prose">
+        <p>Dos cosas saltan a la vista. La fila de sumas vale 0: cada pieza es ortogonal a f<sub>0</sub> = 1. Y los valores son cada vez más pequeños (por eso O'Neill usa ×10⁻³ y ×10⁻⁶), porque cada pieza es un producto de diferencias de radios de unas centésimas de Å. Por eso los λ de orden alto son números grandes (λ<sub>4</sub> = −2002 en VG 189): multiplican a una pieza diminuta. Un λ grande no significa una forma exagerada.</p>
+        <p>La fila del Eu se calcula igual (<i class="vr">r</i> = 1.066 Å), aunque el Eu no entra en el ajuste: servirá para calcular el Eu* en la Lección 7. Y otro dato que usaremos en las Lecciones 6 y 7: la suma de los cuadrados de cada columna (13 REE) vale 13; 0.04722; 1.029 × 10⁻⁴; 2.550 × 10⁻⁷ y 5.567 × 10⁻¹⁰.</p>
+
+        <h3>¿Y si falta algún elemento?</h3>
+        <p>Las constantes dependen de qué radios entran en la receta. Si se incluyera el Eu, o se quitara el Ce, saldrían otras. Pruébalo:</p>
+      </div>
+      <figure class="figbox" id="l5-sub">
+        <div class="seg chips" id="l5-chips" role="group" aria-label="REE que entran en la receta"></div>
+        <div class="ctrl-row ui">
+          <div class="seg" role="group" aria-label="Ejemplos de selección"><span class="seg-label">Ejemplos</span><button type="button" data-set="std">13 REE (O'Neill)</button><button type="button" data-set="eu">con Eu</button><button type="button" data-set="ce">sin Ce</button><button type="button" data-set="mono">sin Pr, Tb, Ho, Tm</button></div>
+        </div>
+        <div class="table-wrap" style="margin:.7rem 0 0">
+          <table class="ctab" id="l5-ctab">
+            <thead><tr><th scope="col">Constante</th><th scope="col">Tabla 2 (13 REE)</th><th scope="col">Con tu selección</th><th scope="col">Diferencia</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="readline" id="l5-subread"></p>
+        <figcaption>Pulsa las fichas para quitar o añadir elementos. Las constantes cambian aunque no cambie ninguna concentración: dependen solo de qué radios entran. Hacen falta al menos 6 REE.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>¿Hay que recalcular las constantes cuando a una muestra le falta un elemento? O'Neill dice que no (p. 1466). Las covarianzas entre los λ solo son exactamente cero con las 13 REE, pero si falta alguna, en la práctica importa poco. Lo que de verdad importa es usar <b>los mismos polinomios para todos los patrones</b>, para que sus λ sean comparables. Su macro hace eso: si falta un dato, lo salta y sigue usando las constantes de la Tabla 2. El ajuste sigue siendo correcto (veremos por qué en la Lección 6); solo que los λ dejan de ser del todo independientes. Recalcular las constantes para otro conjunto de REE es posible, pero entonces los λ ya no se pueden comparar con los de O'Neill. Y con sentido común: si faltan todas las REE ligeras, la forma del patrón no queda definida. En la Lección 8 lo probaremos con VG 189 sin el Ce.</p>
+      </div>
+
+      <div class="after">
+        <h3>Practica</h3>
+        <div class="practice">
+          <div class="ex">
+            <p><b>1.</b> ¿Son ortogonales estas dos listas de tres números, A = (1, 2, −1) y B = (2, 0, 2)?</p>
+            <div class="mc ui" role="group" aria-label="Respuestas">
+              <button type="button" class="btn ghost" data-mc5="si">Sí</button>
+              <button type="button" class="btn ghost" data-mc5="no">No</button>
+            </div>
+            <div class="fb" id="l5ex1-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>2.</b> Calcula f<sub>2</sub> para el Nd (<i class="vr">r</i> = 1.109 Å), con γ<sub>1</sub> = 1.005327 y γ<sub>2</sub> = 1.128236.</p>
+            <form id="l5ex2" autocomplete="off">
+              <label for="l5ex2-in" class="ui" style="font-size:.88rem">f<sub>2</sub>(Nd) =</label>
+              <input id="l5ex2-in" inputmode="decimal" placeholder="p. ej. 0.001">
+              <button type="submit">Comprobar</button>
+              <button type="button" class="ghost" data-sol="l5ex2">Ver solución</button>
+            </form>
+            <div class="fb" id="l5ex2-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>3.</b> Si alguien incluyera el Eu (<i class="vr">r</i> = 1.066 Å) en la receta, con 14 REE, ¿cuánto valdría β? Recuerda que los 13 radios de O'Neill suman 13.712 Å.</p>
+            <form id="l5ex3" autocomplete="off">
+              <label for="l5ex3-in" class="ui" style="font-size:.88rem">β =</label>
+              <input id="l5ex3-in" inputmode="decimal" placeholder="p. ej. 1.05">
+              <button type="submit">Comprobar</button>
+              <button type="button" class="ghost" data-sol="l5ex3">Ver solución</button>
+            </form>
+            <div class="fb" id="l5ex3-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>4.</b> Pasas de ajustar VG 189 a ajustar VG 4080, un basalto enriquecido. ¿Qué cambia?</p>
+            <div class="mc ui" role="group" aria-label="Respuestas">
+              <button type="button" class="btn ghost" data-mc5b="const">Las constantes β, γ, δ, ε</button>
+              <button type="button" class="btn ghost" data-mc5b="lam">Solo los λ</button>
+              <button type="button" class="btn ghost" data-mc5b="both">Las dos cosas</button>
+            </div>
+            <div class="fb" id="l5ex4-fb" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <h3>Resumen</h3>
+        <ul class="summary">
+          <li><b>Ortogonal</b> significa perpendicular: dos piezas lo son si la suma de sus productos en las 13 REE es 0 (los productos positivos y negativos se compensan).</li>
+          <li>Con piezas perpendiculares, cada coeficiente se lee sin rodeos. Las piezas simples 1, r, r², r³ y r⁴ son casi paralelas (de 3° a 13° entre sí), y por eso sus coeficientes se disparan y se correlacionan.</li>
+          <li>La receta (Bevington, §7.3): cada pieza nueva tiene tantas constantes como piezas anteriores y debe ser ortogonal a todas. Salen <b>β = 1.05477</b> (la media de los radios), <b>γ = 1.00533 y 1.12824</b>, las tres δ y las cuatro ε de la Tabla 2.</li>
+          <li>Superar las pruebas equivale a que <b>añadir una pieza no cambie los λ anteriores</b>.</li>
+          <li>Las constantes <b>solo dependen de los radios</b> (y de qué REE se usan): se calculan una vez y valen para todas las muestras. O'Neill recomienda no cambiarlas aunque falte algún elemento.</li>
+          <li>Sustituyendo cada radio se obtiene la <b>tabla f<sub>n</sub>(r<sub>i</sub>)</b> (Tabla 1): cada columna suma 0 y los valores son cada vez más pequeños.</li>
+        </ul>
+        <p><b>Dónde ha aparecido el radio en esta lección:</b> en todo. <span class="kr">②</span> Las constantes β, γ, δ y ε salen solo de los 13 radios. <span class="kr">③</span> La tabla f<sub>n</sub>(r<sub>i</sub>) es cada radio sustituido en cada pieza. Las concentraciones solo han aparecido para comprobar, con VG 189, que los λ anteriores no se mueven.</p>
+        <div class="next">
+          <p><b>Próxima lección · Calcular los λ: tres caminos, un resultado.</b> Con las piezas ya fabricadas, cada λ se calcula por su cuenta con una simple división: λ<sub>n</sub> = Σ y·f<sub>n</sub> / Σ f<sub>n</sub>² (Bevington, ec. 7.38). Lo haremos con VG 189 y veremos que la macro llega al mismo resultado resolviendo un sistema de 5 ecuaciones, y que ESTIMACION.LINEAL también sirve.</p>
+          <p><a href="#leccion-6" data-tab="leccion-6" class="ui" style="font-weight:600">Ir a la Lección 6 →</a></p>
+        </div>
+
+        <h3>Fuentes de esta lección</h3>
+        <ul class="sources">
+          <li>Bevington & Robinson (2003), §7.3, pp. 127–130: ec. 7.28 (el polinomio de piezas ortogonales), nota 1 de la p. 128 (definición: Σ f<sub>j</sub>·f<sub>k</sub> = 0 para j ≠ k), ecs. 7.34–7.37 (las pruebas que fijan β, γ y δ, y la advertencia de que solo dependen de la variable independiente) y ec. 7.38 (adelanto de la Lección 6).</li>
+          <li>O'Neill (2016), Tabla 1 (valores de f<sub>1</sub>…f<sub>4</sub> en cada REE, reproducidos aquí), Tabla 2 (constantes y significado de cada término) y p. 1466 (la ortogonalidad es exacta solo con las 13 REE; hay que usar los mismos polinomios para todos los patrones).</li>
+          <li>Macro REE_OrthogRegress_5term de la hoja de cálculo de O'Neill: las constantes van escritas en el código (tabla del sistema y línea XCalc).</li>
+          <li>Cálculos propios: constantes recalculadas a partir de los 13 radios (coinciden con la Tabla 2 y con la macro), ángulos entre piezas y constantes para otros conjuntos de REE.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= LECCIÓN 6 ======================= -->
+  <section class="panel" id="leccion-6" role="tabpanel" aria-label="Lección 6" hidden>
+    <header class="lesson-head">
+      <p class="eyebrow">Lección 6 · de 7 (+ 2 opcionales)</p>
+      <h2>Calcular los λ: tres caminos, un resultado</h2>
+      <p class="lead">Con las piezas fabricadas en la Lección 5 falta el último paso: averiguar cuánto hay de cada pieza en una muestra, es decir, sus λ. Hay tres caminos: la fórmula directa de Bevington, el sistema que resuelve la macro de O'Neill y un ajuste corriente con ESTIMACION.LINEAL. Los tres dan lo mismo para VG 189: 3.187, −1.656, −50.60, −227.29 y −2001.8. Al final veremos qué significa cada λ y cómo se lee el diagrama λ<sub>2</sub>–λ<sub>1</sub>.</p>
+      <dl class="facts ui">
+        <div><dt>Idea matemática nueva</dt><dd>Proyección: la «sombra» de los datos sobre cada pieza</dd></div>
+        <div><dt>Dónde entra el radio</dt><dd><span class="kr">④ la tabla del sistema de la macro, solo con radios</span>, y los f<sub>n</sub>(r<sub>i</sub>) de la Lección 5 en cada fórmula</dd></div>
+        <div><dt>Muestras</dt><dd>VG 189, las otras tres muestras de ejemplo y los 616 vidrios OFB de la hoja de O'Neill</dd></div>
+      </dl>
+    </header>
+
+    <div class="flow">
+      <div class="prose">
+        <h3>Camino 1: la sombra de los datos sobre cada pieza</h3>
+        <p>En la Lección 5 imaginamos los 13 valores <i class="vy">y</i> de una muestra como un punto, y cada pieza como una dirección. Cuando las direcciones son perpendiculares hay un atajo para saber cuánto caminar en cada una: medir la <b>sombra</b> del punto sobre esa dirección, con la luz cayendo en perpendicular. Compruébalo:</p>
+      </div>
+      <figure class="figbox" id="l6-shadow">
+        <div class="slider-row"><label for="l6-th">Ángulo entre las direcciones A y B</label><input type="range" id="l6-th" min="20" max="90" step="1" value="60"><output id="l6-tho" for="l6-th"></output></div>
+        <div class="ctrl-row ui"><div class="seg" role="group" aria-label="Ángulos de ejemplo"><span class="seg-label">Ejemplos</span><button type="button" data-th6="90">90°</button><button type="button" data-th6="60">60°</button><button type="button" data-th6="30">30°</button></div></div>
+        <div class="legend"><span><i class="lksh"></i>sombra del punto sobre A</span><span><i class="lk3"></i>a × dirección A</span><span><i class="lk4"></i>b × dirección B</span><span><i class="lky"></i>el punto</span></div>
+        <div class="plot" id="l6-sh"></div>
+        <div class="readouts">
+          <div class="ro"><div class="k">Sombra sobre A</div><div class="v" id="l6-shv"></div><div class="s">(3 × 1 + 4 × 0) / (1 × 1 + 0 × 0)</div></div>
+          <div class="ro"><div class="k sym">a</div><div class="v" id="l6-av"></div><div class="s" id="l6-as"></div></div>
+        </div>
+        <figcaption>El punto está en (3, 4). Su sombra sobre A mide siempre 3, sea cual sea la dirección B. El coeficiente a solo coincide con ella cuando B es perpendicular a A: con 60°, a = 0.69; con 30°, a = −3.93.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>La sombra solo depende del punto y de su dirección, no de las demás. La cuenta es la prueba del producto de la Lección 5 (multiplicar y sumar), dividida por la misma prueba de la dirección consigo misma. Con las piezas de O'Neill es igual, pero con 13 números en vez de 2 (Bevington & Robinson, ec. 7.38):</p>
+        <p class="eq">λ<sub>n</sub> = Σ <i class="vy">y</i><sub>i</sub>·f<sub>n</sub>(<i class="vr">r</i><sub>i</sub>) &nbsp;/&nbsp; Σ f<sub>n</sub>(<i class="vr">r</i><sub>i</sub>)²</p>
+        <p>Arriba se multiplica cada dato por el valor de la pieza en su REE y se suma; abajo, la suma de cuadrados de la pieza, que ya vimos en la Lección 5. Para λ<sub>0</sub> la pieza es f<sub>0</sub> = 1 y la fórmula da la media de las 13 <i class="vy">y</i>, como ya sabíamos. Pruébalo con cada muestra:</p>
+      </div>
+      <figure class="figbox" id="l6-proj">
+        <div class="lab-head ui"><label for="l6-sample">Muestra</label><select id="l6-sample"></select><span class="lab-meta" id="l6-meta"></span></div>
+        <div class="ctrl-row ui"><div class="seg" role="group" aria-label="Coeficiente que se calcula"><span class="seg-label">Calcular</span><button type="button" data-n6="0">λ₀</button><button type="button" data-n6="1">λ₁</button><button type="button" data-n6="2">λ₂</button><button type="button" data-n6="3">λ₃</button><button type="button" data-n6="4">λ₄</button></div></div>
+        <div class="legend"><span><i class="lkp"></i>producto positivo</span><span><i class="lkn"></i>producto negativo</span></div>
+        <div class="plot" id="l6-pp"></div>
+        <p class="readline" id="l6-pread"></p>
+        <div class="table-wrap" style="margin:.5rem 0 0">
+          <table class="coef ptab" id="l6-ptab">
+            <thead><tr><th scope="col" style="text-align:left">Coeficiente</th><th scope="col">Σ y·f<sub>n</sub></th><th scope="col">Σ f<sub>n</sub>²</th><th scope="col">λ<sub>n</sub></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <figcaption>Cada barra es el producto y<sub>i</sub>·f<sub>n</sub>(r<sub>i</sub>) de una REE. La suma de las barras, dividida por Σ f<sub>n</sub>², es el λ. Para λ<sub>0</sub> todas las barras son las propias y. La tabla reúne las cinco divisiones de la muestra elegida: son los λ que da la macro.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>De esta fórmula salen dos propiedades muy útiles:</p>
+        <ol class="reasons">
+          <li><b>Cada λ se calcula por su cuenta.</b> λ<sub>2</sub> no necesita a λ<sub>1</sub> ni a λ<sub>3</sub>, así que añadir o quitar términos no cambia los demás. O'Neill lo destaca (p. 1467): así se pueden comparar los λ de estudios poco precisos, que usan menos términos, con los de los análisis más precisos.</li>
+          <li><b>Solo λ<sub>0</sub> depende del nivel.</b> Como f<sub>1</sub>…f<sub>4</sub> suman 0 (Lección 5), sumar la misma cantidad a las 13 <i class="vy">y</i> no cambia Σ y·f<sub>n</sub>. Y multiplicar todas las concentraciones por un factor suma su logaritmo a todas las <i class="vy">y</i>. Si un magma se concentra o se diluye por igual en todas las REE, solo cambia λ<sub>0</sub>. Por eso, dice O'Neill (p. 1466), un error analítico sistemático que afecte igual a todas las REE solo pasa a λ<sub>0</sub>, y no a los coeficientes de forma.</li>
+        </ol>
+
+        <h3>Camino 2: el sistema de la macro</h3>
+        <p>La macro de O'Neill no usa la fórmula directa. Hace lo mismo que vimos en la Lección 3: recorre las REE sumando una tabla A de 5 × 5 y un vector Z, y resuelve A·λ = Z con MINVERSA y MMULT (líneas resumidas):</p>
+<pre class="vba"><code>For M% = 1 To NoData%                 <span class="c">' recorre las REE (salta vacíos, ceros y el Eu)</span>
+  A(1, 1) = A(1, 1) + 1
+  A(1, 2) = A(1, 2) + (RR(M%) - <span class="hr">1.054769</span>)                 <span class="c">' Σ f1</span>
+  A(2, 2) = A(2, 2) + RR(M%) * (RR(M%) - <span class="hr">1.054769</span>)       <span class="c">' Σ r·f1</span>
+  <span class="c">' … así hasta 25 sumas:  A(i, j) = Σ r^(i−1)·f(j−1)(r)    ← solo radios</span>
+  Z(1, 1) = Z(1, 1) + <span class="hy">X(M%)</span>                         <span class="c">' Σ y</span>
+  Z(2, 1) = Z(2, 1) + <span class="hy">X(M%)</span> * RR(M%)                <span class="c">' Σ r·y   … hasta Σ r⁴·y</span>
+Next M%
+MatInv = Application.WorksheetFunction.MInverse(A)
+SolutionMatrix = Application.WorksheetFunction.MMult(MatInv, Z)   <span class="c">' = λ0 … λ4</span></code></pre>
+        <p>La tabla A solo contiene radios: es la estación <span class="kr">④</span> del mapa. El vector Z es exactamente el β de la Lección 3 (Σ r<sup>k</sup>·y), y las cinco ecuaciones son las 7.30–7.33 de Bevington. Así queda para VG 189:</p>
+      </div>
+      <figure class="figbox" id="l6-mtx">
+        <div class="ctrl-row ui"><div class="seg" role="group" aria-label="REE que entran"><span class="seg-label">REE usadas</span><button type="button" data-set6="all">las 13</button><button type="button" data-set6="ce">sin Ce</button><button type="button" data-set6="mono">sin Pr, Tb, Ho, Tm</button></div></div>
+        <div class="mtx-wrap" style="margin:.7rem 0 .4rem"><div class="mtx-row" id="l6-mrow"></div></div>
+        <div class="table-wrap" style="margin:.4rem 0 0">
+          <table class="coef" id="l6-mtab">
+            <thead><tr><th scope="col" style="text-align:left">Camino</th><th scope="col">λ<sub>0</sub></th><th scope="col">λ<sub>1</sub></th><th scope="col">λ<sub>2</sub></th><th scope="col">λ<sub>3</sub></th><th scope="col">λ<sub>4</sub></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <figcaption>Tabla A (solo radios), incógnitas λ y vector Z (radios y datos) de VG 189. Con las 13 REE, todo lo que queda por encima de la diagonal vale 0. Si quitas elementos aparecen números ahí (en naranja): el sistema sigue dando el ajuste correcto, pero la fórmula directa se estropea.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>Con las 13 REE, la tabla es una <b>escalera</b>: por encima de la diagonal todo vale 0, porque cada pieza es ortogonal a las potencias más bajas de <i class="vr">r</i>. La primera ecuación, 13·λ<sub>0</sub> = 41.437, da λ<sub>0</sub> = 3.187 sin mirar las demás. La segunda, 13.712·λ<sub>0</sub> + 0.04722·λ<sub>1</sub> = 43.629, da λ<sub>1</sub> = −1.656 en cuanto se conoce λ<sub>0</sub>. Y así hasta λ<sub>4</sub>: cada ecuación aporta el coeficiente siguiente, como explica Bevington (p. 130). La diagonal son las Σ f<sub>n</sub>² de la Lección 5.</p>
+        <p>¿Para qué un sistema, si la fórmula directa es tan sencilla? Porque <b>el sistema sigue valiendo cuando falta un dato</b>. Quita el Ce en la figura: la escalera se pierde, pero el sistema da el ajuste por mínimos cuadrados correcto con las mismas piezas de la Tabla 2, con λ muy parecidos a los de las 13 REE, como anunciaba O'Neill. La fórmula directa, en cambio, da disparates (λ<sub>4</sub> = +40 062). Con 12 REE las piezas ya no son perpendiculares, y la sombra deja de ser el coeficiente, como en la primera figura con un ángulo distinto de 90°. Esta es la explicación que prometimos en la Lección 5: la macro puede saltarse un dato sin cambiar las constantes.</p>
+        <details class="curious">
+          <summary>Para curiosos: dos detalles numéricos de la macro</summary>
+          <p>El sistema tampoco necesita constantes perfectas. La macro redondea β a 1.054769 (el valor exacto es 1.0547692…), y con eso Σ f<sub>1</sub> vale 0.000003 en vez de 0. La fórmula directa lo notaría en la cuarta cifra de λ<sub>1</sub> (−1.6556 en vez de −1.6558); el sistema, no.</p>
+          <p>La macro guarda los radios en precisión simple (<code>Dim RR(14) As Single</code>), con unas siete cifras. Por eso su λ<sub>4</sub> de VG 189 es −2001.816 y no −2001.807. La diferencia es irrelevante: la incertidumbre de λ<sub>4</sub> con un 2 % de error analítico es ±848 (Lección 4).</p>
+        </details>
+
+        <h3>Camino 3: con un ajuste corriente</h3>
+        <p><b>a) ESTIMACION.LINEAL con las piezas como columnas.</b> Es la vía más cómoda en Excel, y la propone el propio O'Neill (p. 1467): hacer una regresión múltiple usando los polinomios ortogonales como variables «independientes». Pon las 13 <i class="vy">y</i> (sin Eu) en B2:B14 y, en C2:F14, los valores de f<sub>1</sub>…f<sub>4</sub> de cada REE, calculados con fórmulas a partir del radio (en la columna A):</p>
+<pre class="vba"><code>C2:  =A2-<span class="hr">1.054769</span>                                              <span class="c">f1</span>
+D2:  =(A2-<span class="hr">1.005327429</span>)*(A2-<span class="hr">1.128236038</span>)                        <span class="c">f2</span>
+E2:  =(A2-<span class="hr">0.991412204</span>)*(A2-<span class="hr">1.060548105</span>)*(A2-<span class="hr">1.145519887</span>)     <span class="c">f3</span>
+F2:  =(A2-<span class="hr">0.984820219</span>)*(A2-<span class="hr">1.030518142</span>)*(A2-<span class="hr">1.104414973</span>)*(A2-<span class="hr">1.153426708</span>)   <span class="c">f4</span>
+
+=ESTIMACION.LINEAL(B2:B14;C2:F14)     <span class="c">→ λ₄  λ₃  λ₂  λ₁  λ₀   (en orden inverso, como en la Lección 3)</span></code></pre>
+        <p>Para VG 189 devuelve −2001.8, −227.29, −50.60, −1.656 y 3.187. Si usas solo C2:D14 obtienes λ<sub>2</sub>, λ<sub>1</sub> y λ<sub>0</sub>, con los mismos valores: con piezas ortogonales, quitar términos no cambia los demás. Con las columnas r, r², r³ y r⁴, en cambio, los coeficientes cambiaban (Lección 4).</p>
+        <p><b>b) Reordenando los coeficientes de un ajuste normal.</b> Si ya tienes los <i>a</i> de la Lección 3, O'Neill indica que basta reordenarlos (p. 1467). Se hace de arriba abajo, usando los polinomios desarrollados de la Lección 5 con más cifras:</p>
+      </div>
+      <div class="table-wrap">
+        <table class="conv">
+          <thead><tr><th scope="col">Fórmula</th><th scope="col">VG 189</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">λ<sub>4</sub> = a<sub>4</sub></th><td>−2001.8067</td></tr>
+            <tr><th scope="row">λ<sub>3</sub> = a<sub>3</sub> + 4.27318004·λ<sub>4</sub></th><td>8326.7924 − 8554.0803 = −227.288</td></tr>
+            <tr><th scope="row">λ<sub>2</sub> = a<sub>2</sub> + 3.19748020·λ<sub>3</sub> − 6.83905178·λ<sub>4</sub></th><td>−13014.3108 − 726.7487 + 13690.4595 = −50.600</td></tr>
+            <tr><th scope="row">λ<sub>1</sub> = a<sub>1</sub> + 2.13356347·λ<sub>2</sub> − 3.40200168·λ<sub>3</sub> + 4.85868971·λ<sub>4</sub></th><td>9059.2260 − 107.9583 + 773.2340 − 9726.1575 = −1.656</td></tr>
+            <tr><th scope="row">λ<sub>0</sub> = a<sub>0</sub> + 1.054769·λ<sub>1</sub> − 1.13424664·λ<sub>2</sub> + 1.20444581·λ<sub>3</sub> − 1.29281055·λ<sub>4</sub></th><td>−2366.65963 − 1.74653 + 57.39290 − 273.75603 + 2587.95678 = 3.1875</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <p>Funciona, pero fíjate en las cancelaciones: para obtener λ<sub>0</sub> = 3.19 se suman números de miles. Con las constantes redondeadas a 4 decimales saldría λ<sub>0</sub> = 3.206 y λ<sub>1</sub> = −1.619, errores mayores que la incertidumbre analítica (0.0055 y 0.09). Si eliges este camino, usa todas las cifras. El camino a) no tiene ese problema.</p>
+        <aside class="analogy"><span class="tag">Analogía</span><p>Los tres caminos son como tres formas de averiguar cuánto lleva de cada ingrediente un bizcocho. La fórmula directa mide cada ingrediente por separado, y solo funciona si los ingredientes no se confunden entre sí (piezas perpendiculares). El sistema de la macro los despeja todos a la vez, y funciona aunque falte un trozo del bizcocho. Reordenar los <i>a</i> es traducir otra receta equivalente, llena de cantidades enormes que se compensan. Hechos con cuidado, los tres dan las mismas cantidades.</p></aside>
+
+        <h3>Qué significa cada λ</h3>
+        <p>Cada λ multiplica a una pieza, y el patrón es la suma de las cinco contribuciones. El tamaño del número no dice cuánto pesa en el patrón, porque las piezas son cada vez más pequeñas (Lección 5). Para VG 189:</p>
+      </div>
+      <div class="table-wrap">
+        <table class="mean">
+          <thead><tr><th scope="col">λ</th><th scope="col">Pieza</th><th scope="col">Qué mide (Tabla 2)</th><th scope="col">VG 189</th><th scope="col">Qué hace en VG 189</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">λ<sub>0</sub></th><td>1</td><td>Nivel medio: e<sup>λ₀</sup> es la media geométrica de [REE]/[REE]<sub>CI</sub></td><td>3.187</td><td>24 veces el condrito</td></tr>
+            <tr><th scope="row">λ<sub>1</sub></th><td>f<sub>1</sub>, recta</td><td>Pendiente. Positiva: ligeras enriquecidas (el La, a la derecha, más alto)</td><td>−1.656</td><td>La −16 %, Lu +14 %</td></tr>
+            <tr><th scope="row">λ<sub>2</sub></th><td>f<sub>2</sub>, U</td><td>Curvatura. Negativa: joroba (REE medias por encima de la recta); positiva: valle</td><td>−50.60</td><td>Gd +20 %; La −22 %, Lu −20 %</td></tr>
+            <tr><th scope="row">λ<sub>3</sub></th><td>f<sub>3</sub>, S</td><td>Inflexiones en los extremos del patrón</td><td>−227.3</td><td>La −5 %, Lu +5 %</td></tr>
+            <tr><th scope="row">λ<sub>4</sub></th><td>f<sub>4</sub>, W</td><td>Forma de W</td><td>−2002</td><td>unos −2 % en La, Gd y Lu</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <p>λ<sub>4</sub> = −2002 cambia el patrón en un 2 %; λ<sub>1</sub> = −1.66, en un 16 %. La figura descompone las cuatro muestras de ejemplo en sus contribuciones, como la Fig. 1b de O'Neill, y las sitúa en el diagrama λ<sub>2</sub>–λ<sub>1</sub>. Elige <b>Punto libre</b> y arrastra el punto por el diagrama para ver qué forma corresponde a cada zona.</p>
+      </div>
+      <figure class="figbox" id="l6-shape">
+        <div class="ctrl-row ui"><div class="seg" role="group" aria-label="Muestra o punto libre"><span class="seg-label">Muestra</span><button type="button" data-s6="0">VG 189</button><button type="button" data-s6="1">VG 304</button><button type="button" data-s6="2">VG 4080</button><button type="button" data-s6="3">8-2.70</button><button type="button" data-s6="free">Punto libre</button></div></div>
+        <div class="shape-grid">
+          <div>
+            <p class="panel-t">El patrón</p>
+            <div class="plot" id="l6-pat"></div>
+            <p class="panel-t">Lo que aporta cada término</p>
+            <div class="legend"><span><i class="lk2"></i>λ₁·f₁</span><span><i class="lk3"></i>λ₂·f₂</span><span><i class="lk4"></i>λ₃·f₃</span><span><i class="lk5"></i>λ₄·f₄</span></div>
+            <div class="plot" id="l6-terms"></div>
+          </div>
+          <div>
+            <p class="panel-t">Diagrama λ<sub>2</sub>–λ<sub>1</sub></p>
+            <div class="legend"><span><i class="dot-ofb"></i>616 vidrios OFB</span><span><i class="dot-oib"></i>119 basaltos de Hawái (HSDP2)</span><span><i class="lk2 dash"></i>tendencia de los OFB</span></div>
+            <div class="plot" id="l6-dia"></div>
+            <div id="l6-free" hidden>
+              <div class="slider-row"><label for="l6-l1">λ<sub>1</sub></label><input type="range" id="l6-l1" min="-10" max="20" step="0.1" value="0"><output id="l6-l1o" for="l6-l1"></output></div>
+              <div class="slider-row"><label for="l6-l2">λ<sub>2</sub></label><input type="range" id="l6-l2" min="-80" max="60" step="1" value="0"><output id="l6-l2o" for="l6-l2"></output></div>
+            </div>
+          </div>
+        </div>
+        <div class="readouts" id="l6-lro"></div>
+        <figcaption>Arriba a la izquierda, los datos (puntos morados; el Eu, hueco) y la curva ajustada; la línea discontinua es λ<sub>0</sub>. Debajo, cuánto sube o baja cada REE por cada término, en unidades de ln (0.1 ≈ 10 %). A la derecha, el diagrama de la Fig. 2f de O'Neill con los datos de su hoja REEshapes. Pulsa un círculo para elegir esa muestra. En «Punto libre», λ<sub>0</sub> = 3 y λ<sub>3</sub> = λ<sub>4</sub> = 0.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>Cómo leer el diagrama: hacia la derecha, patrones más enriquecidos en REE ligeras (λ<sub>1</sub> mayor); hacia arriba, menos joroba y más valle (λ<sub>2</sub> mayor). Los vidrios OFB forman una banda inclinada, λ<sub>2</sub> = −22.6 + 5.36·λ<sub>1</sub>: en ellos, la curvatura de los patrones va ligada a su pendiente (O'Neill, p. 1469). Los basaltos de Hawái quedan aparte, por debajo de la banda: para la misma pendiente, mucha más joroba. Lo que esas posiciones significan en términos de procesos (fusión, cristalización) es el tema de los vectores ψ de la Lección 9.</p>
+        <p>Separar el nivel de la forma tiene otra ventaja. En los OFB, λ<sub>0</sub> sube a medida que el magma evoluciona y pierde MgO (λ<sub>0</sub> = 5.100 − 0.287·[MgO]), mientras que λ<sub>1</sub> y λ<sub>2</sub> apenas cambian. O'Neill concluye que la forma de los patrones se hereda de los magmas parentales (p. 1468). ¿Y λ<sub>3</sub> y λ<sub>4</sub>? Con la precisión analítica habitual suelen ser poco distinguibles de cero; lo veremos en la Lección 7.</p>
+      </div>
+
+      <div class="after">
+        <h3>Practica</h3>
+        <div class="practice">
+          <div class="ex">
+            <p><b>1.</b> Para VG 189, Σ y·f<sub>2</sub> = −0.0052060 y Σ f<sub>2</sub>² = 0.00010288. ¿Cuánto vale λ<sub>2</sub>?</p>
+            <form id="l6ex1" autocomplete="off">
+              <label for="l6ex1-in" class="ui" style="font-size:.88rem">λ<sub>2</sub> =</label>
+              <input id="l6ex1-in" inputmode="decimal" placeholder="p. ej. −10">
+              <button type="submit">Comprobar</button>
+              <button type="button" class="ghost" data-sol="l6ex1">Ver solución</button>
+            </form>
+            <div class="fb" id="l6ex1-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>2.</b> Un magma con el patrón de VG 189 se diluye a la mitad: todas las concentraciones de REE se reducen al 50 %. ¿Qué λ cambian?</p>
+            <div class="mc ui" role="group" aria-label="Respuestas">
+              <button type="button" class="btn ghost" data-mc6="all">Todos</button>
+              <button type="button" class="btn ghost" data-mc6="l0">Solo λ₀</button>
+              <button type="button" class="btn ghost" data-mc6="none">Ninguno</button>
+            </div>
+            <div class="fb" id="l6ex2-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>3.</b> ¿Por qué la macro resuelve un sistema de 5 ecuaciones en vez de usar la fórmula directa?</p>
+            <div class="mc ui" role="group" aria-label="Respuestas">
+              <button type="button" class="btn ghost" data-mc6b="exact">Porque con las 13 REE es más exacto</button>
+              <button type="button" class="btn ghost" data-mc6b="miss">Porque sigue valiendo aunque falte alguna REE</button>
+              <button type="button" class="btn ghost" data-mc6b="l4">Porque la fórmula directa no sirve para λ₄</button>
+            </div>
+            <div class="fb" id="l6ex3-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>4.</b> VG 4080 está arriba a la derecha en el diagrama (λ<sub>1</sub> = 11.0, λ<sub>2</sub> = 41.9). ¿Qué forma tiene su patrón?</p>
+            <div class="mc ui" role="group" aria-label="Respuestas">
+              <button type="button" class="btn ghost" data-mc6c="a">Ligeras enriquecidas y REE medias hundidas (valle)</button>
+              <button type="button" class="btn ghost" data-mc6c="b">Ligeras empobrecidas y con joroba</button>
+              <button type="button" class="btn ghost" data-mc6c="c">Plano</button>
+            </div>
+            <div class="fb" id="l6ex4-fb" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <h3>Resumen</h3>
+        <ul class="summary">
+          <li><b>Tres caminos, un resultado:</b> la fórmula directa λ<sub>n</sub> = Σ y·f<sub>n</sub> / Σ f<sub>n</sub>², el sistema A·λ = Z de la macro y ESTIMACION.LINEAL (con las piezas como columnas, o reordenando los <i>a</i>).</li>
+          <li>La fórmula directa es una <b>sombra</b>: solo da el coeficiente porque las piezas son perpendiculares. Así, cada λ se calcula por su cuenta, y añadir o quitar términos no cambia los demás.</li>
+          <li><b>Solo λ<sub>0</sub> depende del nivel</b>: diluir o concentrar un magma, o un error de calibración común a todas las REE, solo cambia λ<sub>0</sub>.</li>
+          <li>El sistema de la macro es una <b>escalera</b> con las 13 REE y sigue dando el ajuste correcto aunque falte un dato; la fórmula directa, no.</li>
+          <li>Reordenar los <i>a</i> funciona, pero exige muchas cifras: hay cancelaciones enormes.</li>
+          <li>Cada λ mide una forma, y su tamaño no es su efecto (λ<sub>4</sub> = −2002 ≈ 2 %). En el diagrama λ<sub>2</sub>–λ<sub>1</sub>, los OFB siguen λ<sub>2</sub> = −22.6 + 5.36·λ<sub>1</sub>.</li>
+        </ul>
+        <p><b>Dónde ha aparecido el radio en esta lección:</b> <span class="kr">④</span> la tabla A de la macro solo contiene radios (sumas de potencias de r por las piezas), y su diagonal son las Σ f<sub>n</sub>² de la Lección 5. En la fórmula directa, el radio entra a través de los f<sub>n</sub>(r<sub>i</sub>) (③) y de Σ f<sub>n</sub>². Los datos solo entran en Σ y·f<sub>n</sub> y en Z.</p>
+        <div class="next">
+          <p><b>Próxima lección · ¿Es bueno el ajuste? Residuos, Eu/Eu*, χ² e incertidumbres.</b> Veremos cuánto se aparta cada REE de la curva (el cociente observado/calculado de la macro), cómo se obtiene la anomalía de Eu con la curva evaluada en r = 1.066 Å, qué es el χ² reducido, cómo infiere O'Neill la precisión de los análisis (2.14 %) y de dónde salen los errores de los λ (los factores ζ).</p>
+          <p><a href="#leccion-7" data-tab="leccion-7" class="ui" style="font-weight:600">Ir a la Lección 7 →</a></p>
+        </div>
+
+        <h3>Fuentes de esta lección</h3>
+        <ul class="sources">
+          <li>Bevington & Robinson (2003), §7.3, pp. 128–130: ecs. 7.30–7.33 (el sistema), p. 130 (cada ecuación da el coeficiente siguiente) y ec. 7.38 (la fórmula directa).</li>
+          <li>O'Neill (2016): p. 1466 (un error sistemático común a todas las REE solo afecta a λ<sub>0</sub>), p. 1467 (quitar términos no cambia los demás; regresión múltiple con los polinomios ortogonales como variables; reordenar los coeficientes de un ajuste polinómico), p. 1468 (λ<sub>0</sub> frente a MgO; la forma se hereda de los magmas parentales), Fig. 2f y p. 1469 (λ<sub>2</sub> frente a λ<sub>1</sub> en los OFB) y Fig. 1b (descomposición en términos).</li>
+          <li>Macro REE_OrthogRegress_5term: construcción de A y Z y solución con MInverse y MMult; radios declarados en precisión simple.</li>
+          <li>Datos del diagrama: hoja REEshapes_reference_datasets_for_plots.xls de O'Neill, con los λ calculados por su macro para 616 vidrios OFB (Jenner & O'Neill, 2012) y 119 basaltos del sondeo HSDP2 de Hawái (Feigenson et al., 2003).</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= LECCIÓN 7 ======================= -->
+  <section class="panel" id="leccion-7" role="tabpanel" aria-label="Lección 7" hidden>
+    <header class="lesson-head">
+      <p class="eyebrow">Lección 7 · de 7 (+ 2 opcionales)</p>
+      <h2>¿Es bueno el ajuste? Residuos, Eu/Eu*, χ² e incertidumbres</h2>
+      <p class="lead">Ya tenemos los λ. Falta comprobar lo bien que describen el patrón y cuánto nos podemos fiar de ellos. La macro de O'Neill calcula tres cosas más: el cociente observado/calculado de cada REE (incluido el Eu, que da la anomalía Eu/Eu*) y un χ² reducido para cada muestra. Con muchas muestras, además, se puede deducir la precisión típica de los análisis. Con esa precisión y los factores ζ salen los errores de los λ.</p>
+      <dl class="facts ui">
+        <div><dt>Idea matemática nueva</dt><dd>χ² reducido y propagación de errores</dd></div>
+        <div><dt>Dónde entra el radio</dt><dd><span class="kr">⑤ la curva evaluada en r = 1.066 Å (el Eu*)</span> y <span class="kr">⑥ los factores ζ = 1/√Σf<sub>n</sub>²</span>, que solo dependen de los radios</dd></div>
+        <div><dt>Muestras</dt><dd>VG 189, las otras tres muestras de ejemplo y los 616 vidrios OFB de la hoja de O'Neill</dd></div>
+      </dl>
+    </header>
+
+    <div class="flow">
+      <div class="prose">
+        <h3>Cuánto se aparta cada REE: el cociente observado/calculado</h3>
+        <p>Con los λ ya calculados, la macro evalúa la curva en los 14 radios, incluido el del Eu (estación <span class="kr">⑤</span> del mapa). Después compara cada dato con la curva:</p>
+<pre class="vba"><code>XCalc(M%) = Q(1) + Q(2) * (RR(M%) - 1.054769) + …       <span class="c">' la curva en el radio de la REE M (Lección 5)</span>
+DataOut.Cells(Sample%, 8 + M%) = Exp(<span class="hy">X(M%)</span> - XCalc(M%))  <span class="c">' [REE]obs / [REE]calc</span>
+<span class="c">' … y pinta de rojo las celdas por debajo de 0.95 o por encima de 1.05</span></code></pre>
+        <p>Como <i class="vy">y</i> es un logaritmo, la diferencia <i class="vy">y</i> − y<sub>calc</sub> es el logaritmo del cociente, y exp() lo deshace: 1.00 significa que el dato cae sobre la curva; 0.98, que está un 2 % por debajo. O'Neill llama <b>suavidad</b> a lo cerca que están estos cocientes de 1 (p. 1470). Mira cómo cambian al añadir términos:</p>
+      </div>
+      <figure class="figbox" id="l7-res">
+        <div class="lab-head ui"><label for="l7-sample">Muestra</label><select id="l7-sample"></select><span class="lab-meta" id="l7-meta"></span></div>
+        <div class="ctrl-row ui"><div class="seg" role="group" aria-label="Número de términos"><span class="seg-label">Términos</span><button type="button" data-t7="1">1</button><button type="button" data-t7="2">2</button><button type="button" data-t7="3">3</button><button type="button" data-t7="4">4</button><button type="button" data-t7="5">5 (macro)</button></div></div>
+        <div class="legend"><span><i class="lkres"></i>entre 0.95 y 1.05</span><span><i class="lkn"></i>fuera (la macro la pinta de rojo)</span><span><i class="lkeu"></i>Eu: es el Eu/Eu*</span></div>
+        <div class="plot" id="l7-rp"></div>
+        <div class="readouts">
+          <div class="ro"><div class="k">Mayor desviación</div><div class="v" id="l7-max"></div><div class="s" id="l7-maxs"></div></div>
+          <div class="ro"><div class="k">Desviación típica</div><div class="v" id="l7-s"></div><div class="s" id="l7-ss"></div></div>
+          <div class="ro"><div class="k nc">χ² REDUCIDO</div><div class="v" id="l7-chi"></div><div class="s" id="l7-chis"></div></div>
+          <div class="ro"><div class="k nc">Eu/Eu*</div><div class="v" id="l7-eu"></div><div class="s">cociente del Eu</div></div>
+        </div>
+        <figcaption>Cada barra es [REE]<sub>obs</sub>/[REE]<sub>calc</sub> − 1, en %. La franja marca ±5 %: lo que queda fuera, la macro lo pinta de rojo. Con 1 término (solo λ<sub>0</sub>), el «ajuste» es una línea horizontal y las desviaciones llegan al 40 %; con 5 términos, las de VG 189 no pasan del 2.6 %. El Eu no entra en el ajuste, así que su barra es la anomalía.</figcaption>
+      </figure>
+
+      <div class="prose">
+        <h3>La anomalía de Eu</h3>
+        <p>El Eu queda fuera del ajuste «por la probabilidad de anomalías debidas al Eu<sup>2+</sup>» (Apéndice 1). Parte del Eu de un magma está como Eu<sup>2+</sup>, un ion mucho mayor (1.25 Å en coordinación 8, frente a <span class="kr">1.066 Å</span> del Eu<sup>3+</sup>), parecido al Sr<sup>2+</sup>, que la plagioclasa acepta con facilidad. Si la plagioclasa ha cristalizado o se ha acumulado, el Eu se sale del patrón suave de las demás REE.</p>
+        <p>Por eso la curva, calculada con las otras 13 REE, dice cuánto Eu «debería» haber si no hubiera anomalía: es el Eu*, el valor de la curva en <span class="kr">r = 1.066 Å</span>. Y el cociente observado/calculado del Eu es precisamente Eu/Eu*. La hoja de O'Neill lo indica en la cabecera de esa columna: «this is Eu/Eu*». Para VG 189, y(Eu) = 3.2547 y la curva vale 3.3479 en 1.066 Å, así que Eu/Eu* = e<sup>3.2547 − 3.3479</sup> = 0.911: le falta un 9 % de Eu.</p>
+      </div>
+      <figure class="figbox" id="l7-eu">
+        <div class="ctrl-row ui">
+          <div class="seg" role="group" aria-label="Muestra"><span class="seg-label">Muestra</span><button type="button" data-e7="0">VG 189</button><button type="button" data-e7="1">VG 304</button><button type="button" data-e7="2">VG 4080</button><button type="button" data-e7="3">8-2.70</button></div>
+          <button type="button" class="btn ghost" id="l7-gd" aria-pressed="false">Gd con un error del +5 %</button>
+        </div>
+        <div class="legend"><span><i class="lk5"></i>curva ajustada (13 REE) y su Eu*</span><span><i class="lk2 dash"></i>recta Sm–Gd y su punto medio (Eu* clásico)</span><span><i class="lkr"></i>r = 1.066 Å</span></div>
+        <div class="plot" id="l7-ep"></div>
+        <div class="readouts">
+          <div class="ro"><div class="k nc">Eu/Eu* CON LA CURVA</div><div class="v" id="l7-eu1"></div><div class="s" id="l7-eu1s"></div></div>
+          <div class="ro"><div class="k nc">Eu/Eu* CLÁSICO</div><div class="v" id="l7-eu2"></div><div class="s" id="l7-eu2s"></div></div>
+        </div>
+        <figcaption>Ampliación alrededor del Eu. El Eu* de O'Neill es la curva en r = 1.066 Å; el clásico, Eu<sub>N</sub>/√(Sm<sub>N</sub>·Gd<sub>N</sub>), es el punto medio de la recta entre Sm y Gd (el Eu queda justo a mitad de camino entre los dos, tanto en radio como en Z). El botón simula un error analítico del +5 % en el Gd.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>En basaltos de patrón suave los dos Eu* casi coinciden: para VG 189, 0.911 con la curva y 0.912 con Sm y Gd. La diferencia está en de qué depende cada uno. El clásico depende a partes iguales de dos análisis. El de O'Neill es una media ponderada de todas las REE, con pesos que solo dependen de los radios: Sm 38 %, Gd 34 %, Tb 24 %, Nd 16 %, Dy 11 %, y pesos menores, algunos negativos, para las demás. Un error del 5 % en el Gd desplaza el Eu/Eu* clásico un 2.4 %, y el de O'Neill, un 1.6 %.</p>
+
+        <h3>El χ²: la calidad del ajuste en un número</h3>
+        <p>Para resumir los 13 residuos en un solo número, cada residuo se mide en unidades del error analítico esperado σ, se eleva al cuadrado y se suma (Apéndice 1, ec. A3b; es el χ² de la Lección 2):</p>
+        <p class="eq">χ² = Σ ( (<i class="vy">y</i><sub>i</sub> − y<sub>calc,i</sub>) / σ )²</p>
+        <p>Si la curva es buena y los residuos son solo ruido analítico, cada término vale en promedio 1… salvo que el ajuste ya ha «gastado» un punto por cada λ. De los 13 términos, solo cuentan 13 − 5 = 8, los <b>grados de libertad</b> ν. Por eso se esperan χ² ≈ ν y χ²<sub>ν</sub> = χ²/ν ≈ 1: el <b>χ² reducido</b>.</p>
+        <p>La macro usa σ = 1 % (0.01 en ln). Para VG 189 con 5 términos, la suma de residuos al cuadrado es 0.003301, así que χ² = 0.003301 / 0.01² = 33.0 y χ²<sub>ν</sub> = 33.0 / 8 = 4.1. Un χ²<sub>ν</sub> de 4 significa que los residuos son unas √4 = 2 veces mayores que el 1 % supuesto: el patrón se aparta de la curva en torno a un 2 %. No es un mal ajuste; es que el 1 % era optimista.</p>
+        <aside class="warn"><b>Un detalle de la macro.</b> La macro divide por N − 4 = 9, no por N − 5 = 8, y da χ²<sub>ν</sub> = 3.667 para VG 189. El Apéndice 1 dice ν = 8 para 13 REE y cinco términos. La diferencia es de un 12 % en χ²<sub>ν</sub> y de un 6 % en las precisiones que se deducen de él, como el 2.14 % que veremos ahora (con ν = 8 sería 2.27 %). No cambia ninguna conclusión, pero conviene saberlo si comparas tus cálculos con los suyos.</aside>
+
+        <h3>Muchas muestras: la precisión que infiere O'Neill</h3>
+        <p>En una sola muestra, χ²<sub>ν</sub> fluctúa mucho por azar. Pero en una población de muestras analizadas del mismo modo, la media de χ²<sub>ν</sub> debe valer 1 si σ es la correcta. Entonces se puede despejar σ: se busca el valor que hace que la media sea 1 (Apéndice 1, ec. A4). O'Neill lo llama <b>s(ln[REE])* inferido</b>. Pruébalo con los 616 vidrios OFB de su hoja:</p>
+      </div>
+      <figure class="figbox" id="l7-hist">
+        <div class="slider-row"><label for="l7-sig">Precisión supuesta σ</label><input type="range" id="l7-sig" min="1" max="4" step="0.01" value="1"><output id="l7-sigo" for="l7-sig"></output></div>
+        <div class="ctrl-row ui">
+          <div class="seg" role="group" aria-label="Grados de libertad"><span class="seg-label">Grados de libertad</span><button type="button" data-nu7="9">9 (macro)</button><button type="button" data-nu7="8">8 (Apéndice 1)</button></div>
+          <button type="button" class="btn" id="l7-fit">Buscar la σ que da media 1</button>
+        </div>
+        <div class="legend"><span><i class="lkbar"></i>616 vidrios OFB</span><span><i class="lk5"></i>lo esperado si σ es correcta (χ² con ν grados de libertad)</span></div>
+        <div class="plot" id="l7-hp"></div>
+        <div class="readouts">
+          <div class="ro"><div class="k nc">MEDIA DE χ²<sub>ν</sub></div><div class="v" id="l7-mean"></div><div class="s">debe ser ≈ 1</div></div>
+          <div class="ro"><div class="k nc">MUESTRAS CON χ²<sub>ν</sub> &gt; 3</div><div class="v" id="l7-out"></div><div class="s" id="l7-outs"></div></div>
+        </div>
+        <figcaption>Histograma de los χ²<sub>ν</sub> que da la macro para los 616 vidrios, recalculados con la σ elegida. La curva es la distribución teórica, que O'Neill compara con estos datos en su Fig. A1. Con σ = 1 % los datos quedan muy a la derecha. Con la σ correcta, la media vale 1 y los datos siguen la curva.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>La σ que da media 1 es <b>2.14 %</b> (con el ν = 9 de la macro; 2.27 % con ν = 8). Los análisis repetidos de dos patrones analizados en el mismo laboratorio, el vidrio vg2 y el basalto fundido bcr2g, tienen una dispersión de 1.9 ± 0.6 % y 2.1 ± 0.5 % (pp. 1468–1469). Es decir: <b>lo que la cuártica no explica es solo ruido analítico</b>. Los patrones de REE de estos basaltos son suaves hasta donde los análisis permiten verlo. Es la conclusión que da título al artículo.</p>
+        <p>La distribución sirve además de control. Si σ es la correcta, los χ²<sub>ν</sub> deben repartirse como la curva, y así ocurre casi siempre. Las pocas muestras de la cola derecha pueden ser fallos analíticos… o desviaciones reales de un patrón suave, petrológicamente interesantes. O'Neill recomienda volver a analizarlas (Apéndice 1).</p>
+        <p class="aside-note">Esto explica los porcentajes de la Lección 1: al ajustar los 616 vidrios con 2, 3, 4 y 5 términos, la σ inferida baja de 11.7 a 3.9, 2.4 y 2.14 % con el radio, y de 14.0 a 5.6, 3.09 y 2.56 % con Z (p. 1471). Esos porcentajes se reproducen dividiendo por 9 en todos los casos. Con el ν correcto de cada ajuste (13 − número de términos), los valores con el radio serían 10.6, 3.7, 2.4 y 2.27 %: la conclusión no cambia.</p>
+
+        <h3>Los errores de los λ: los factores ζ</h3>
+        <p>Cada λ es una suma ponderada de los 13 datos (Lección 6): λ<sub>n</sub> = Σ y·f<sub>n</sub> / Σ f<sub>n</sub>². Si cada <i class="vy">y</i> lleva un error independiente de tamaño s*, el error de esa suma se calcula con la regla habitual de propagación de errores, y queda (Tabla 2 y p. 1466 de O'Neill):</p>
+        <p class="eq">s(λ<sub>n</sub>) = ζ<sub>n</sub> · s*, &nbsp;&nbsp;con&nbsp; ζ<sub>n</sub> = 1 / √Σ f<sub>n</sub>(<i class="vr">r</i><sub>i</sub>)²</p>
+        <p>Es la tabla de errores de la Lección 4 (Bevington, ecs. 7.23–7.27), que con piezas ortogonales solo tiene diagonal: 1/Σ f<sub>n</sub>² veces σ². Los ζ solo dependen de los radios: son la estación <span class="kr">⑥</span> del mapa.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="coef zeta">
+          <thead><tr><th scope="col" style="text-align:left">λ</th><th scope="col">Σ f<sub>n</sub>²</th><th scope="col">ζ<sub>n</sub></th><th scope="col">s(λ) con 1 % (Tabla 2)</th><th scope="col">s(λ) con 2.14 %</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">λ<sub>0</sub></th><td>13</td><td>0.2774</td><td>0.0028</td><td>0.0059</td></tr>
+            <tr><th scope="row">λ<sub>1</sub></th><td>0.04722</td><td>4.602</td><td>0.046</td><td>0.098</td></tr>
+            <tr><th scope="row">λ<sub>2</sub></th><td>1.029 × 10⁻⁴</td><td>98.59</td><td>0.99</td><td>2.11</td></tr>
+            <tr><th scope="row">λ<sub>3</sub></th><td>2.550 × 10⁻⁷</td><td>1980</td><td>19.8</td><td>42.4</td></tr>
+            <tr><th scope="row">λ<sub>4</sub></th><td>5.567 × 10⁻¹⁰</td><td>42 382</td><td>424</td><td>907</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <aside class="analogy"><span class="tag">Analogía</span><p>Es como leer distancias en un mapa de escala muy pequeña: un milímetro de error sobre el papel son kilómetros sobre el terreno. f<sub>4</sub> es una pieza diminuta (sus valores son del orden de 10⁻⁵), así que cada unidad de λ<sub>4</sub> mueve el patrón muy poco. El mismo error del 2 % en los datos equivale a ±850 unidades de λ<sub>4</sub>, y solo a ±0.09 de λ<sub>1</sub>.</p></aside>
+        <p>Con estos errores se decide qué λ son <b>significativos</b>: con el criterio habitual (95 %), un λ lo es si se aparta de cero más de dos veces su error. O'Neill da un ejemplo con s* = 5 %: λ<sub>3</sub> sería significativo si |λ<sub>3</sub>| &gt; 2 × 5 × 19.8 = 198, y λ<sub>4</sub>, si |λ<sub>4</sub>| &gt; 2 × 5 × 424 = 4240 (p. 1466). Compruébalo con cada muestra y con la precisión que quieras:</p>
+      </div>
+      <figure class="figbox" id="l7-sig">
+        <div class="lab-head ui"><label for="l7-sample2">Muestra</label><select id="l7-sample2"></select></div>
+        <div class="slider-row"><label for="l7-sp">Precisión de los análisis s*</label><input type="range" id="l7-sp" min="0.5" max="6" step="0.01" value="2.14"><output id="l7-spo" for="l7-sp"></output></div>
+        <div class="table-wrap" style="margin:.5rem 0 0">
+          <table class="coef sigtab" id="l7-stab">
+            <thead><tr><th scope="col" style="text-align:left">λ</th><th scope="col">Valor</th><th scope="col">± 2·s(λ)</th><th scope="col" class="mcol">|λ| frente a 2·s(λ)</th><th scope="col">¿Significativo?</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <figcaption>La barra compara |λ| con 2·s(λ) en escala logarítmica. Si pasa la raya, el λ es significativo al 95 %. Con 2.14 %, λ<sub>3</sub> es significativo en las cuatro muestras, y λ<sub>4</sub> solo en VG 189, por poco. Con un 5 %, típico de técnicas más antiguas, λ<sub>3</sub> solo lo seguiría siendo en VG 189, y λ<sub>4</sub> en ninguna.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>Es lo que concluye O'Neill (Apéndice 1 y pp. 1469–1471). La mayor parte de la información de un patrón está en λ<sub>0</sub>, λ<sub>1</sub> y λ<sub>2</sub>, más la anomalía de Eu si la hay. λ<sub>3</sub> solo se distingue de cero gracias a la precisión del 2 % de los análisis modernos, y λ<sub>4</sub> casi nunca.</p>
+        <p class="aside-note">Una última advertencia: los ζ solo propagan los errores independientes de cada REE. Un error que afecte igual a todas las REE de una muestra solo altera λ<sub>0</sub> (Lección 6). O'Neill lo ilustra con 42 lavas de la erupción del Laki de 1783 (p. 1470). La dispersión de λ<sub>1</sub>…λ<sub>4</sub> implica errores de menos del 1 %; la de λ<sub>0</sub>, un 10 %, debido sobre todo a la cantidad variable de fenocristales, que diluyen todas las REE por igual.</p>
+
+        <h3>El recorrido completo</h3>
+        <p>Con esta lección se cierra el cálculo de O'Neill:</p>
+        <ol class="reasons">
+          <li><b>Preparar</b>: ppm ÷ CI, ln y eje X = radio iónico; fuera el Eu → 13 puntos (Lección 1).</li>
+          <li><b>Ajustar</b>: mínimos cuadrados con un polinomio (Lecciones 2 y 3), pero con piezas ortogonales, fabricadas solo con los radios (Lecciones 4 y 5).</li>
+          <li><b>Calcular los λ</b>: fórmula directa, sistema de la macro o ESTIMACION.LINEAL (Lección 6).</li>
+          <li><b>Comprobar</b>: cocientes observado/calculado, Eu/Eu* en r = 1.066 Å, χ²<sub>ν</sub> y, con muchas muestras, s* (esta lección).</li>
+          <li><b>Dar los errores</b>: s(λ<sub>n</sub>) = ζ<sub>n</sub>·s* y decidir qué λ son significativos (esta lección).</li>
+        </ol>
+      </div>
+
+      <div class="after">
+        <h3>Practica</h3>
+        <div class="practice">
+          <div class="ex">
+            <p><b>1.</b> En VG 189, y(Eu) = 3.2547 y la curva vale 3.3479 en r = 1.066 Å. ¿Cuánto vale Eu/Eu*?</p>
+            <form id="l7ex1" autocomplete="off">
+              <label for="l7ex1-in" class="ui" style="font-size:.88rem">Eu/Eu* =</label>
+              <input id="l7ex1-in" inputmode="decimal" placeholder="p. ej. 1.05">
+              <button type="submit">Comprobar</button>
+              <button type="button" class="ghost" data-sol="l7ex1">Ver solución</button>
+            </form>
+            <div class="fb" id="l7ex1-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>2.</b> Con σ = 1 %, una muestra da χ²<sub>ν</sub> = 9. ¿Qué precisión analítica sugiere, en %?</p>
+            <form id="l7ex2" autocomplete="off">
+              <label for="l7ex2-in" class="ui" style="font-size:.88rem">s ≈</label>
+              <input id="l7ex2-in" inputmode="decimal" placeholder="p. ej. 1.5">
+              <button type="submit">Comprobar</button>
+              <button type="button" class="ghost" data-sol="l7ex2">Ver solución</button>
+            </form>
+            <div class="fb" id="l7ex2-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>3.</b> Tus análisis tienen una precisión del 3 %. ¿Es significativo un λ<sub>3</sub> = −100? (ζ<sub>3</sub> = 1980)</p>
+            <div class="mc ui" role="group" aria-label="Respuestas">
+              <button type="button" class="btn ghost" data-mc7="si">Sí</button>
+              <button type="button" class="btn ghost" data-mc7="no">No</button>
+            </div>
+            <div class="fb" id="l7ex3-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>4.</b> ¿Por qué ζ<sub>4</sub> (42 382) es tanto mayor que ζ<sub>1</sub> (4.6)?</p>
+            <div class="mc ui" role="group" aria-label="Respuestas">
+              <button type="button" class="btn ghost" data-mc7b="piece">Porque f₄ es una pieza diminuta</button>
+              <button type="button" class="btn ghost" data-mc7b="lam">Porque los λ₄ de las muestras son grandes</button>
+              <button type="button" class="btn ghost" data-mc7b="lu">Porque las REE pesadas se analizan peor</button>
+            </div>
+            <div class="fb" id="l7ex4-fb" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <h3>Resumen</h3>
+        <ul class="summary">
+          <li>La macro evalúa la curva en los 14 radios y da <b>[REE]<sub>obs</sub>/[REE]<sub>calc</sub></b> = exp(y − y<sub>calc</sub>). Pinta de rojo lo que se aparta más de un 5 %.</li>
+          <li><b>Eu/Eu*</b> es el cociente del Eu: la curva en r = 1.066 Å da el Eu*. Para VG 189, 0.911, casi igual que el clásico √(Sm·Gd), pero apoyado en todas las REE.</li>
+          <li><b>χ²</b> = Σ(residuo/σ)²; con la σ correcta, χ²<sub>ν</sub> = χ²/ν ≈ 1, con ν = 13 − 5 = 8 (la macro divide por 9).</li>
+          <li>Con muchas muestras se infiere la precisión: <b>s* = 2.14 %</b> para los 616 vidrios OFB, igual que los análisis repetidos. Los patrones son suaves dentro del error analítico.</li>
+          <li><b>s(λ<sub>n</sub>) = ζ<sub>n</sub>·s*</b>, con ζ<sub>n</sub> = 1/√Σ f<sub>n</sub>², que solo depende de los radios. Un λ es significativo si |λ| &gt; 2·s(λ). λ<sub>3</sub> lo es a menudo con un 2 % de precisión; λ<sub>4</sub>, casi nunca.</li>
+        </ul>
+        <p><b>Dónde ha aparecido el radio en esta lección:</b> <span class="kr">⑤</span> la curva se evalúa en los 14 radios; en el del Eu (1.066 Å) da el Eu*, aunque el Eu no entre en el ajuste. Y el Eu<sup>2+</sup>, con un radio mucho mayor, es la causa de la anomalía. <span class="kr">⑥</span> Los factores ζ<sub>n</sub> = 1/√Σ f<sub>n</sub>(r<sub>i</sub>)² convierten el error analítico en el error de cada λ y solo dependen de los radios. Con esto están recorridas las seis estaciones del mapa.</p>
+        <div class="next">
+          <p><b>Aquí termina el núcleo del curso.</b> Quedan dos lecciones opcionales. <b>Lección 8 · Hazlo tú con tus datos</b>: el cálculo completo en Excel o en Python, y qué hacer si falta un elemento o quieres dejar fuera otro (por ejemplo el Ce en circón). <b>Lección 9 · Vectores petrogenéticos ψ</b>: cómo describe O'Neill la fusión y la cristalización con los mismos polinomios. Si quieres alguna, escríbeme «siguiente» o dime cuál.</p>
+          <p><a href="#leccion-8" data-tab="leccion-8" class="ui" style="font-weight:600">Ir a la Lección 8 →</a></p>
+        </div>
+
+        <h3>Fuentes de esta lección</h3>
+        <ul class="sources">
+          <li>O'Neill (2016), Apéndice 1 del material suplementario: tres tipos de incertidumbre (ec. A2), el χ² con logaritmos (A3b), cómo inferir s(ln[REE])* (A4), ν = 8 y Fig. A1; exclusión del Eu por el Eu<sup>2+</sup>; las muestras poco suaves merecen volver a analizarse.</li>
+          <li>O'Neill (2016): p. 1466 (ζ<sub>n</sub>, s(λ<sub>n</sub>) = ζ<sub>n</sub>·s* y el criterio de 2 errores, con los ejemplos 198 y 4240), p. 1469 (s* = 2.14 % frente a 2.0 % de vg2 y bcr2g; λ<sub>3</sub> y λ<sub>4</sub>), p. 1470 (suavidad y complejidad; el ejemplo del Laki), p. 1471 (s* con 2–5 términos, r frente a Z; Fig. 3) y Tabla 2 (s(λ) con un 1 %).</li>
+          <li>Macro REE_OrthogRegress_5term: curva en los 14 radios (XCalc), Exp(X − XCalc), celdas rojas fuera de 0.95–1.05, SumSq con σ = 0.01 y χ²<sub>ν</sub> = SumSq/(N − 4).</li>
+          <li>Bevington & Robinson (2003): χ² (ec. 7.29), grados de libertad (p. 121) y tabla de errores (ecs. 7.23–7.27).</li>
+          <li>Radio del Eu<sup>2+</sup> y del Sr<sup>2+</sup> en coordinación 8: Shannon (1976). Datos del histograma: χ²<sub>ν</sub> de los 616 vidrios OFB (Jenner & O'Neill, 2012) en la hoja REEshapes de O'Neill.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= LECCIÓN 8 ======================= -->
+  <section class="panel" id="leccion-8" role="tabpanel" aria-label="Lección 8" hidden>
+    <header class="lesson-head">
+      <p class="eyebrow">Lección 8 · opcional</p>
+      <h2>Hazlo tú con tus datos</h2>
+      <p class="lead">Ya conoces todo el cálculo; esta lección es práctica. Hay tres maneras de aplicarlo a tus análisis: la hoja de O'Neill con su macro, una plantilla de Excel sin macros y un script de Python (o pyrolite). Además, una prueba para comprobar que lo haces bien, y qué hacer si te falta un elemento o quieres dejar fuera otro, como el Ce en circón.</p>
+      <dl class="facts ui">
+        <div><dt>Idea nueva</dt><dd>Ninguna: aplicar lo aprendido, y saber qué cambia (y qué no) al quitar elementos</dd></div>
+        <div><dt>Dónde entra el radio</dt><dd>Si cambias qué REE entran, cambia la tabla del sistema (<span class="kr">④</span>); si además recalculas las constantes, cambian <span class="kr">②</span> y <span class="kr">③</span></dd></div>
+        <div><dt>Archivos</dt><dd>Lambdas_ONeill_plantilla.xlsx y lambdas_oneill.py, que acompañan a esta lección en la conversación</dd></div>
+      </dl>
+    </header>
+
+    <div class="flow">
+      <div class="prose">
+        <h3>La receta y la prueba de control</h3>
+        <ol class="reasons">
+          <li>Concentraciones en ppm de las 14 REE. Los valores por debajo del límite de detección se dejan <b>en blanco</b>, nunca a 0.</li>
+          <li>Divide por el condrito CI de O'Neill (Tabla 1) y toma el logaritmo <b>neperiano</b> (LN en Excel, no LOG).</li>
+          <li>Eje X: radio iónico del catión 3+ en coordinación 8 (Shannon, 1976), el de la Tabla 1.</li>
+          <li>Deja fuera el Eu (y el Ce, u otras, si tienes motivo).</li>
+          <li>Ajusta con las piezas de la Tabla 2: con la macro, con la plantilla o con el script.</li>
+          <li>Revisa los cocientes observado/calculado (y las anomalías de las REE excluidas) y el χ² reducido.</li>
+          <li>Da los errores de los λ con s(λ<sub>n</sub>) = ζ<sub>n</sub>·s*.</li>
+        </ol>
+        <p>Antes de usar cualquier herramienta con tus datos, compruébala con <b>VG 189</b>. Estas son sus concentraciones en ppm:</p>
+      </div>
+      <div class="table-wrap">
+        <table class="plain ctrl8">
+          <thead><tr><th scope="col">La</th><th scope="col">Ce</th><th scope="col">Pr</th><th scope="col">Nd</th><th scope="col">Sm</th><th scope="col">Eu</th><th scope="col">Gd</th><th scope="col">Tb</th><th scope="col">Dy</th><th scope="col">Ho</th><th scope="col">Er</th><th scope="col">Tm</th><th scope="col">Yb</th><th scope="col">Lu</th></tr></thead>
+          <tbody><tr><td>3.622</td><td>12.477</td><td>2.1646</td><td>12.125</td><td>4.4536</td><td>1.5340</td><td>5.7578</td><td>1.0734</td><td>6.8684</td><td>1.4817</td><td>4.2397</td><td>0.6578</td><td>3.9963</td><td>0.5711</td></tr></tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <p>Debes obtener λ = <b>3.187, −1.656, −50.60, −227.29 y −2001.8</b>, Eu/Eu* = 0.911 y χ²<sub>ν</sub> = 4.13 con σ = 1 % (3.667 si divides por N − 4, como la macro). Si no te sale, revisa el logaritmo, el condrito y los radios antes que nada.</p>
+
+        <h3>Camino A: la hoja de O'Neill con su macro</h3>
+        <p>Es la opción más directa si trabajas en Excel y puedes ejecutar macros. En la hoja «Data In & Out» del archivo LstSq_REE_OrthogPolynomial_April2015.xls (instrucciones en la hoja «Instructions»):</p>
+        <ol class="reasons">
+          <li>Borra las celdas de entrada y de salida desde la fila 6.</li>
+          <li>Pega tus datos en ppm desde B6 (una muestra por fila, de La en B a Lu en O; el nombre, en A) y pon un 1 en B3 para normalizar al condrito.</li>
+          <li>Pon en B4 el número de la última fila con datos, o uno algo mayor.</li>
+          <li>Ejecuta la macro REE_OrthogRegress_5term.</li>
+        </ol>
+      </div>
+      <div class="table-wrap">
+        <table class="cols8">
+          <thead><tr><th scope="col">Columnas</th><th scope="col">Contenido</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">A · B–O</th><td>Nombre · La…Lu en ppm (entrada)</td></tr>
+            <tr><th scope="row">Q–U</th><td>λ<sub>0</sub>…λ<sub>4</sub></td></tr>
+            <tr><th scope="row">V</th><td>Número de REE usadas en el ajuste</td></tr>
+            <tr><th scope="row">W</th><td>χ² reducido con σ = 1 %, dividido por N − 4 (Lección 7)</td></tr>
+            <tr><th scope="row">Y–AL</th><td>[REE]<sub>obs</sub>/[REE]<sub>calc</sub> de La a Lu; la columna AD (Eu) es Eu/Eu*. En rojo, las que se apartan más de un 5 %</td></tr>
+            <tr><th scope="row">Filas 2–3</th><td>W2: s* inferido de todas las filas (2.14 % con sus datos); Q3–U3: s(λ) para un 1 %; Y2–AL3: media y desviación típica de cada cociente</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <p>Tres cosas que conviene saber. Si falta una REE, basta dejarla en blanco: la macro la salta y mantiene las constantes de la Tabla 2. Las propias instrucciones avisan de que entonces los λ «no serán del todo independientes». Una fila se ignora si le faltan a la vez La y Ce. Y para excluir el Ce hay que dejarlo en blanco, así que la macro no dará su cociente: Ce/Ce* hay que calcularlo aparte, con la curva en r = 1.143 Å (lo hacen la plantilla y el script).</p>
+
+        <h3>Camino B: la plantilla de Excel sin macros</h3>
+        <p><b>Lambdas_ONeill_plantilla.xlsx</b> hace lo mismo que la macro solo con fórmulas, sin macros ni fórmulas matriciales: funciona en Excel y en LibreOffice. Tiene cuatro hojas:</p>
+        <ul class="plainlist">
+          <li><b>Muestra</b>: una muestra con todos los pasos a la vista (y, piezas, tabla del sistema, su inversa, λ, curva, cocientes, χ²). Cada REE tiene su casilla «¿Entra?» con 1 o 0.</li>
+          <li><b>Lote</b>: hasta 200 muestras, una por fila, todas con las mismas REE en el ajuste (fila 6). Da N, λ<sub>0</sub>…λ<sub>4</sub>, χ²<sub>ν</sub>, s y los 14 cocientes, y arriba los errores de los λ.</li>
+          <li><b>Constantes</b> y <b>Lote_calculos</b>: radios, CI, constantes de la Tabla 2 y cálculos intermedios. No hace falta tocarlas.</li>
+        </ul>
+        <p>El truco de la hoja Lote es el de la Lección 6: la tabla del sistema solo depende de los radios de las REE que entran (<span class="kr">④</span>), así que se calcula e invierte una sola vez para todo el lote. Cada muestra solo aporta su vector de sumas con los datos. Por eso todas las filas deben usar las mismas REE. Si a una muestra le falta una de las que entran, la fila lo avisa y no da λ; esa muestra se calcula en la hoja Muestra.</p>
+        <p class="aside-note">La plantilla resuelve G·λ = h con G = Σ w·f<sub>j</sub>·f<sub>k</sub> y h = Σ w·f<sub>j</sub>·y (w = 1 si la REE entra, 0 si no), usando INDEX(MINVERSA(G); fila; columna), que no necesita fórmulas matriciales. Con las 13 REE, G es diagonal y el resultado es la fórmula directa de la Lección 6; si falta alguna, es el mismo ajuste que hace la macro.</p>
+
+        <h3>Camino C: Python</h3>
+        <p>El script <b>lambdas_oneill.py</b> solo necesita numpy y pandas. Desde la línea de órdenes:</p>
+<pre class="vba"><code>python lambdas_oneill.py --prueba                        <span class="c"># comprueba VG 189 contra O'Neill</span>
+python lambdas_oneill.py mis_datos.csv                   <span class="c"># CSV con columnas La…Lu en ppm</span>
+python lambdas_oneill.py mis_datos.csv --excluir Eu Ce   <span class="c"># circón: fuera Eu y Ce</span>
+python lambdas_oneill.py mis_datos.csv --constantes recalcular --terminos 4</code></pre>
+        <p>O desde tu propio código (el cálculo central son cinco líneas):</p>
+<pre class="vba"><code><span class="hr">F</span> = piezas(radios_que_entran, TABLA2)   <span class="c"># f0…f4 en cada radio (solo radios)</span>
+<span class="hr">G</span> = F @ F.T                            <span class="c"># tabla del sistema</span>
+h = F @ <span class="hy">y</span>                              <span class="c"># sumas con los datos</span>
+lam = np.linalg.solve(G, h)              <span class="c"># λ0…λ4</span>
+obs_calc = np.exp(<span class="hy">y_14</span> - lam @ piezas(radios_14, TABLA2))   <span class="c"># incluye Eu/Eu*, Ce/Ce*</span></code></pre>
+        <details class="curious">
+          <summary>Ver el script completo (para copiarlo)</summary>
+<pre class="vba script8"><code>#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+lambdas_oneill.py — Coeficientes λ de O'Neill (2016) para patrones de REE.
+
+Reproduce el cálculo de la macro REE_OrthogRegress_5term de la hoja de O'Neill:
+
+  1. y = ln([REE] / [REE]CI), con los valores CI de O'Neill (2016, Tabla 1).
+  2. Eje X: radio iónico del catión 3+ en coordinación 8 (Shannon, 1976).
+  3. Ajuste por mínimos cuadrados a λ0 + λ1·f1 + λ2·f2 + λ3·f3 + λ4·f4, con los
+     polinomios ortogonales de la Tabla 2 de O'Neill (u otros, ver «constantes»).
+  4. Curva calculada en los 14 radios: cocientes observado/calculado
+     (en los elementos excluidos del ajuste, son las anomalías: Eu/Eu*, Ce/Ce*…).
+  5. χ² reducido (σ = 1 % por defecto) y errores de los λ.
+
+Solo necesita numpy y pandas.
+
+USO DESDE LA LÍNEA DE ÓRDENES
+  python lambdas_oneill.py --prueba
+      Calcula VG 189 y lo compara con los valores de O'Neill.
+  python lambdas_oneill.py datos.csv --salida resultados.csv
+      datos.csv: una fila por muestra; columnas La, Ce, …, Lu en ppm (se admiten
+      otras columnas, por ejemplo el nombre de la muestra). Separador: coma o punto y coma.
+  Opciones:
+      --excluir Eu Ce        REE que no entran en el ajuste (por defecto: Eu)
+      --terminos 5           número de términos (1 a 5; por defecto 5, hasta λ4)
+      --constantes tabla2    'tabla2' (O'Neill; recomendado) o 'recalcular'
+      --sigma 0.01           error supuesto de cada ln([REE]) para el χ² (O'Neill: 0.01)
+      --s 0.02               precisión analítica para los errores de los λ
+
+USO COMO MÓDULO
+  from lambdas_oneill import ajustar, ajustar_tabla
+  r = ajustar({'La': 3.622, 'Ce': 12.477, …}, excluir=('Eu', 'Ce'))
+  r['lambdas'], r['obs_calc']['Ce'], r['chi2_red']
+
+Equivalente con pyrolite (versión 0.3.7), para obtener los mismos λ:
+  import pyrolite.geochem
+  df.pyrochem.lambda_lnREE(params="ONeill2016", degree=5,
+                           exclude=["Pm", "Eu"], sigmas=0.01, add_X2=True)
+  · params="ONeill2016": por defecto pyrolite usa una base calculada con las 14 REE,
+    incluido el Eu, y sus λ no coinciden exactamente con los de O'Neill.
+  · degree=5: en pyrolite, degree es el número de términos (degree=4 da λ0–λ3).
+  · Pasa siempre una lista nueva en exclude: la lista por defecto se modifica al usar
+    anomalies=[…] y el cambio persiste en la sesión.
+  · Una fila con algún valor ≤ 0 se descarta entera: convierte antes esos valores en NaN.
+"""
+
+import argparse
+import sys
+
+import numpy as np
+import pandas as pd
+
+REE = ['La', 'Ce', 'Pr', 'Nd', 'Sm', 'Eu', 'Gd', 'Tb', 'Dy', 'Ho', 'Er', 'Tm', 'Yb', 'Lu']
+
+# Radios iónicos (Å) del catión 3+ en coordinación 8: Shannon (1976), Tabla 1 de O'Neill.
+RADIOS = dict(zip(REE, [1.160, 1.143, 1.126, 1.109, 1.079, 1.066, 1.053,
+                        1.040, 1.027, 1.015, 1.004, 0.994, 0.985, 0.977]))
+
+# Condrito CI (ppm): O'Neill (2016), Tabla 1 (los mismos que usa su macro).
+CI = dict(zip(REE, [0.2472, 0.6308, 0.0950, 0.4793, 0.15419, 0.0592, 0.2059,
+                    0.0375, 0.2540, 0.0554, 0.1645, 0.0258, 0.1684, 0.0251]))
+
+# Constantes de los polinomios ortogonales (Tabla 2 de O'Neill), con los decimales de su macro.
+# Cada pieza es f_n(r) = producto de (r − constante).
+TABLA2 = [
+    (),                                                       # f0 = 1
+    (1.054769,),                                              # f1: β
+    (1.005327429, 1.128236038),                               # f2: γ1, γ2
+    (0.991412204, 1.060548105, 1.145519887),                  # f3: δ1, δ2, δ3
+    (0.984820219, 1.030518142, 1.104414973, 1.153426708),     # f4: ε1…ε4
+]
+
+
+def piezas(r, constantes=TABLA2, terminos=5):
+    """Matriz (terminos × len(r)) con los valores de f0…f_{terminos-1} en los radios r."""
+    r = np.atleast_1d(np.asarray(r, dtype=float))
+    return np.array([np.prod([r - c for c in constantes[n]], axis=0) if n else np.ones_like(r)
+                     for n in range(terminos)])
+
+
+def constantes_ortogonales(radios, terminos=5):
+    """Constantes (ceros) de los polinomios ortogonales para un conjunto de radios.
+
+    Con los 13 radios de O'Neill (sin Eu) reproduce la Tabla 2. Usa la recurrencia de
+    tres términos, equivalente a la receta de Bevington &amp; Robinson (2003, §7.3).
+    """
+    x = np.asarray(radios, dtype=float)
+    p_prev, p = np.zeros_like(x), np.ones_like(x)
+    alfa, beta = [], [0.0]
+    for n in range(terminos - 1):
+        alfa.append(np.sum(x * p * p) / np.sum(p * p))
+        if n &gt; 0:
+            beta.append(np.sum(p * p) / np.sum(p_prev * p_prev))
+        p_prev, p = p, (x - alfa[n]) * p - beta[n] * p_prev
+
+    def f(n, t):
+        a, b = np.ones_like(t), t - alfa[0]
+        if n == 0:
+            return a
+        for k in range(1, n):
+            a, b = b, (t - alfa[k]) * b - beta[k] * a
+        return b
+
+    # Los ceros de f_n están dentro del intervalo de los radios: se buscan por cambio de signo.
+    t = np.linspace(x.min() - 0.05, x.max() + 0.05, 20001)
+    consts = [()]
+    for n in range(1, terminos):
+        v = f(n, t)
+        idx = np.where(np.sign(v[:-1]) * np.sign(v[1:]) &lt; 0)[0]
+        ceros = []
+        for i in idx:  # refinamiento por bisección
+            lo, hi = t[i], t[i + 1]
+            for _ in range(60):
+                mid = 0.5 * (lo + hi)
+                if np.sign(f(n, np.array([lo]))[0]) * np.sign(f(n, np.array([mid]))[0]) &lt;= 0:
+                    hi = mid
+                else:
+                    lo = mid
+            ceros.append(0.5 * (lo + hi))
+        consts.append(tuple(ceros))
+    return consts
+
+
+def ajustar(ppm, excluir=('Eu',), terminos=5, constantes='tabla2', sigma=0.01, s_est=0.02):
+    """Ajusta una muestra. ppm: dict o Series con las REE en ppm (faltan = NaN o ausentes).
+
+    constantes: 'tabla2' (O'Neill, recomendado para comparar con otros trabajos),
+                'recalcular' (polinomios ortogonales para las REE que entran), o una lista
+                de tuplas como TABLA2.
+    Devuelve un dict con: lambdas, errores (con s_est), n_ree, chi2_red (ν = N − términos),
+    chi2_red_macro (÷ (N − 4), como la macro con 5 términos), s_muestra y obs_calc
+    (cocientes observado/calculado en las 14 REE; en las excluidas, son la anomalía).
+    """
+    ppm = pd.Series(ppm, dtype=float).reindex(REE)
+    y = pd.Series(np.nan, index=REE)
+    validos = ppm.notna() &amp; (ppm &gt; 0)
+    y[validos] = np.log(ppm[validos] / pd.Series(CI)[validos])
+    usar = [e for e in REE if e not in excluir and validos[e]]
+    if len(usar) &lt; terminos + 1:
+        raise ValueError('Hacen falta al menos %d REE válidas para %d términos.' % (terminos + 1, terminos))
+    x = np.array([RADIOS[e] for e in usar])
+    yy = y[usar].values
+    if constantes == 'tabla2':
+        consts = TABLA2
+    elif constantes == 'recalcular':
+        consts = constantes_ortogonales(x, terminos)
+    else:
+        consts = constantes
+    F = piezas(x, consts, terminos)                  # terminos × N
+    G = F @ F.T                                      # tabla del sistema (solo radios)
+    h = F @ yy                                       # Σ f_n · y
+    lam = np.linalg.solve(G, h)                      # = G⁻¹ h (con las 13 REE, λn = Σ y fn / Σ fn²)
+    Ginv = np.linalg.inv(G)
+    todos = np.array([RADIOS[e] for e in REE])
+    ycalc = lam @ piezas(todos, consts, terminos)    # curva en los 14 radios
+    res = yy - lam @ F
+    N = len(usar)
+    ss = float(np.sum(res ** 2))
+    obs_calc = pd.Series(np.exp(y.values - ycalc), index=REE)
+    corr = Ginv / np.sqrt(np.outer(np.diag(Ginv), np.diag(Ginv)))
+    return {
+        'lambdas': pd.Series(lam, index=['λ%d' % n for n in range(terminos)]),
+        'errores': pd.Series(s_est * np.sqrt(np.diag(Ginv)), index=['s(λ%d)' % n for n in range(terminos)]),
+        'corr_max': float(np.max(np.abs(corr - np.eye(terminos)))) if terminos &gt; 1 else 0.0,
+        'n_ree': N,
+        'ree_usadas': usar,
+        'chi2_red': ss / sigma ** 2 / (N - terminos) if N &gt; terminos else np.nan,
+        'chi2_red_macro': ss / sigma ** 2 / (N - 4) if (terminos == 5 and N &gt; 4) else np.nan,
+        's_muestra': np.sqrt(ss / (N - terminos)) if N &gt; terminos else np.nan,
+        'obs_calc': obs_calc,
+        'constantes': consts,
+    }
+
+
+def ajustar_tabla(df, **kw):
+    """Aplica ajustar() a cada fila de un DataFrame con columnas La…Lu en ppm."""
+    filas = []
+    for idx, fila in df.iterrows():
+        try:
+            r = ajustar(fila[[c for c in REE if c in fila.index]], **kw)
+            d = dict(r['lambdas'])
+            d.update(r['errores'])
+            d.update({'N': r['n_ree'], 'chi2_red': r['chi2_red'], 'chi2_red_macro': r['chi2_red_macro'],
+                      's_muestra': r['s_muestra'], 'corr_max': r['corr_max']})
+            d.update({'%s obs/calc' % e: v for e, v in r['obs_calc'].items()})
+        except ValueError as err:
+            d = {'aviso': str(err)}
+        filas.append(pd.Series(d, name=idx))
+    return pd.DataFrame(filas)
+
+
+VG189 = dict(zip(REE, [3.622024, 12.477229, 2.164558, 12.124874, 4.45359, 1.533984, 5.757827,
+                       1.073365, 6.868444, 1.481695, 4.239659, 0.657756, 3.996338, 0.571062]))
+
+
+def prueba():
+    """Comprueba el cálculo con VG 189 (primera fila de la hoja de O'Neill)."""
+    r = ajustar(VG189)
+    ref = [3.1875, -1.6558, -50.600, -227.29, -2001.8]
+    print('VG 189 (13 REE, Tabla 2, 5 términos)')
+    for (k, v), rv in zip(r['lambdas'].items(), ref):
+        print('  %-3s = %11.4f   (O\'Neill: %s)' % (k, v, rv))
+    print('  χ²ν (σ = 1 %%, ν = %d) = %.3f;  como la macro (÷ %d) = %.3f   (O\'Neill: 3.667)'
+          % (r['n_ree'] - 5, r['chi2_red'], r['n_ree'] - 4, r['chi2_red_macro']))
+    print('  Eu/Eu* = %.3f   (O\'Neill: 0.911)' % r['obs_calc']['Eu'])
+    r2 = ajustar(VG189, excluir=('Eu', 'Ce'))
+    r3 = ajustar(VG189, excluir=('Eu', 'Ce'), constantes='recalcular')
+    print('Sin Ce, Tabla 2:   ', np.round(r2['lambdas'].values, 4), ' Ce/Ce* = %.3f' % r2['obs_calc']['Ce'])
+    print('Sin Ce, recalculadas:', np.round(r3['lambdas'].values, 4), ' Ce/Ce* = %.3f' % r3['obs_calc']['Ce'])
+    ok = np.allclose(r['lambdas'].values, ref, rtol=2e-4, atol=1e-3)
+    print('Resultado:', 'coincide con O\'Neill' if ok else 'NO coincide: revisa los datos')
+    return ok
+
+
+def main(argv=None):
+    ap = argparse.ArgumentParser(description="Coeficientes λ de O'Neill (2016) para patrones de REE.")
+    ap.add_argument('datos', nargs='?', help='CSV con columnas La…Lu en ppm')
+    ap.add_argument('--salida', default='resultados_lambdas.csv')
+    ap.add_argument('--excluir', nargs='*', default=['Eu'])
+    ap.add_argument('--terminos', type=int, default=5)
+    ap.add_argument('--constantes', choices=['tabla2', 'recalcular'], default='tabla2')
+    ap.add_argument('--sigma', type=float, default=0.01)
+    ap.add_argument('--s', type=float, default=0.02, dest='s_est')
+    ap.add_argument('--prueba', action='store_true')
+    a = ap.parse_args(argv)
+    if a.prueba or not a.datos:
+        return 0 if prueba() else 1
+    df = pd.read_csv(a.datos, sep=None, engine='python')
+    faltan = [e for e in REE if e not in df.columns]
+    if faltan:
+        print('Aviso: faltan columnas', faltan, '(se tratan como datos ausentes)')
+    res = ajustar_tabla(df, excluir=tuple(a.excluir), terminos=a.terminos,
+                        constantes=a.constantes, sigma=a.sigma, s_est=a.s_est)
+    pd.concat([df, res], axis=1).to_csv(a.salida, index=False)
+    print('Escrito:', a.salida, '(%d muestras)' % len(df))
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
+</code></pre>
+        </details>
+        <p><b>Con pyrolite.</b> Si ya usas pyrolite (versión 0.3.7), esta llamada reproduce exactamente los λ de O'Neill:</p>
+<pre class="vba"><code>import pyrolite.geochem
+ls = df.pyrochem.lambda_lnREE(params="ONeill2016", degree=5,
+                              exclude=["Pm", "Eu"], sigmas=0.01, add_X2=True)</code></pre>
+        <p>Al revisar su código he encontrado cuatro detalles que cambian los resultados:</p>
+        <ul class="plainlist">
+          <li><b>params="ONeill2016"</b>. Por defecto (params=None), pyrolite fabrica las piezas con las 14 REE, incluido el radio del Eu, aunque luego no ajuste el Eu. Los λ cambian: para VG 189, λ<sub>0</sub> = 3.199 y λ<sub>1</sub> = −1.616 en vez de 3.187 y −1.656 (λ<sub>0</sub> se desvía el doble de su error analítico).</li>
+          <li><b>degree=5</b>. En pyrolite, degree es el número de términos: degree=4 da λ<sub>0</sub>…λ<sub>3</sub>.</li>
+          <li><b>exclude, siempre explícito y nuevo</b>. La lista por defecto se modifica dentro de la función: una llamada con anomalies=["Ce", "Eu"] deja el Ce excluido en todas las llamadas siguientes de la sesión.</li>
+          <li><b>Ceros</b>. Una fila con algún valor ≤ 0 se descarta entera; convierte antes esos valores en NaN.</li>
+        </ul>
+        <p class="aside-note">Además, los errores que da add_uncertainties=True están escalados por el χ²<sub>ν</sub> de cada muestra: usan la dispersión de esa muestra, no la precisión común s* de O'Neill. Ambas opciones son legítimas, pero no son lo mismo.</p>
+
+        <h3>Si falta un elemento o quieres quitar otro</h3>
+        <p>Hay dos opciones: mantener las piezas de la Tabla 2, como recomienda O'Neill y hacen su macro, la plantilla y pyrolite con params="ONeill2016", o recalcular las constantes para las REE que entran. Compáralas:</p>
+      </div>
+      <figure class="figbox" id="l8-miss">
+        <div class="ctrl-row ui">
+          <div class="seg" role="group" aria-label="Muestra"><span class="seg-label">Muestra</span><button type="button" data-s8="0">VG 189</button><button type="button" data-s8="1">VG 304</button><button type="button" data-s8="2">VG 4080</button><button type="button" data-s8="3">8-2.70</button></div>
+        </div>
+        <div class="seg chips" id="l8-chips" role="group" aria-label="REE que entran en el ajuste" style="margin-top:8px"></div>
+        <div class="ctrl-row ui">
+          <div class="seg" role="group" aria-label="Ejemplos de exclusión"><span class="seg-label">Fuera</span><button type="button" data-p8="eu">Eu (O'Neill)</button><button type="button" data-p8="euce">Eu y Ce</button><button type="button" data-p8="zr">Eu, Ce, La y Pr</button><button type="button" data-p8="mono">Eu, Pr, Tb, Ho, Tm</button></div>
+          <div class="seg" role="group" aria-label="Número de términos"><span class="seg-label">Términos</span><button type="button" data-t8="2">2</button><button type="button" data-t8="3">3</button><button type="button" data-t8="4">4</button><button type="button" data-t8="5">5</button></div>
+        </div>
+        <div class="legend"><span><i class="lk5"></i>curva ajustada (la misma con las dos opciones)</span><span><i class="lky"></i>REE que entran</span><span><i class="lkeu"></i>REE excluidas</span></div>
+        <div class="plot" id="l8-pp"></div>
+        <div class="readouts">
+          <div class="ro"><div class="k nc">Ce/Ce*</div><div class="v" id="l8-ce"></div><div class="s">Ce / curva en 1.143 Å</div></div>
+          <div class="ro"><div class="k nc">Eu/Eu*</div><div class="v" id="l8-eu"></div><div class="s">Eu / curva en 1.066 Å</div></div>
+          <div class="ro"><div class="k nc">La obs/calc</div><div class="v" id="l8-la"></div><div class="s" id="l8-las"></div></div>
+          <div class="ro"><div class="k nc">χ² REDUCIDO</div><div class="v" id="l8-chi"></div><div class="s" id="l8-chis"></div></div>
+        </div>
+        <div class="table-wrap" style="margin:.6rem 0 0">
+          <table class="coef" id="l8-tab">
+            <thead><tr><th scope="col" style="text-align:left">λ</th><th scope="col">λ<sub>0</sub></th><th scope="col">λ<sub>1</sub></th><th scope="col">λ<sub>2</sub></th><th scope="col">λ<sub>3</sub></th><th scope="col">λ<sub>4</sub></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <p class="readline" id="l8-corr"></p>
+        <figcaption>Pulsa las fichas para quitar o añadir REE (en oscuro, las que entran). La curva y todo lo que depende de ella (cocientes, anomalías, χ²) es idéntico con las dos opciones; solo cambian los λ. «± 2 %» es el error de los λ de la Tabla 2 con s* = 2 %. Hacen falta al menos 6 REE.</figcaption>
+      </figure>
+      <div class="prose">
+        <p><b>Lo que no cambia: la curva.</b> Con las mismas REE y el mismo número de términos, los dos juegos de piezas generan los mismos polinomios, y el ajuste por mínimos cuadrados es único. Los cocientes, el χ² y las anomalías (Ce/Ce*, Eu/Eu*) son idénticos. Recalcular las constantes no «mejora» el ajuste.</p>
+        <p><b>Lo que cambia: los λ.</b> Son las mismas curvas repartidas en piezas distintas. Con las piezas de la Tabla 2, los λ conservan su significado y se pueden comparar con los de O'Neill y con los de otras muestras. A cambio, si faltan varias REE, se correlacionan y pierden precisión. Sin el Ce, apenas se nota: los λ de VG 189 cambian menos de una desviación típica y la correlación máxima es 0.16. Sin La, Ce y Pr, la correlación sube a 0.996 y el error de λ<sub>1</sub> se multiplica por 19. Con constantes recalculadas, los λ vuelven a ser independientes, pero describen otra cosa. Sin La, Ce y Pr, λ<sub>1</sub> ya no es la pendiente de todo el patrón, sino la de Nd a Lu, y para VG 189 cambia de signo (+1.06 en vez de −1.66). Por eso O'Neill insiste en usar siempre los mismos polinomios (p. 1466). Y solo tiene sentido comparar λ de muestras con las mismas REE en el ajuste.</p>
+        <p><b>Cuidado con los extremos.</b> Una REE excluida en medio del patrón (el Eu, el Ce si están el La y el Pr) queda entre datos: su anomalía se interpola y es robusta. Una excluida en un extremo se extrapola, y eso es muy inestable. Prueba «Eu, Ce, La y Pr» con VG 189, que no tiene anomalía de Ce. Con 2, 3, 4 y 5 términos, Ce/Ce* sale 0.67, 0.92, 0.99 y 1.47. Con el La y el Pr dentro sale 1.07, 1.06 y 1.04 con 3, 4 y 5 términos.</p>
+        <aside class="note">
+          <p><b>Si trabajas con circón.</b> El Ce (parte como Ce<sup>4+</sup>) y el Eu (parte como Eu<sup>2+</sup>) suelen tener anomalías fuertes, así que hay que dejarlos fuera del ajuste y dar Ce/Ce* y Eu/Eu* a partir de la curva. Es lo que proponen Anenburg & Williams (2022), cuyo método está en pyrolite y en la aplicación web ALambdaR de la ANU. El La y el Pr suelen estar cerca del límite de detección y son sensibles a microinclusiones. Si son fiables, consérvalos: son los que sujetan la curva a ambos lados del Ce. Si no lo son y los quitas, comprueba cómo cambia Ce/Ce* con 3, 4 y 5 términos antes de interpretarlo. Y compara λ solo entre análisis con las mismas REE.</p>
+        </aside>
+
+        <h3>Errores frecuentes</h3>
+        <ul class="plainlist">
+          <li><b>Logaritmo decimal en vez de neperiano</b>: todos los λ salen divididos por ln 10 = 2.303.</li>
+          <li><b>Otro condrito</b> (por ejemplo McDonough & Sun, 1995): cambian λ<sub>0</sub> y también la forma, porque los cocientes entre REE de los dos condritos no son idénticos. Solo son comparables los λ calculados con el mismo condrito (en pyrolite, «ChondriteREE_ON» es el de O'Neill).</li>
+          <li><b>Otros radios</b> (coordinación 6 o 9) o el número atómico Z: cambian todas las constantes.</li>
+          <li><b>Incluir el Eu</b> en el ajuste, o incluir una REE con una anomalía evidente.</li>
+          <li><b>Ceros</b> o valores bajo el límite de detección tratados como números: ln(0) no existe. Déjalos en blanco.</li>
+          <li><b>Constantes redondeadas</b> al convertir los a de un ajuste normal, u olvidar que ESTIMACION.LINEAL devuelve los coeficientes al revés (Lecciones 3 y 6).</li>
+          <li><b>Comparar χ²<sub>ν</sub></b> de programas distintos sin mirar el ν: la macro divide por N − 4 y pyrolite, el script y la plantilla, por N − 5.</li>
+        </ul>
+      </div>
+
+      <div class="after">
+        <h3>Practica</h3>
+        <div class="practice">
+          <div class="ex">
+            <p><b>1.</b> Calculas los λ de VG 189 con pyrolite, sin más opciones, y obtienes λ<sub>0</sub> = 3.199 en vez de 3.187. ¿Qué ha pasado?</p>
+            <div class="mc ui" role="group" aria-label="Respuestas">
+              <button type="button" class="btn ghost" data-mc8="base">Usa piezas fabricadas con las 14 REE, Eu incluido</button>
+              <button type="button" class="btn ghost" data-mc8="log">Usa el logaritmo decimal</button>
+              <button type="button" class="btn ghost" data-mc8="ce">Deja fuera el Ce</button>
+            </div>
+            <div class="fb" id="l8ex1-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>2.</b> Alguien calcula los λ con log<sub>10</sub> en vez de ln. ¿Por qué número habría que multiplicar sus λ para obtener los de O'Neill?</p>
+            <form id="l8ex2" autocomplete="off">
+              <label for="l8ex2-in" class="ui" style="font-size:.88rem">Factor =</label>
+              <input id="l8ex2-in" inputmode="decimal" placeholder="p. ej. 2">
+              <button type="submit">Comprobar</button>
+              <button type="button" class="ghost" data-sol="l8ex2">Ver solución</button>
+            </form>
+            <div class="fb" id="l8ex2-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>3.</b> En un circón has quitado del ajuste el La, el Ce, el Pr y el Eu, y con 5 términos obtienes Ce/Ce* = 1.5. ¿Qué haces antes de interpretarlo?</p>
+            <div class="mc ui" role="group" aria-label="Respuestas">
+              <button type="button" class="btn ghost" data-mc8b="pub">Nada: el circón tiene Ce⁴⁺</button>
+              <button type="button" class="btn ghost" data-mc8b="terms">Ver cómo cambia con 3 y 4 términos</button>
+              <button type="button" class="btn ghost" data-mc8b="recalc">Recalcular las constantes</button>
+            </div>
+            <div class="fb" id="l8ex3-fb" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <h3>Resumen</h3>
+        <ul class="summary">
+          <li>Tres caminos: la <b>macro de O'Neill</b> (pega en B6:O…, pon 1 en B3 y la última fila en B4), la <b>plantilla de Excel</b> sin macros y el <b>script de Python</b>; o pyrolite con params="ONeill2016", degree=5 y exclude explícito.</li>
+          <li>Comprueba siempre con <b>VG 189</b>: 3.187, −1.656, −50.60, −227.29, −2001.8.</li>
+          <li>Si falta o quitas una REE, <b>la curva no depende de las constantes</b>: cocientes, anomalías y χ² son iguales con la Tabla 2 o con constantes recalculadas. Cambian los λ.</li>
+          <li>Con la <b>Tabla 2</b> los λ son comparables, pero se correlacionan si faltan varias REE. Con <b>constantes recalculadas</b> son independientes, pero describen otra cosa. O'Neill recomienda la Tabla 2.</li>
+          <li>Las anomalías de REE en un <b>extremo</b> del patrón se extrapolan: comprueba cómo cambian con el número de términos.</li>
+        </ul>
+        <div class="next">
+          <p><b>Última lección opcional · Vectores petrogenéticos ψ.</b> Veremos por qué O'Neill escribe λ = λ⁰ + ψ: los coeficientes de reparto de un mineral también se describen con los mismos polinomios en el radio, y los procesos (fusión, cristalización) se suman como flechas en el diagrama λ<sub>2</sub>–λ<sub>1</sub>.</p>
+          <p><a href="#leccion-9" data-tab="leccion-9" class="ui" style="font-weight:600">Ir a la Lección 9 →</a></p>
+        </div>
+
+        <h3>Fuentes de esta lección</h3>
+        <ul class="sources">
+          <li>O'Neill (2016): Tablas 1 y 2, p. 1466 (usar los mismos polinomios aunque falte algún elemento) y la hoja LstSq_REE_OrthogPolynomial_April2015.xls (hoja «Instructions», macro REE_OrthogRegress_5term y distribución de las columnas).</li>
+          <li>pyrolite 0.3.7 (Williams et al., 2020, <i>Journal of Open Source Software</i> 5, 2314): código de lambda_lnREE, calc_lambdas y lambdas_ONeill2016, comprobado aquí con VG 189 y las otras tres muestras. <a href="https://pyrolite.readthedocs.io/en/main/examples/geochem/lambdas.html">Documentación de los λ en pyrolite</a>.</li>
+          <li>Anenburg, M. & Williams, M. J. (2022). Quantifying the tetrad effect, shape components, and Ce–Eu–Gd anomalies in rare earth element patterns. <i>Mathematical Geosciences</i> 54, 47–70. <a href="https://link.springer.com/article/10.1007/s11004-021-09959-5">Artículo</a> · <a href="https://lambdar.rses.anu.edu.au/alambdar">ALambdaR</a>.</li>
+          <li>Ernst, D. M., Vogt, J., Bau, M. & Mues, M. (2025). Polynomial modelling of high-quality yet incomplete rare earth element data sets and a holistic assessment of REE anomalies. <i>Scientific Reports</i>. <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11825873/">Artículo</a>.</li>
+          <li>Cálculos propios: plantilla y script verificados con VG 189 (13 REE, sin Ce y sin Lu) frente a la macro de O'Neill y a pyrolite; comparación de constantes fijas y recalculadas para varios conjuntos de REE.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= LECCIÓN 9 ======================= -->
+  <section class="panel" id="leccion-9" role="tabpanel" aria-label="Lección 9" hidden>
+    <header class="lesson-head">
+      <p class="eyebrow">Lección 9 · opcional</p>
+      <h2>Vectores petrogenéticos ψ</h2>
+      <p class="lead">Hasta ahora, los λ describían la forma de un patrón. En esta última lección veremos que también describen los procesos que cambian esa forma: la cristalización de un mineral, la fusión de la fuente o la mezcla de dos magmas. O'Neill lo resume en una suma, λ = λ⁰ + ψ, que en el diagrama λ<sub>2</sub>–λ<sub>1</sub> se convierte en una flecha.</p>
+      <dl class="facts ui">
+        <div><dt>Idea nueva</dt><dd>Un proceso también tiene «forma»: sus coeficientes ψ se suman a los λ del magma inicial</dd></div>
+        <div><dt>Dónde entra el radio</dt><dd><span class="kr">⑦</span> Los coeficientes de reparto D dependen del radio y se describen con las mismas piezas f<sub>n</sub>(r) (Tabla 7)</dd></div>
+        <div><dt>Del artículo</dt><dd>pp. 1485–1494: ecuaciones 2 a 8, Tablas 5 a 7 y Fig. 17</dd></div>
+      </dl>
+    </header>
+
+    <div class="flow">
+      <div class="prose">
+        <h3>Un proceso se suma en logaritmos</h3>
+        <p>Cuando un magma cristaliza, o cuando una roca funde, la concentración de cada REE en el líquido queda multiplicada por un factor. Por ejemplo, si la mitad de un magma cristalizara como clinopiroxeno, en el líquido restante el La se multiplicaría por 1.88 y el Lu por 1.38: el clinopiroxeno acepta el Lu mejor que el La. El factor depende del mineral y de cuánto ha cristalizado, pero no de cuánto La o Lu había al principio.</p>
+        <p>En logaritmos, multiplicar se convierte en sumar (lo anunciamos en la Lección 1):</p>
+        <div class="eq">ln([REE]/CI) = ln([REE]⁰/CI) + ln([REE]/[REE]⁰)</div>
+        <p>[REE]⁰ es la concentración inicial: la del magma de partida o la de la fuente que funde. O'Neill llama al último término <b>función del proceso petrogenético</b>. Piensa en una cuenta bancaria: el saldo final es el saldo inicial más los movimientos, y los movimientos no dependen de lo que hubiera en la cuenta. Aquí, el saldo de cada REE es su <i class="vy">y</i> = ln([REE]/CI), y los movimientos, la función del proceso.</p>
+        <p>La función del proceso también cambia de forma suave con el radio (enseguida veremos por qué), así que se puede describir con las mismas piezas f<sub>n</sub> de la Tabla 2. Sus coeficientes se llaman ψ (psi) y forman el <b>vector del proceso</b>, Ψ = {ψ<sub>0</sub>, ψ<sub>1</sub>, ψ<sub>2</sub>…}. Es la ecuación 3 de O'Neill:</p>
+        <div class="eq">ln([REE]/CI) = ln([REE]⁰/CI) + ψ<sub>0</sub> + ψ<sub>1</sub>·f<sub>1</sub> + ψ<sub>2</sub>·f<sub>2</sub> + …</div>
+        <p>Los ψ se calculan igual que los λ: son la «sombra» de la función del proceso sobre cada pieza, ψ<sub>n</sub> = Σ g·f<sub>n</sub> / Σ f<sub>n</sub>² (Lección 6), donde g es el valor de la función del proceso en cada REE. Y como la sombra de una suma es la suma de las sombras, los λ del magma final son los del inicial más los ψ, orden por orden:</p>
+      </div>
+      <div class="lambda0">
+        <div class="big">λ = λ⁰ + ψ</div>
+        <div>
+          <p><b>Cada orden va por su lado:</b> λ<sub>0</sub> = λ<sub>0</sub>⁰ + ψ<sub>0</sub>, λ<sub>1</sub> = λ<sub>1</sub>⁰ + ψ<sub>1</sub>, λ<sub>2</sub> = λ<sub>2</sub>⁰ + ψ<sub>2</sub>… Sumar funcionaría con cualquier ajuste por mínimos cuadrados. Lo que aportan las piezas ortogonales es que cada ψ<sub>n</sub> no depende de cuántos términos uses ni de los demás. Por eso puedes trabajar solo con λ<sub>1</sub> y λ<sub>2</sub> sin preocuparte de λ<sub>3</sub> y λ<sub>4</sub>.</p>
+        </div>
+      </div>
+      <div class="prose">
+        <p>Compruébalo con números. Tomemos VG 304 como magma inicial y hagamos cristalizar la mitad como clinopiroxeno (coeficientes de O'Neill &amp; Jenner, 2012). Multiplicamos cada REE por su factor, recalculamos los λ del patrón nuevo con la fórmula de la Lección 6 y los comparamos con la suma:</p>
+      </div>
+      <div class="table-wrap">
+        <table class="coef add9">
+          <thead><tr><th scope="col" style="text-align:left"></th><th scope="col">λ<sub>0</sub></th><th scope="col">λ<sub>1</sub></th><th scope="col">λ<sub>2</sub></th></tr></thead>
+          <tbody>
+            <tr><th scope="row">VG 304, magma inicial (λ⁰)</th><td>2.653</td><td>−5.866</td><td>−47.74</td></tr>
+            <tr><th scope="row">Proceso: 50 % de clinopiroxeno (ψ)</th><td>+0.388</td><td>+2.024</td><td>+14.35</td></tr>
+            <tr class="sum"><th scope="row">Suma λ⁰ + ψ</th><td>3.041</td><td>−3.842</td><td>−33.39</td></tr>
+            <tr class="fit"><th scope="row">Patrón final, ajustado de nuevo</th><td>3.041</td><td>−3.842</td><td>−33.39</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <p>Coinciden en todas las cifras, y también en λ<sub>3</sub> y λ<sub>4</sub>. De aquí salen tres consecuencias que usa O'Neill:</p>
+        <ul class="plainlist">
+          <li>La parte (ψ<sub>1</sub>, ψ<sub>2</sub>) es una <b>flecha</b> en el diagrama λ<sub>2</sub>–λ<sub>1</sub>, con una dirección y una longitud definidas: el vector del proceso.</li>
+          <li>La flecha <b>no depende del magma inicial</b>, así que se puede trasladar a cualquier punto del diagrama.</li>
+          <li>Los procesos sucesivos (fundir y luego cristalizar, por ejemplo) se <b>encadenan</b> como flechas, una tras otra.</li>
+        </ul>
+        <p class="aside-note">Un matiz: la ortogonalidad de las piezas de la Tabla 2 es exacta con las 13 REE. Para los coeficientes de reparto casi nunca hay datos de las 13, pero según O'Neill la diferencia es despreciable si cubren del La al Lu (o al menos hasta el Yb).</p>
+
+        <h3>Los coeficientes de reparto también son curvas en el radio</h3>
+        <p>¿Por qué es suave la función del proceso? Porque depende de los coeficientes de reparto. El coeficiente de reparto de un elemento entre un mineral y el fundido, D, es el cociente entre su concentración en el mineral y en el líquido. Con D = 0.1, la concentración en el cristal es la décima parte que en el líquido: el elemento es incompatible y se acumula en el fundido. Con D = 5, el cristal tiene cinco veces más: lo acapara.</p>
+        <p>La teoría de la deformación de la red cristalina (<i>lattice strain</i>; Wood &amp; Blundy, 2014) explica cómo depende D del radio. Cada posición del cristal donde pueden entrar las REE es como un zapato de una talla r<sub>0</sub>: un ion de ese tamaño entra cómodo; uno mayor o menor deforma la red y le cuesta más, tanto más cuanto más se aparte de r<sub>0</sub>. Es la ecuación 7 de O'Neill:</p>
+        <div class="eq">D<sub>REE</sub> = D(r<sub>0</sub>)·exp{−B·[(<i class="vr">r</i> − r<sub>0</sub>)² + (<i class="vr">r</i> − r<sub>0</sub>)³/3]}</div>
+        <p>donde B mide lo rígida que es esa posición del cristal. El resultado es una curva suave en forma de campana, y como los radios de las REE cambian poco a poco del La al Lu, D también. En el granate, por ejemplo, la talla es pequeña: las REE pesadas, de radio pequeño, entran mucho mejor que las ligeras (D<sub>Lu</sub> = 7.1 frente a D<sub>La</sub> = 0.003). Es la estación <span class="kr">⑦</span> del mapa del radio.</p>
+        <p>O'Neill ajusta directamente D (no ln D) con las mismas piezas de la Tabla 2, y comprueba que bastan unos pocos términos para reproducir los datos dentro de su incertidumbre. Es su ecuación 6, y los coeficientes están en su Tabla 7:</p>
+        <div class="eq">D = δ<sub>0</sub> + δ<sub>1</sub>·f<sub>1</sub> + δ<sub>2</sub>·f<sub>2</sub> + δ<sub>3</sub>·f<sub>3</sub> + δ<sub>4</sub>·f<sub>4</sub></div>
+        <p>Igual que con los λ, δ<sub>0</sub> es el valor medio de D en las 13 REE, δ<sub>1</sub> su pendiente y δ<sub>2</sub> su curvatura. Ojo con los nombres: O'Neill reutiliza la letra δ, pero estos δ<sub>0</sub>…δ<sub>4</sub> no tienen nada que ver con las constantes δ<sub>1</sub>, δ<sub>2</sub> y δ<sub>3</sub> de f<sub>3</sub> (Lección 5).</p>
+      </div>
+      <div class="table-wrap">
+        <table class="t7">
+          <thead><tr><th scope="col">Mineral</th><th scope="col">Datos de</th><th scope="col">δ<sub>0</sub></th><th scope="col">δ<sub>1</sub></th><th scope="col">δ<sub>2</sub></th><th scope="col">D<sub>La</sub></th><th scope="col">D<sub>Lu</sub></th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Olivino</th><td>O'Neill &amp; Jenner (2012)</td><td>0.01</td><td>−0.10</td><td>1.4</td><td>10⁻⁵</td><td>0.023</td></tr>
+            <tr><th scope="row">Plagioclasa</th><td>O'Neill &amp; Jenner (2012)</td><td>0.02</td><td>0.10</td><td>1.3</td><td>0.033</td><td>0.014</td></tr>
+            <tr><th scope="row">Ortopiroxeno</th><td>Yao et al. (2012)</td><td>0.04</td><td>−0.55</td><td>3.8</td><td>0.001</td><td>0.102</td></tr>
+            <tr><th scope="row">Clinopiroxeno 1</th><td>O'Neill &amp; Jenner (2012)</td><td>0.44</td><td>−2.92</td><td>−20.7</td><td>0.081</td><td>0.528</td></tr>
+            <tr><th scope="row">Clinopiroxeno 2</th><td>Sun &amp; Liang (2012)*</td><td>0.39</td><td>−3.00</td><td>−4.2</td><td>0.077</td><td>0.575</td></tr>
+            <tr><th scope="row">Clinopiroxeno</th><td>Yao et al. (2012)</td><td>0.30</td><td>−2.44</td><td>−6.6</td><td>0.047</td><td>0.433</td></tr>
+            <tr><th scope="row">Anfíbol</th><td>Tiepolo et al. (2000)†</td><td>0.89</td><td>−4.09</td><td>−61.3</td><td>0.162</td><td>0.949</td></tr>
+            <tr><th scope="row">Granate</th><td>Van Westrenen &amp; Draper (2007)*</td><td>2.35</td><td>−35.4</td><td>365</td><td>0.003</td><td>7.081</td></tr>
+            <tr><th scope="row">Granate</th><td>McKenzie &amp; O'Nions (1991)</td><td>2.49</td><td>−39.7</td><td>496</td><td>0.001</td><td>8.552</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <p class="aside-note">Extracto de la Tabla 7 de O'Neill (también da δ<sub>3</sub> y δ<sub>4</sub>). * Aplicados a las fases del experimento 40.06 de Walter (1998), a 40 kbar. † Normalizados a D<sub>Yb</sub> = 1; la Fig. 17a usa D<sub>Yb</sub> = 0.7. La ecuación 7 relaciona ln D, y no D, con el radio; O'Neill comprueba que, aun así, D se ajusta bien con pocos términos. Le conviene ajustar D porque, en la cristalización fraccionada, D aparece sin logaritmo, como vas a ver ahora.</p>
+
+        <h3>Cristalización fraccionada: flechas rectas</h3>
+        <p>En la cristalización fraccionada simple (SFX en el artículo), los cristales se separan del líquido a medida que se forman. La ecuación de Rayleigh da la función del proceso (ecuación 4 de O'Neill):</p>
+        <div class="eq">ln([REE]/[REE]⁰) = ln(F)·(D − 1)</div>
+        <p>F es la fracción de líquido que queda (F = 0.8 si ha cristalizado un 20 %). Como ln F es negativo, las REE con D &lt; 1 aumentan en el líquido y las que tienen D &gt; 1 disminuyen. Si cristalizan varios minerales a la vez, D es la media de sus D, pesada por la proporción de cada mineral, m<sub>X</sub> (ecuación 5).</p>
+        <p>Aquí está el atajo. Como D es una suma de piezas, δ<sub>0</sub> + δ<sub>1</sub>·f<sub>1</sub> + δ<sub>2</sub>·f<sub>2</sub>…, la función del proceso también lo es, y los ψ salen sin ajustar nada:</p>
+        <div class="eq">ψ<sub>0</sub> = ln F·(δ<sub>0</sub> − 1) &nbsp;&nbsp;·&nbsp;&nbsp; ψ<sub>1</sub> = ln F·δ<sub>1</sub> &nbsp;&nbsp;·&nbsp;&nbsp; ψ<sub>2</sub> = ln F·δ<sub>2</sub></div>
+        <p>Con varios minerales, cada δ es la media pesada Σ m<sub>X</sub>·δ<sub>X</sub>. De aquí salen dos propiedades muy útiles. La <b>dirección</b> de la flecha en el diagrama λ<sub>2</sub>–λ<sub>1</sub> es ψ<sub>2</sub>/ψ<sub>1</sub> = δ<sub>2</sub>/δ<sub>1</sub>: la fija el mineral, no la cantidad que cristaliza. Y su <b>longitud</b> es proporcional a ln F. Explóralo:</p>
+      </div>
+      <figure class="figbox" id="l9-sfx">
+        <div class="ctrl-row ui">
+          <div class="seg" role="group" aria-label="Mineral que cristaliza"><span class="seg-label">Mineral</span><button type="button" data-m9="ol">Olivino</button><button type="button" data-m9="pl">Plagioclasa</button><button type="button" data-m9="opx">Opx</button><button type="button" data-m9="cpx1">Cpx 1</button><button type="button" data-m9="cpx2">Cpx 2</button><button type="button" data-m9="amp">Anfíbol</button><button type="button" data-m9="gt">Granate</button></div>
+        </div>
+        <div class="ctrl-row ui">
+          <div class="seg" role="group" aria-label="Punto de partida"><span class="seg-label">Salida</span><button type="button" data-o9="0">(0, 0), como la Fig. 17a</button><button type="button" data-o9="1">Magma parental OFB</button></div>
+        </div>
+        <div class="slider-row"><label for="l9-x">Cristalizado</label><input type="range" id="l9-x" min="0" max="90" step="1" value="80"><output id="l9-xo" for="l9-x"></output></div>
+        <div class="shape-grid">
+          <div>
+            <p class="panel-t" id="l9-dt">Coeficientes de reparto D</p>
+            <div class="plot" id="l9-d"></div>
+            <p class="panel-t">Función del proceso: ln F·(D − 1)</p>
+            <div class="plot" id="l9-g"></div>
+          </div>
+          <div>
+            <p class="panel-t">Diagrama λ<sub>2</sub>–λ<sub>1</sub></p>
+            <div class="legend"><span><i class="lk4"></i>mineral elegido</span><span><i class="lk2"></i>los demás, con el mismo % cristalizado</span><span><i class="dot-ofb"></i>vidrios OFB</span><span><i class="dot-oib"></i>Hawái</span></div>
+            <div class="plot" id="l9-dia"></div>
+          </div>
+        </div>
+        <div class="readouts" id="l9-ro"></div>
+        <p class="readline" id="l9-sum"></p>
+        <figcaption>Arriba a la izquierda, los D del mineral elegido frente al radio (Tabla 7; la línea discontinua es D = 1). Debajo, la función del proceso en unidades de ln (0.1 ≈ 10 %), con su nivel medio ψ<sub>0</sub> en discontinua. A la derecha, la flecha del mineral elegido y, en gris, las de los demás con el mismo porcentaje cristalizado, sobre los datos de la Fig. 2f (Lección 6). Con un 80 % de clinopiroxeno o anfíbol y un 10 % de granate se reproduce, aproximadamente, la Fig. 17a de O'Neill. Anfíbol de Tiepolo et al. (2000) con D<sub>Yb</sub> = 0.7; el magma parental OFB es el de la Tabla 6 (9.5 % de MgO).</figcaption>
+      </figure>
+      <div class="prose">
+        <p>Lo que muestra la figura, y O'Neill subraya (p. 1487):</p>
+        <ul class="plainlist">
+          <li><b>Solo el clinopiroxeno, el anfíbol y el granate cambian la forma</b> de manera apreciable: son los únicos con δ<sub>1</sub> y δ<sub>2</sub> grandes. Aun así, hacen falta cantidades enormes. Con un 20 % de clinopiroxeno, una cantidad realista, la flecha mide (0.65, 4.6) y no se notaría entre la dispersión de los OFB. O'Neill usa un 80 % solo para que se vea.</li>
+          <li><b>El granate va en otra dirección</b>, casi perpendicular a la del clinopiroxeno y el anfíbol: baja λ<sub>2</sub> (más joroba) porque se lleva las REE pesadas. Es la «firma del granate».</li>
+          <li><b>El olivino y la plagioclasa apenas cambian la forma</b>, solo λ<sub>0</sub>. Sus D son casi 0, así que la función del proceso es casi igual en todas las REE: −ln F. Con un 20 % de olivino, λ<sub>0</sub> sube 0.22, mientras que λ<sub>1</sub> cambia 0.02 y λ<sub>2</sub>, −0.3. Por eso, cuando un basalto evoluciona por cristalización fraccionada en un sistema cerrado, λ<sub>0</sub> sube a medida que baja el MgO mientras la forma apenas cambia (Fig. 18a-b de O'Neill; Lección 6).</li>
+        </ul>
+        <p>Lo mismo ocurre al revés: si una roca <b>acumula</b> cristales sin REE (olivino y, casi, plagioclasa), el líquido se diluye por igual en todas las REE y solo cambia λ<sub>0</sub>, en el logaritmo de la fracción de líquido que hay en la mezcla (ecuación 8 de O'Neill). La acumulación de olivino o de plagioclasa no mueve una muestra en el diagrama λ<sub>2</sub>–λ<sub>1</sub>.</p>
+        <p class="aside-note">En los volcanes, el magma no suele cristalizar en un sistema cerrado: la cámara se rellena, entra en erupción y cristaliza muchas veces (<i>replenish–tap–fractionate</i>, RTX). O'Neill muestra que ese proceso amplifica el efecto del clinopiroxeno (Fig. 17b) y propone que los patrones «en plato» de algunas boninitas podrían deberse a un RTX con anfíbol (p. 1490).</p>
+
+        <h3>Fusión parcial: trayectorias curvas</h3>
+        <p>Para la fusión, O'Neill usa el modelo más sencillo, la fusión en equilibrio (<i>batch melting</i>; ecuación 2):</p>
+        <div class="eq">ln([REE]/[REE]⁰) = −ln(D⁰ − F·P + F)</div>
+        <p>Aquí F es la fracción de fundido y [REE]⁰, la concentración en la fuente. D⁰ es el D medio de la fuente, pesado por su moda (la proporción de cada mineral). P es el D medio de lo que funde, pesado por la reacción de fusión (qué proporción de cada mineral pasa al líquido). Las modas y reacciones que usa O'Neill están en su Tabla 5:</p>
+      </div>
+      <div class="table-wrap">
+        <table class="t5">
+          <thead><tr><th scope="col">Fuente</th><th scope="col"></th><th scope="col">Olivino</th><th scope="col">Opx</th><th scope="col">Cpx</th><th scope="col">Espinela o granate</th><th scope="col">Referencia</th></tr></thead>
+          <tbody>
+            <tr><th scope="row" rowspan="2">Lherzolita con espinela, 10 kbar</th><td class="lbl">Moda</td><td>0.51</td><td>0.275</td><td>0.19</td><td>0.025</td><td>O'Neill (2016)</td></tr>
+            <tr><td class="lbl">Reacción</td><td>−0.167</td><td>0.652</td><td>0.466</td><td>0.049</td><td>Niu (1997)</td></tr>
+            <tr class="grp"><th scope="row" rowspan="2">Lherzolita con granate, 30 kbar</th><td class="lbl">Moda</td><td>0.52</td><td>0.145</td><td>0.30</td><td>0.035</td><td>Walter (1998)</td></tr>
+            <tr><td class="lbl">Reacción</td><td>0.05</td><td>−0.15</td><td>0.96</td><td>0.14</td><td>Walter (2014)</td></tr>
+            <tr class="grp"><th scope="row" rowspan="2">Lherzolita con granate, 40 kbar</th><td class="lbl">Moda</td><td>0.53</td><td>0.03</td><td>0.30</td><td>0.14</td><td>Walter (1998)</td></tr>
+            <tr><td class="lbl">Reacción</td><td>0.25</td><td>−0.89</td><td>1.23</td><td>0.41</td><td>Walter (1998)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <p class="aside-note">Fracciones en masa; las reacciones, por unidad de masa de fundido. Un número negativo significa que ese mineral se forma mientras la roca funde. Coeficientes de reparto: olivino, O'Neill &amp; Jenner (2012); opx y cpx, Yao et al. (2012); granate, Van Westrenen &amp; Draper (2007); la espinela no admite REE (D = 0). Son las combinaciones de la Fig. 17c.</p>
+        <p>Ahora D aparece dentro de un logaritmo, sumado a F, y ya no hay atajo. Para cada F hay que calcular la función del proceso en las 13 REE y ajustarla con las piezas de la Tabla 2, como si fuera una muestra más: es la «fuerza bruta» que propone O'Neill. Al cambiar F, la punta del vector dibuja una curva:</p>
+      </div>
+      <figure class="figbox" id="l9-melt">
+        <div class="ctrl-row ui">
+          <div class="seg" role="group" aria-label="Fuente que funde"><span class="seg-label">Fuente</span><button type="button" data-f9="sp10">Espinela, 10 kbar</button><button type="button" data-f9="gt30">Granate, 30 kbar</button><button type="button" data-f9="gt40">Granate, 40 kbar</button></div>
+          <div class="seg" role="group" aria-label="Ejemplo del método de la flecha"><button type="button" id="l9-arw" aria-pressed="false">Método de la flecha</button></div>
+        </div>
+        <div class="slider-row"><label for="l9-F">Grado de fusión F</label><input type="range" id="l9-F" min="1" max="20" step="0.5" value="10"><output id="l9-Fo" for="l9-F"></output></div>
+        <div class="shape-grid">
+          <div>
+            <p class="panel-t">D⁰ y P de la fuente</p>
+            <div class="legend"><span><i class="lk5"></i>D⁰ (moda)</span><span><i class="lk5 dash5"></i>P (reacción)</span></div>
+            <div class="plot" id="l9-bulk"></div>
+            <p class="panel-t">Función del proceso: −ln(D⁰ − F·P + F)</p>
+            <div class="legend"><span><i class="lky"></i>13 REE</span><span><i class="lk5"></i>ajuste con 5 términos</span><span><i class="lk2 dash"></i>−ln F</span></div>
+            <div class="plot" id="l9-mg"></div>
+          </div>
+          <div>
+            <p class="panel-t">Trayectorias en el diagrama λ<sub>2</sub>–λ<sub>1</sub></p>
+            <div class="legend"><span><i class="s1"></i>espinela, 10 kbar</span><span><i class="s2"></i>granate, 30 kbar</span><span><i class="s3"></i>granate, 40 kbar</span></div>
+            <div class="plot" id="l9-mdia"></div>
+          </div>
+        </div>
+        <div class="readouts" id="l9-mro"></div>
+        <p class="readline" id="l9-msg"></p>
+        <figcaption>Arriba a la izquierda, D⁰ y P de la fuente elegida frente al radio. Debajo, la función del proceso en las 13 REE (puntos) y su ajuste con 5 términos (curva); la línea discontinua es −ln F. A la derecha, las trayectorias de la fusión en equilibrio desde (0, 0), con marcas en F = 1, 2, 5, 10, 15 y 20 %. Calculadas aquí con las Tablas 5 y 7, coinciden con las curvas continuas de la Fig. 17c de O'Neill (las discontinuas de su figura, la fusión fraccionada acumulada, no se han calculado). Con más fusión, las curvas se siguen acercando a (0, 0), pero el cálculo con una reacción constante deja de valer cuando se agota un mineral: el cpx a 40 kbar con F = 24 % y el granate a 30 kbar con F = 25 %.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>Tres cosas que se ven en la figura:</p>
+        <ul class="plainlist">
+          <li><b>Con poca fusión, el fundido se enriquece mucho en REE ligeras</b> (ψ<sub>1</sub> grande). Con F = 1 %, el La se multiplica por 41 a 51, según la fuente, y el Lu por 7.7 (espinela), por 2.5 (granate, 30 kbar) o por 0.9 (granate, 40 kbar).</li>
+          <li><b>El granate hunde λ<sub>2</sub></b>: retiene las REE pesadas y deja una joroba. Cuanto más granate tiene la fuente (0.035 a 30 kbar, 0.14 a 40 kbar), más abajo va la trayectoria.</li>
+          <li><b>Con mucha fusión, el fundido hereda la forma de la fuente.</b> Cuando F es mucho mayor que los D, D⁰ − F·P + F se parece a F en todas las REE, y la función del proceso se acerca a −ln F, igual en todas. En la facies de espinela ocurre a partir de F ≈ 10 %: el vector se acerca a Ψ ≈ {−ln F, 0, 0} (pp. 1493–1494). Con granate, no: a 40 kbar y con F = 20 %, ψ<sub>2</sub> todavía vale −43.</li>
+        </ul>
+        <p>La prueba de fuerza bruta sale bien: con 5 términos, la función del proceso se ajusta en todos los casos con desviaciones de menos del 1.2 %, del orden de la precisión de un buen análisis. Con 3 términos llegan al 9 % en la fuente de 40 kbar.</p>
+      </div>
+      <div class="lambda0">
+        <div class="big">F ≈ e<sup>λ<sub>0</sub>⁰ − λ<sub>0</sub></sup></div>
+        <div>
+          <p><b>Un resultado de O'Neill con ψ<sub>0</sub>.</b> Si Ψ ≈ {−ln F, 0, 0}, entonces λ<sub>0</sub> = λ<sub>0</sub>⁰ − ln F, y el grado de fusión sale de comparar el λ<sub>0</sub> del magma parental con el de la fuente. Para el magma parental de los OFB, O'Neill obtiene λ<sub>0</sub> = 2.36 ± 0.1, de la tendencia de λ<sub>0</sub> frente al MgO a 9.5 % de MgO. Con las fuentes de la Tabla 6 (λ<sub>0</sub>⁰ = 0.47, 0.60 o 0.86), F = 0.15, 0.17 o 0.22. Su estimación es F ≈ 0.19, con un intervalo del 95 % de ±0.03 (p. 1494), de acuerdo con el modelo independiente de Niu &amp; Batiza (1991) aplicado a 190 segmentos de dorsal (0.176 ± 0.020).</p>
+        </div>
+      </div>
+      <div class="prose">
+        <p><b>El método de la flecha.</b> Así propone O'Neill usar el diagrama, con papel de calco «o su equivalente electrónico» (pp. 1490–1491). Supón una composición para la fuente y dibuja una flecha desde ella hasta la muestra. Traslada la flecha, sin girarla ni estirarla, hasta que su base quede en (0, 0). Si la punta cae cerca de una trayectoria, ya tienes un modelo de fusión y un F. Después, compruébalo con λ<sub>0</sub>: ψ<sub>0</sub> debe ser la diferencia entre el λ<sub>0</sub> de la muestra y el de la fuente. También se puede hacer al revés: si conoces F (por ejemplo, por λ<sub>0</sub>), la flecha desde (0, 0) hasta ese punto de la trayectoria, trasladada hasta la muestra, te dice dónde estaría su fuente. Pruébalo en la figura con el botón «Método de la flecha»: la fuente S y la muestra M son inventadas, y tienes que encontrar la fuente y el F que las unen.</p>
+
+        <h3>Mezclas: curvas, no rectas</h3>
+        <p>La mezcla de dos magmas suma concentraciones, no logaritmos. El La de una mezcla a partes iguales es la media del La de los dos magmas, pero su logaritmo no es la media de los logaritmos. Por eso las mezclas no dan rectas en el diagrama λ<sub>2</sub>–λ<sub>1</sub>. Además, en cada REE manda el magma más rico: con solo un 20 % del basalto de Hawái 8-2.70 (9.1 ppm de La) en VG 304 (1.42 ppm), el La de la mezcla se duplica (2.96 ppm), mientras que el Lu apenas cambia (0.432 frente a 0.472 ppm). La figura reproduce los dos ejemplos de la Fig. 17d de O'Neill:</p>
+      </div>
+      <figure class="figbox" id="l9-mix">
+        <div class="ctrl-row ui">
+          <div class="seg" role="group" aria-label="OFB de la mezcla"><span class="seg-label">Mezcla de 8-2.70 con</span><button type="button" data-x9="1">VG 304 (empobrecido)</button><button type="button" data-x9="2">VG 4080 (enriquecido)</button></div>
+        </div>
+        <div class="slider-row"><label for="l9-p">Proporción del OFB</label><input type="range" id="l9-p" min="0" max="100" step="1" value="50"><output id="l9-po" for="l9-p"></output></div>
+        <div class="shape-grid">
+          <div>
+            <p class="panel-t">Los patrones</p>
+            <div class="legend" id="l9-xleg"></div>
+            <div class="plot" id="l9-xpat"></div>
+          </div>
+          <div>
+            <p class="panel-t">Curvas de mezcla en el diagrama λ<sub>2</sub>–λ<sub>1</sub></p>
+            <div class="legend"><span><i class="b1"></i>8-2.70 + VG 304</span><span><i class="b2"></i>8-2.70 + VG 4080</span><span><i class="lk2 dash"></i>recta entre los extremos</span></div>
+            <div class="plot" id="l9-xdia"></div>
+          </div>
+        </div>
+        <div class="readouts" id="l9-xro"></div>
+        <p class="readline" id="l9-xmsg"></p>
+        <figcaption>A la izquierda, los patrones de 8-2.70, del OFB elegido y de la mezcla (en negro). A la derecha, las curvas de mezcla de 8-2.70 con VG 304 y con VG 4080, con marcas cada 20 %; las rectas discontinuas unen los extremos, y el círculo hueco marca dónde caería la mezcla si se interpolaran los λ. Con VG 304, la mezcla a partes iguales cae en (2.5, −25), lejos del punto medio de la recta, (0.8, −45).</figcaption>
+      </figure>
+      <div class="prose">
+        <p>Aun así, las curvas de mezcla se pueden dibujar y son informativas; solo hay que calcularlas con las concentraciones, no interpolando entre los λ de los extremos. O'Neill también sitúa en la Fig. 17d la corteza continental superior y los sedimentos subducidos, porque son posibles contaminantes.</p>
+      </div>
+
+      <div class="after">
+        <h3>Practica</h3>
+        <div class="practice">
+          <div class="ex">
+            <p><b>1.</b> Con los coeficientes del granate de McKenzie &amp; O'Nions (1991), δ<sub>1</sub> = −39.7 y δ<sub>2</sub> = 496, ¿cuánto vale ψ<sub>2</sub> si cristaliza un 10 % de granate?</p>
+            <form id="l9ex1" autocomplete="off">
+              <label for="l9ex1-in" class="ui" style="font-size:.88rem">ψ<sub>2</sub> =</label>
+              <input id="l9ex1-in" inputmode="decimal" placeholder="p. ej. −10">
+              <button type="submit">Comprobar</button>
+              <button type="button" class="ghost" data-sol="l9ex1">Ver solución</button>
+            </form>
+            <div class="fb" id="l9ex1-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>2.</b> Un basalto ha acumulado un 20 % de cristales de olivino. ¿Qué coeficientes cambian respecto al líquido original?</p>
+            <div class="mc ui" role="group" aria-label="Respuestas">
+              <button type="button" class="btn ghost" data-mc9="l0">Solo λ<sub>0</sub>, que baja</button>
+              <button type="button" class="btn ghost" data-mc9="l12">λ<sub>1</sub> y λ<sub>2</sub></button>
+              <button type="button" class="btn ghost" data-mc9="all">Todos, en la misma proporción</button>
+            </div>
+            <div class="fb" id="l9ex2-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>3.</b> Una fuente tiene λ<sub>0</sub>⁰ = 0.86 y el magma parental que sale de ella, λ<sub>0</sub> = 2.36. Con la aproximación Ψ ≈ {−ln F, 0, 0}, ¿qué grado de fusión F le corresponde?</p>
+            <form id="l9ex3" autocomplete="off">
+              <label for="l9ex3-in" class="ui" style="font-size:.88rem">F =</label>
+              <input id="l9ex3-in" inputmode="decimal" placeholder="p. ej. 0.1">
+              <button type="submit">Comprobar</button>
+              <button type="button" class="ghost" data-sol="l9ex3">Ver solución</button>
+            </form>
+            <div class="fb" id="l9ex3-fb" aria-live="polite"></div>
+          </div>
+          <div class="ex">
+            <p><b>4.</b> ¿Por qué la mezcla de dos magmas no da una recta en el diagrama λ<sub>2</sub>–λ<sub>1</sub>?</p>
+            <div class="mc ui" role="group" aria-label="Respuestas">
+              <button type="button" class="btn ghost" data-mc9b="orto">Porque las piezas dejan de ser ortogonales</button>
+              <button type="button" class="btn ghost" data-mc9b="log">Porque se suman concentraciones y los λ salen de sus logaritmos</button>
+              <button type="button" class="btn ghost" data-mc9b="radio">Porque la mezcla cambia los radios iónicos</button>
+            </div>
+            <div class="fb" id="l9ex4-fb" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <h3>Resumen</h3>
+        <ul class="summary">
+          <li>Un proceso multiplica cada REE por un factor. En logaritmos, suma la <b>función del proceso</b>, que también se describe con las piezas de la Tabla 2. Sus coeficientes son los <b>ψ</b>, y <b>λ = λ⁰ + ψ</b>, orden por orden.</li>
+          <li>Los <b>coeficientes de reparto</b> dependen del radio de forma suave (deformación de la red) y se describen con las mismas piezas: D = δ<sub>0</sub> + δ<sub>1</sub>f<sub>1</sub> + δ<sub>2</sub>f<sub>2</sub> + … (Tabla 7).</li>
+          <li><b>Cristalización fraccionada</b>: ψ<sub>0</sub> = ln F·(δ<sub>0</sub> − 1), ψ<sub>1</sub> = ln F·δ<sub>1</sub>, ψ<sub>2</sub> = ln F·δ<sub>2</sub>. Flechas rectas con dirección δ<sub>2</sub>/δ<sub>1</sub>. Solo el cpx, el anfíbol y el granate cambian la forma; el olivino y la plagioclasa solo cambian λ<sub>0</sub>, también cuando se acumulan.</li>
+          <li><b>Fusión parcial</b>: sin atajo; los ψ se obtienen ajustando la función del proceso para cada F, y dibujan trayectorias curvas. En la facies de espinela, con F &gt; 10 %, Ψ ≈ {−ln F, 0, 0}: el fundido hereda la forma de la fuente y F ≈ e<sup>λ<sub>0</sub>⁰ − λ<sub>0</sub></sup>. Para los OFB, F ≈ 0.19.</li>
+          <li><b>Mezclas</b>: curvas, no rectas, porque se suman concentraciones y no logaritmos.</li>
+        </ul>
+
+        <h3>El radio, de principio a fin</h3>
+        <p>Esta era la pregunta con la que empezamos: dónde usa O'Neill los radios iónicos. Estas son las siete estaciones del mapa:</p>
+        <ol class="stations">
+          <li><span class="bdg">1</span><div><b>Eje X.</b> Cada <i class="vy">y</i> = ln([REE]/CI) se dibuja y se ajusta frente al radio del catión 3+ en coordinación 8 (Shannon, 1976). <span class="where">Lección 1</span></div></li>
+          <li><span class="bdg">2</span><div><b>Constantes de los polinomios ortogonales.</b> β = 1.05477 es la media de los 13 radios; γ, δ y ε salen de exigir que las piezas no se pisen. Solo dependen de los radios. <span class="where">Lecciones 2 y 5</span></div></li>
+          <li><span class="bdg">3</span><div><b>Tabla de valores f<sub>n</sub>(r<sub>i</sub>).</b> Cada radio sustituido en cada pieza. <span class="where">Lección 5</span></div></li>
+          <li><span class="bdg">4</span><div><b>El ajuste.</b> La tabla del sistema solo contiene radios; con piezas ortogonales, λ<sub>n</sub> = Σ y·f<sub>n</sub> / Σ f<sub>n</sub>². <span class="where">Lecciones 3 y 6</span></div></li>
+          <li><span class="bdg">5</span><div><b>La curva calculada.</b> Evaluada en los 14 radios; en el del Eu (1.066 Å) da el Eu*. <span class="where">Lección 7</span></div></li>
+          <li><span class="bdg">6</span><div><b>Incertidumbres.</b> ζ<sub>n</sub> = 1/√Σ f<sub>n</sub>² convierte el error analítico en el error de cada λ. <span class="where">Lección 7</span></div></li>
+          <li><span class="bdg ext">7</span><div><b>Procesos.</b> Los coeficientes de reparto dependen del radio y se describen con las mismas piezas f<sub>n</sub>(r): de ahí los vectores ψ de cristalización y de fusión. <span class="where">Lección 9</span></div></li>
+        </ol>
+        <p>En las seis primeras, lo que aporta el radio es igual para todas las muestras: se calcula una sola vez. La séptima añade la física de los cristales, y también ella se reduce a las mismas piezas.</p>
+        <div class="next">
+          <p><b>Fin del curso.</b> Has recorrido todo el cálculo de O'Neill: de las ppm a los λ, sus errores, lo que significan y cómo se relacionan con los procesos. Para aplicarlo a tus análisis, vuelve a la Lección 8. Si quieres que revisemos juntos tus datos o cualquier punto del curso, pregúntame.</p>
+          <p><a href="#mapa" data-tab="mapa" class="ui" style="font-weight:600">Volver al mapa del radio →</a></p>
+        </div>
+
+        <h3>Fuentes de esta lección</h3>
+        <ul class="sources">
+          <li>O'Neill (2016), pp. 1485–1494: ecuaciones 2 a 8, Tablas 5, 6 y 7 y Fig. 17 (vectores de cristalización, RTX, trayectorias de fusión y mezclas); estimación de F<sub>OFB</sub>, p. 1494.</li>
+          <li>Datos citados por O'Neill en sus Tablas 5 y 7: McKenzie &amp; O'Nions (1991), Niu (1997), Walter (1998, 2014), Tiepolo et al. (2000), Van Westrenen &amp; Draper (2007), O'Neill &amp; Jenner (2012), Sun &amp; Liang (2012) y Yao et al. (2012). Fuentes de la Tabla 6: Salters &amp; Stracke (2004), Workman &amp; Hart (2005) y O'Neill &amp; Palme (2008).</li>
+          <li>Shaw, D. M. (2006). <i>Trace Elements in Magmas: A Theoretical Treatment</i>. Cambridge University Press (ecuaciones de fusión y cristalización).</li>
+          <li>Wood, B. J. &amp; Blundy, J. D. (2014). Trace element partitioning: the influences of ionic radius, cation charge, pressure, and temperature. <i>Treatise on Geochemistry</i>, 2.ª ed., vol. 3 (deformación de la red).</li>
+          <li>Muestras de la mezcla: 8-2.70 (HSDP2, Feigenson et al., 2003) y VG 304 y VG 4080 (Jenner &amp; O'Neill, 2012b), de las hojas de O'Neill.</li>
+          <li>Cálculos propios: la comprobación de λ = λ⁰ + ψ con VG 304, los vectores de cristalización, las trayectorias de fusión (reproducen las curvas continuas de la Fig. 17c) y las curvas de mezcla (Fig. 17d), con las Tablas 1, 2, 5 y 7.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <footer>
+    Preparado a partir del artículo de O'Neill, su material suplementario, su hoja de cálculo (con la macro extraída) y el libro de Bevington & Robinson. Todas las cifras se han recalculado y coinciden con las de O'Neill. Uso el punto decimal, como en el artículo.
+  </footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+var NS='http://www.w3.org/2000/svg';
+var reduced=false; try{reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;}catch(e){}
+
+/* ---------------- Datos ---------------- */
+var REE=[
+ {el:'La',Z:57,r:1.160,ci:0.2472,ciT:'0.2472'},
+ {el:'Ce',Z:58,r:1.143,ci:0.6308,ciT:'0.6308'},
+ {el:'Pr',Z:59,r:1.126,ci:0.0950,ciT:'0.0950'},
+ {el:'Nd',Z:60,r:1.109,ci:0.4793,ciT:'0.4793'},
+ {el:'Sm',Z:62,r:1.079,ci:0.15419,ciT:'0.1542'},
+ {el:'Eu',Z:63,r:1.066,ci:0.0592,ciT:'0.0592'},
+ {el:'Gd',Z:64,r:1.053,ci:0.2059,ciT:'0.2059'},
+ {el:'Tb',Z:65,r:1.040,ci:0.0375,ciT:'0.0375'},
+ {el:'Dy',Z:66,r:1.027,ci:0.2540,ciT:'0.2540'},
+ {el:'Ho',Z:67,r:1.015,ci:0.0554,ciT:'0.0554'},
+ {el:'Er',Z:68,r:1.004,ci:0.1645,ciT:'0.1645'},
+ {el:'Tm',Z:69,r:0.994,ci:0.0258,ciT:'0.0258'},
+ {el:'Yb',Z:70,r:0.985,ci:0.1684,ciT:'0.1684'},
+ {el:'Lu',Z:71,r:0.977,ci:0.0251,ciT:'0.0251'}
+];
+var PM={el:'Pm',Z:61,r:1.0945};
+var SAMPLES=[
+ {name:'VG 189',meta:'OFB · dorsal Mesoatlántica, 21.9° S · 7.98 % MgO',
+  ppm:[3.622024,12.477229,2.164558,12.124874,4.45359,1.533984,5.757827,1.073365,6.868444,1.481695,4.239659,0.657756,3.996338,0.571062],lam0:3.18749},
+ {name:'VG 304',meta:'OFB empobrecido · Atlántico · 7.49 % MgO',
+  ppm:[1.423631,4.962335,0.939331,5.395306,2.32115,0.943261,3.53125,0.671099,4.525978,1.026377,3.050374,0.46498,3.297372,0.472261],lam0:2.65264},
+ {name:'VG 4080',meta:'OFB enriquecido · dorsal Mesoatlántica, 45.5° N · 6.81 % MgO',
+  ppm:[20.036821,40.296256,4.735473,18.149354,3.849948,1.331558,3.681736,0.612352,3.548541,0.747006,2.120916,0.289525,1.981517,0.290205],lam0:3.08581},
+ {name:'8-2.70',meta:'OIB · Hawái, sondeo HSDP2 (Feigenson et al., 2003) · 7.64 % MgO',
+  ppm:[9.1,24.0,3.54,17.22,4.64,1.64,5.34,0.8,4.75,0.91,2.41,0.32,1.87,0.27],lam0:3.06746}
+];
+
+function mk(tag,attrs,parent){var e=document.createElementNS(NS,tag);if(attrs){for(var k in attrs){e.setAttribute(k,attrs[k]);}}if(parent)parent.appendChild(e);return e;}
+function txt(tag,attrs,parent,s){var e=mk(tag,attrs,parent);e.textContent=s;return e;}
+function niceTicks(min,max,n){var span=max-min,raw=span/Math.max(1,n),mag=Math.pow(10,Math.floor(Math.log(raw)/Math.LN10)),f=raw/mag;
+  var step=(f>=7.5?10:f>=3.5?5:f>=1.5?2:1)*mag,out=[];for(var v=Math.ceil(min/step-1e-9)*step;v<=max+step*1e-9;v+=step){out.push(+v.toFixed(10));}return {vals:out,step:step};}
+function decs(step){return Math.max(0,-Math.floor(Math.log(step)/Math.LN10+1e-9));}
+
+/* ---------------- Fichas de la cabecera ---------------- */
+(function(){
+  var box=document.getElementById('tiles');
+  var list=REE.slice(0,4).concat([PM]).concat(REE.slice(4));
+  list.forEach(function(e){
+    var d=document.createElement('div');d.className='tile'+(e.el==='Eu'?' eu':'')+(e.el==='Pm'?' pm':'');
+    var z=document.createElement('span');z.className='z';z.textContent=e.Z;
+    var s=document.createElement('span');s.className='sym';s.textContent=e.el;
+    var r=document.createElement('span');r.className='rv';r.textContent=(e.el==='Pm')?'—':e.r.toFixed(3);
+    d.append(z,s,r);
+    d.title=e.el==='Pm'?'Pm: no se analiza (sin isótopos estables)':(e.el+' · Z = '+e.Z+' · r = '+e.r.toFixed(3)+' Å'+(e.el==='Eu'?' · excluido del ajuste':''));
+    box.appendChild(d);
+  });
+})();
+
+/* ---------------- Pestañas ---------------- */
+var tabs=[].slice.call(document.querySelectorAll('.tab[data-tab]'));
+var panels=[].slice.call(document.querySelectorAll('.panel'));
+var nav=document.querySelector('.tabs');
+function showTab(id,opts){
+  opts=opts||{};
+  if(!document.getElementById(id)||!document.getElementById(id).classList.contains('panel'))id='programa';
+  panels.forEach(function(p){p.hidden=(p.id!==id);});
+  tabs.forEach(function(t){var on=t.getAttribute('data-tab')===id;t.setAttribute('aria-selected',on?'true':'false');t.tabIndex=on?0:-1;});
+  try{localStorage.setItem('oneill-curso-tab',id);}catch(e){}
+  if(opts.hash!==false){try{history.replaceState(null,'','#'+id);}catch(e){}}
+  if(opts.scroll){
+    var top=document.querySelector('main').getBoundingClientRect().top+window.scrollY-nav.offsetHeight-8;
+    if(window.scrollY>top){window.scrollTo({top:top,behavior:reduced?'auto':'smooth'});}
+  }
+  if(id==='leccion-1'){requestAnimationFrame(function(){renderLab(false);renderRulers();});}
+  if(id==='leccion-2'){requestAnimationFrame(function(){if(window.__drawL2){window.__drawL2();}});}
+  if(id==='leccion-3'){requestAnimationFrame(function(){if(window.__drawL3){window.__drawL3();}});}
+  if(id==='leccion-4'){requestAnimationFrame(function(){if(window.__drawL4){window.__drawL4();}});}
+  if(id==='leccion-5'){requestAnimationFrame(function(){if(window.__drawL5){window.__drawL5();}});}
+  if(id==='leccion-6'){requestAnimationFrame(function(){if(window.__drawL6){window.__drawL6();}});}
+  if(id==='leccion-7'){requestAnimationFrame(function(){if(window.__drawL7){window.__drawL7();}});}
+  if(id==='leccion-8'){requestAnimationFrame(function(){if(window.__drawL8){window.__drawL8();}});}
+  if(id==='leccion-9'){requestAnimationFrame(function(){if(window.__drawL9){window.__drawL9();}});}
+}
+tabs.forEach(function(t){
+  t.addEventListener('click',function(){showTab(t.getAttribute('data-tab'),{scroll:true});});
+  t.addEventListener('keydown',function(ev){
+    if(ev.key!=='ArrowRight'&&ev.key!=='ArrowLeft')return;
+    var i=tabs.indexOf(t),j=(i+(ev.key==='ArrowRight'?1:-1)+tabs.length)%tabs.length;
+    tabs[j].focus();showTab(tabs[j].getAttribute('data-tab'));ev.preventDefault();
+  });
+});
+[].forEach.call(document.querySelectorAll('a[data-tab]'),function(a){
+  a.addEventListener('click',function(ev){ev.preventDefault();showTab(a.getAttribute('data-tab'),{scroll:true});});
+});
+
+/* ---------------- Laboratorio (Lección 1) ---------------- */
+var lab={s:0,y:'ppm',x:'Z',err:true,cur:null,curPm:null,anim:0};
+var plot=document.getElementById('lab1-plot');
+var svg=plot.querySelector('svg');
+var tip=plot.querySelector('.tip');
+var gGrid=mk('g',null,svg),gAx=mk('g',null,svg),gLab=mk('g',null,svg);
+var pline=mk('polyline',{'class':'pline',fill:'none'},svg);
+var gErr=mk('g',{'class':'eb'},svg),gPts=mk('g',null,svg);
+var nodes=REE.map(function(e,i){
+  var l=mk('line',null,gErr),c1=mk('line',null,gErr),c2=mk('line',null,gErr);
+  var g=mk('g',{'class':'pt'+(e.el==='Eu'?' eu':''),tabindex:'0',role:'img'},gPts);
+  var hit=mk('circle',{r:'13','class':'hit'},g);
+  var dot=mk('circle',{r:'5','class':'dot'},g);
+  var lb=txt('text',{'class':'elab'+(e.el==='Eu'?' eu':''),'text-anchor':'middle'},gLab,e.el);
+  var show=function(){showTip(i);};
+  g.addEventListener('pointerenter',show);g.addEventListener('focus',show);
+  g.addEventListener('pointerleave',hideTip);g.addEventListener('blur',hideTip);
+  return {l:l,c1:c1,c2:c2,g:g,hit:hit,dot:dot,lb:lb};
+});
+var pmLab=txt('text',{'class':'elab ghost','text-anchor':'middle'},gLab,'Pm');
+
+var sel=document.getElementById('lab1-sample');
+SAMPLES.forEach(function(s,i){var o=document.createElement('option');o.value=String(i);o.textContent=s.name;sel.appendChild(o);});
+var errChk=document.getElementById('lab1-err');
+var cap=document.getElementById('lab1-cap');
+var metaEl=document.getElementById('lab1-meta');
+
+function values(){var s=SAMPLES[lab.s];return REE.map(function(e,i){var n=s.ppm[i]/e.ci;return {ppm:s.ppm[i],norm:n,ln:Math.log(n)};});}
+
+function layout(){
+  var W=Math.max(300,Math.round(plot.clientWidth));
+  var H=Math.round(Math.max(280,Math.min(400,W*0.66)));
+  var m={t:46,r:14,b:50,l:62};
+  var pw=W-m.l-m.r,ph=H-m.t-m.b;
+  var v=values(),key=lab.y,ymin,ymax;
+  if(key==='ln'){
+    var lo=Infinity,hi=-Infinity;v.forEach(function(q){lo=Math.min(lo,q.ln);hi=Math.max(hi,q.ln);});
+    lo+=Math.log(0.95);hi+=Math.log(1.05);var pad=Math.max(0.12,(hi-lo)*0.08);ymin=lo-pad;ymax=hi+pad;
+  }else{
+    var mx=0;v.forEach(function(q){mx=Math.max(mx,q[key]);});ymin=0;ymax=mx*1.05*1.08;
+  }
+  var xmin,xmax,acc;
+  if(lab.x==='Z'){xmin=56.3;xmax=71.7;acc=function(e){return e.Z;};}
+  else{acc=function(e){return e.r;};if(lab.x==='rL'){xmin=1.172;xmax=0.965;}else{xmin=0.965;xmax=1.172;}}
+  var sx=function(q){return m.l+(q-xmin)/(xmax-xmin)*pw;};
+  var sy=function(q){return m.t+(1-(q-ymin)/(ymax-ymin))*ph;};
+  var pts=REE.map(function(e,i){
+    var q=v[i][key],e1,e2;
+    if(key==='ln'){e1=q+Math.log(0.95);e2=q+Math.log(1.05);}else{e1=q*0.95;e2=q*1.05;}
+    return {x:sx(acc(e)),y:sy(q),y1:sy(e1),y2:sy(e2)};
+  });
+  var pmx=sx(acc(PM));
+  var xs=pts.map(function(p){return p.x;}).concat([pmx]).sort(function(a,b){return a-b;});
+  var gap=Infinity;for(var k=1;k<xs.length;k++){gap=Math.min(gap,xs[k]-xs[k-1]);}
+  return {W:W,H:H,m:m,pw:pw,ph:ph,sx:sx,sy:sy,ymin:ymin,ymax:ymax,pts:pts,pmx:pmx,stagger:gap<21};
+}
+
+function drawAxes(L){
+  gGrid.replaceChildren();gAx.replaceChildren();
+  var yt=niceTicks(L.ymin,L.ymax,L.ph>250?6:5),d=decs(yt.step);
+  yt.vals.forEach(function(q){
+    if(q<L.ymin-1e-9||q>L.ymax+1e-9)return;
+    var y=L.sy(q);
+    mk('line',{x1:L.m.l,x2:L.W-L.m.r,y1:y,y2:y,'class':'gl'},gGrid);
+    txt('text',{x:L.m.l-8,y:y+4,'text-anchor':'end','class':'tick'},gAx,q.toFixed(d));
+  });
+  var yb=L.m.t+L.ph;
+  mk('line',{x1:L.m.l,x2:L.W-L.m.r,y1:yb,y2:yb,'class':'axis'},gAx);
+  var xt=[];
+  if(lab.x==='Z'){var st=L.pw>430?1:2;for(var z=57;z<=71;z+=st){xt.push(z);}}
+  else{var st2=L.pw>430?0.02:0.04;for(var q=0.98;q<=1.1601;q+=st2){xt.push(+q.toFixed(2));}}
+  xt.forEach(function(q){var x=L.sx(q);mk('line',{x1:x,x2:x,y1:yb,y2:yb+5,'class':'axis'},gAx);
+    txt('text',{x:x,y:yb+18,'text-anchor':'middle','class':'tick'},gAx,lab.x==='Z'?String(q):q.toFixed(2));});
+  txt('text',{x:L.m.l+L.pw/2,y:L.H-8,'text-anchor':'middle','class':'atitle'},gAx,
+    lab.x==='Z'?'Número atómico Z':(L.pw>380?(lab.x==='rL'?'Radio iónico r (Å) · La a la izquierda':'Radio iónico r (Å) · crece hacia la derecha'):(lab.x==='rL'?'Radio r (Å) · La a la izq.':'Radio r (Å) · crece a la dcha.')));
+  txt('text',{transform:'translate(14 '+(L.m.t+L.ph/2)+') rotate(-90)','text-anchor':'middle','class':'atitle'},gAx,
+    lab.y==='ppm'?'Concentración (ppm)':(lab.y==='norm'?'[REE] / [REE]CI':'y = ln([REE] / [REE]CI)'));
+}
+
+function drawPts(L,P,pmx){
+  var pts=[];
+  P.forEach(function(p,i){var n=nodes[i];
+    n.dot.setAttribute('cx',p.x);n.dot.setAttribute('cy',p.y);n.hit.setAttribute('cx',p.x);n.hit.setAttribute('cy',p.y);
+    n.l.setAttribute('x1',p.x);n.l.setAttribute('x2',p.x);n.l.setAttribute('y1',p.y1);n.l.setAttribute('y2',p.y2);
+    n.c1.setAttribute('x1',p.x-4);n.c1.setAttribute('x2',p.x+4);n.c1.setAttribute('y1',p.y1);n.c1.setAttribute('y2',p.y1);
+    n.c2.setAttribute('x1',p.x-4);n.c2.setAttribute('x2',p.x+4);n.c2.setAttribute('y1',p.y2);n.c2.setAttribute('y2',p.y2);
+    pts.push(p.x.toFixed(1)+','+p.y.toFixed(1));
+  });
+  pline.setAttribute('points',pts.join(' '));
+  gErr.setAttribute('visibility',lab.err?'visible':'hidden');
+  var items=P.map(function(p,i){return {x:p.x,n:nodes[i].lb};});items.push({x:pmx,n:pmLab});
+  items.sort(function(a,b){return a.x-b.x;});
+  items.forEach(function(it,k){it.n.setAttribute('x',it.x);it.n.setAttribute('y',L.m.t-(L.stagger&&(k%2)?24:10));});
+}
+
+var CAPY={ppm:'<b>Paso 1 · ppm.</b> El zigzag (pares altos, impares bajos) viene de la nucleosíntesis, no del basalto.',
+  norm:'<b>Paso 2 · ÷ CI.</b> El zigzag desaparece: cada punto dice cuántas veces más concentrado está ese elemento que en el condrito.',
+  ln:'<b>Paso 3 · ln.</b> Con las barras activadas, el mismo ±5 % mide igual en todos los elementos.'};
+var CAPX={Z:' Eje X: número atómico, a distancias iguales (hueco del Pm).',
+  rL:' Eje X: radio iónico con el La a la izquierda: las ligeras se separan y las pesadas se apiñan.',
+  rO:' Eje X: radio creciente, como en las figuras de O’Neill: ahora el La está a la derecha.'};
+
+function updateText(){
+  cap.innerHTML=CAPY[lab.y]+CAPX[lab.x]+' El círculo hueco es el Eu, que no entra en el ajuste.';
+  metaEl.textContent=SAMPLES[lab.s].meta;
+  var v=values();
+  nodes.forEach(function(n,i){var e=REE[i];n.g.setAttribute('aria-label',e.el+': '+v[i].ppm.toFixed(3)+' ppm; '+v[i].norm.toFixed(2)+' veces el condrito; ln '+v[i].ln.toFixed(3)+'; r '+e.r.toFixed(3)+' Å');});
+  [].forEach.call(document.querySelectorAll('#lab1 [data-y]'),function(b){b.setAttribute('aria-pressed',b.getAttribute('data-y')===lab.y?'true':'false');});
+  [].forEach.call(document.querySelectorAll('#lab1 [data-x]'),function(b){b.setAttribute('aria-pressed',b.getAttribute('data-x')===lab.x?'true':'false');});
+  errChk.checked=lab.err;sel.value=String(lab.s);
+}
+
+function renderLab(animate){
+  if(!plot.offsetParent)return;
+  hideTip();
+  var L=layout();
+  svg.setAttribute('viewBox','0 0 '+L.W+' '+L.H);svg.setAttribute('width',L.W);svg.setAttribute('height',L.H);
+  drawAxes(L);updateText();
+  cancelAnimationFrame(lab.anim);
+  var from=lab.cur,fromPm=lab.curPm;
+  if(!animate||!from||reduced){lab.cur=L.pts;lab.curPm=L.pmx;drawPts(L,L.pts,L.pmx);return;}
+  var t0=performance.now(),D=620;
+  var ease=function(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;};
+  var step=function(now){
+    var k=Math.min(1,(now-t0)/D),e=ease(k);
+    var P=L.pts.map(function(p,i){var f=from[i];return {x:f.x+(p.x-f.x)*e,y:f.y+(p.y-f.y)*e,y1:f.y1+(p.y1-f.y1)*e,y2:f.y2+(p.y2-f.y2)*e};});
+    var pm=fromPm+(L.pmx-fromPm)*e;
+    lab.cur=P;lab.curPm=pm;drawPts(L,P,pm);
+    if(k<1)lab.anim=requestAnimationFrame(step);
+  };
+  lab.anim=requestAnimationFrame(step);
+}
+
+function showTip(i){
+  if(!lab.cur)return;
+  var e=REE[i],s=SAMPLES[lab.s],p=s.ppm[i],n=p/e.ci,y=Math.log(n);
+  tip.replaceChildren();
+  var a=document.createElement('strong');
+  a.textContent=lab.y==='ppm'?(p.toFixed(3)+' ppm'):(lab.y==='norm'?(n.toFixed(2)+' × condrito'):('y = '+y.toFixed(3)));
+  var b=document.createElement('span');b.textContent=e.el+' · Z = '+e.Z+' · r = '+e.r.toFixed(3)+' Å';
+  var c=document.createElement('span');c.className='muted';c.textContent=p.toFixed(3)+' ÷ '+e.ciT+' = '+n.toFixed(2)+' → ln = '+y.toFixed(3);
+  tip.append(a,b,c);
+  if(e.el==='Eu'){var d=document.createElement('span');d.className='muted';d.textContent='Fuera del ajuste (posible Eu²⁺)';tip.append(d);}
+  tip.hidden=false;
+  var P=lab.cur[i],bw=plot.clientWidth,tw=tip.offsetWidth,th=tip.offsetHeight;
+  var left=P.x+14;if(left+tw>bw-4)left=P.x-tw-14;left=Math.max(4,left);
+  var top=P.y-th-10;if(top<4)top=P.y+16;
+  tip.style.left=left+'px';tip.style.top=top+'px';
+}
+function hideTip(){tip.hidden=true;}
+
+function setLab(ch){
+  for(var k in ch){lab[k]=ch[k];}
+  renderLab(true);renderTable();
+}
+[].forEach.call(document.querySelectorAll('#lab1 [data-y]'),function(b){b.addEventListener('click',function(){setLab({y:b.getAttribute('data-y')});});});
+[].forEach.call(document.querySelectorAll('#lab1 [data-x]'),function(b){b.addEventListener('click',function(){setLab({x:b.getAttribute('data-x')});});});
+errChk.addEventListener('change',function(){setLab({err:errChk.checked});});
+sel.addEventListener('change',function(){setLab({s:+sel.value});});
+[].forEach.call(document.querySelectorAll('#leccion-1 .goto'),function(b){
+  b.addEventListener('click',function(){
+    var ch={};if(b.getAttribute('data-y'))ch.y=b.getAttribute('data-y');if(b.getAttribute('data-x'))ch.x=b.getAttribute('data-x');if(b.getAttribute('data-err'))ch.err=true;
+    setLab(ch);
+    var fig=document.getElementById('lab1'),r=fig.getBoundingClientRect();
+    if(r.top<nav.offsetHeight||r.bottom>window.innerHeight){fig.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});}
+  });
+});
+
+/* ---------------- Tabla de resultados ---------------- */
+function renderTable(){
+  var s=SAMPLES[lab.s],tb=document.querySelector('#l1-table tbody');tb.replaceChildren();
+  var sum=0,n=0;
+  REE.forEach(function(e,i){
+    var p=s.ppm[i],nr=p/e.ci,y=Math.log(nr);
+    var tr=document.createElement('tr');if(e.el==='Eu')tr.className='excl';
+    var cells=[e.el,String(e.Z),p.toFixed(3),e.ciT,nr.toFixed(2),y.toFixed(3),e.r.toFixed(3)];
+    cells.forEach(function(v,k){var td=document.createElement(k===0?'th':'td');if(k===0)td.scope='row';td.textContent=v;if(k===5)td.className='cy';if(k===6)td.className='cr';tr.appendChild(td);});
+    if(e.el==='Eu'){tr.cells[0].textContent='Eu (fuera)';}
+    tb.appendChild(tr);
+    if(e.el!=='Eu'){sum+=y;n++;}
+  });
+  var mean=sum/n;
+  document.getElementById('l1-mean').textContent=mean.toFixed(3);
+  document.getElementById('l1-lam0').textContent=mean.toFixed(2);
+  document.getElementById('l1-lam0b').textContent=mean.toFixed(2);
+  document.getElementById('l1-exp').textContent=String(Math.round(Math.exp(mean)));
+  document.getElementById('l1-exp2').textContent=String(Math.round(Math.exp(mean)));
+  document.getElementById('l1-sname').textContent=s.name;
+  document.getElementById('l1-xls').textContent=s.lam0.toFixed(2);
+}
+
+/* ---------------- Reglas Z frente a r ---------------- */
+function renderRulers(){
+  var box=document.getElementById('rulers');if(!box||!box.offsetParent)return;
+  var W=Math.max(290,Math.round(box.clientWidth)),H=198;
+  var s=box.querySelector('svg');if(!s){s=mk('svg',{role:'img','aria-label':'Dos reglas: arriba las REE equiespaciadas por número atómico; abajo colocadas según su radio iónico. Las ligeras quedan más separadas y las pesadas más juntas.'},box);}
+  s.replaceChildren();s.setAttribute('viewBox','0 0 '+W+' '+H);s.setAttribute('width',W);s.setAttribute('height',H);
+  var xL=20,xR=W-20,yT=66,yB=142;
+  var pz=function(z){return xL+(z-57)/14*(xR-xL);};
+  var pr=function(r){return xL+(1.160-r)/(1.160-0.977)*(xR-xL);};
+  txt('text',{x:xL,y:14,'class':'rtitle'},s,'NÚMERO ATÓMICO Z · A DISTANCIAS IGUALES');
+  txt('text',{x:xL,y:H-4,'class':'rtitle r'},s,'RADIO IÓNICO r (Å) · SEGÚN EL TAMAÑO REAL');
+  var all=REE.concat([{el:'Pm',Z:61,r:1.0945,ghost:true}]);
+  all.forEach(function(e){mk('line',{x1:pz(e.Z),y1:yT,x2:pr(e.r),y2:yB,'class':'conn'+(e.ghost?' ghost':'')},s);});
+  mk('line',{x1:xL,x2:xR,y1:yT,y2:yT,'class':'rule'},s);
+  mk('line',{x1:xL,x2:xR,y1:yB,y2:yB,'class':'rule r'},s);
+  all.forEach(function(e){var x=pz(e.Z),g=e.ghost?' ghost':'';
+    mk('line',{x1:x,x2:x,y1:yT-5,y2:yT+5,'class':'rtick'+g},s);
+    txt('text',{x:x,y:yT-12,'text-anchor':'middle','class':'rsym'+g},s,e.el);
+    txt('text',{x:x,y:yT-28,'text-anchor':'middle','class':'rnum'+g},s,String(e.Z));});
+  var byR=all.slice().sort(function(a,b){return b.r-a.r;});
+  var gap=Infinity;for(var k=1;k<byR.length;k++){gap=Math.min(gap,pr(byR[k].r)-pr(byR[k-1].r));}
+  var stag=gap<19;
+  byR.forEach(function(e,k){var x=pr(e.r),g=e.ghost?' ghost':'';
+    mk('line',{x1:x,x2:x,y1:yB-5,y2:yB+5,'class':'rtick r'+g},s);
+    txt('text',{x:x,y:yB+19+(stag&&(k%2)?12:0),'text-anchor':'middle','class':'rsym'+g},s,e.el);});
+}
+
+/* ---------------- Ejercicios ---------------- */
+function num(v){return parseFloat(String(v).replace(',','.').trim());}
+function feedback(id,ok,msg){var f=document.getElementById(id+'-fb');f.className='fb '+(ok?'ok':'no');f.textContent=msg;}
+document.getElementById('ex1').addEventListener('submit',function(ev){ev.preventDefault();
+  var v=num(document.getElementById('ex1-in').value);
+  if(isNaN(v)){feedback('ex1',false,'Escribe un número (vale el punto o la coma).');return;}
+  if(Math.abs(v-3.167)<0.006)feedback('ex1',true,'¡Correcto! 3.996 / 0.1684 = 23.73 y ln(23.73) = 3.167.');
+  else if(Math.abs(v-1.375)<0.01)feedback('ex1',false,'Ese es el logaritmo en base 10. En Excel, usa LN(), no LOG().');
+  else if(Math.abs(v-23.73)<0.05)feedback('ex1',false,'Vas bien: eso es [Yb]/[Yb]CI. Falta tomar el ln.');
+  else feedback('ex1',false,'Aún no. Primero divide 3.996 entre 0.1684 y después toma el ln.');
+});
+document.getElementById('ex2').addEventListener('submit',function(ev){ev.preventDefault();
+  var v=num(document.getElementById('ex2-in').value);
+  if(isNaN(v)){feedback('ex2',false,'Escribe un número (vale el punto o la coma).');return;}
+  if(v>=13.9&&v<=14.4)feedback('ex2',true,'¡Correcto! e^2.65 ≈ 14.2: de media, unas 14 veces el condrito. En Excel: =EXP(2.65).');
+  else if(v>=440&&v<=450)feedback('ex2',false,'Eso es 10^2.65. El ln se deshace con e elevado a…, es decir, EXP().');
+  else feedback('ex2',false,'Aún no. Lo contrario del ln es elevar e a ese número: e^2.65.');
+});
+var SOL={
+  ex1:'Solución: 3.996 / 0.1684 = 23.73; ln(23.73) = 3.167. En Excel: =LN(3.996/0.1684).',
+  ex2:'Solución: e^2.65 = 14.2. La media de las REE de VG 304 es unas 14 veces la del condrito. En Excel: =EXP(2.65).',
+  l2ex1:'Solución: λ₁ = Σx′y / Σx′² = 0.52063 / 0.04722 = 11.03. Positivo, como corresponde a un patrón enriquecido en REE ligeras.',
+  l2ex2:'Solución: 0. Si la recta pasa por (r̄, ȳ), Σ residuos = Σy − N·ȳ − b·(Σr − N·r̄) = 0 − b·0 = 0, sea cual sea b.',
+  l3ex1:'Solución: 2. Con cuatro términos (hasta r³) el polinomio puede tener como mucho dos curvas: una S.',
+  l3ex3:'Solución: ν = 13 − 5 = 8. Cada coeficiente ajustado «gasta» un punto.',
+  l4ex2:'Solución: s(λ₀) = 0.05 / √13 = 0.0139. λ₀ es la media de 13 valores con un error del 5 % cada uno.'
+};
+[].forEach.call(document.querySelectorAll('[data-sol]'),function(b){b.addEventListener('click',function(){
+  var id=b.getAttribute('data-sol');if(SOL[id])feedback(id,true,SOL[id]);
+});});
+
+/* ---------------- Utilidades comunes ---------------- */
+function fmtS(v,n){var s=Math.abs(v).toFixed(n);if(+s===0)return s;return (v>0?'+':'−')+s;}
+function elemRow(parent,items,y){
+  items.sort(function(a,b){return a.x-b.x;});
+  var gap=Infinity;for(var k=1;k<items.length;k++){gap=Math.min(gap,items[k].x-items[k-1].x);}
+  var stag=gap<21;
+  items.forEach(function(it,k){txt('text',{x:it.x,y:y-(stag&&(k%2)?14:0),'text-anchor':'middle','class':'elab'+(it.cls?' '+it.cls:'')},parent,it.t);});
+}
+function spring(x,y1,y2){
+  var len=y2-y1;
+  if(Math.abs(len)<18){return mk('line',{x1:x,x2:x,y1:y1,y2:y2,'class':'spring'});}
+  var n=6,amp=3.5,lead=len*0.14,body=len-2*lead,pts=[[x,y1],[x,y1+lead]];
+  for(var k=0;k<n*2;k++){var t=(k+0.5)/(n*2);pts.push([x+(k%2?-amp:amp),y1+lead+body*t]);}
+  pts.push([x,y2-lead]);pts.push([x,y2]);
+  return mk('polyline',{points:pts.map(function(p){return p[0].toFixed(1)+','+p[1].toFixed(1);}).join(' '),'class':'spring'});
+}
+
+/* ---------------- Laboratorio 2 (Lección 2) ---------------- */
+var L2={s:0,mode:'c',ap:0,b:0,anim:0,st:null};
+var p2=document.getElementById('l2-plot'),svg2=p2.querySelector('svg'),tip2=p2.querySelector('.tip');
+var aIn=document.getElementById('l2-a'),bIn=document.getElementById('l2-b');
+var aOut=document.getElementById('l2-aval'),bOut=document.getElementById('l2-bval'),aLab=document.getElementById('l2-alabel');
+var sel2=document.getElementById('l2-sample');
+SAMPLES.forEach(function(s,i){var o=document.createElement('option');o.value=String(i);o.textContent=s.name;sel2.appendChild(o);});
+function stats2(si){
+  var s=SAMPLES[si],pts=[];
+  REE.forEach(function(e,i){if(e.el!=='Eu')pts.push({e:e,r:e.r,y:Math.log(s.ppm[i]/e.ci)});});
+  var N=pts.length,sr=0,sy=0;pts.forEach(function(p){sr+=p.r;sy+=p.y;});
+  var rb=sr/N,yb=sy/N,sxx=0,sxy=0;pts.forEach(function(p){var d=p.r-rb;sxx+=d*d;sxy+=d*p.y;});
+  var bs=sxy/sxx,ssmin=0,ss0=0,ymin=Infinity,ymax=-Infinity;
+  pts.forEach(function(p){var q=p.y-(yb+bs*(p.r-rb));ssmin+=q*q;ss0+=(p.y-yb)*(p.y-yb);ymin=Math.min(ymin,p.y);ymax=Math.max(ymax,p.y);});
+  var eu={e:REE[5],r:REE[5].r,y:Math.log(s.ppm[5]/REE[5].ci)};ymin=Math.min(ymin,eu.y);ymax=Math.max(ymax,eu.y);
+  return {pts:pts,N:N,rb:rb,yb:yb,bs:bs,ssmin:ssmin,ss0:ss0,eu:eu,ymin:ymin,ymax:ymax};
+}
+function l2Load(si){L2.s=si;L2.st=stats2(si);L2.ap=L2.st.yb+0.35;L2.b=0;l2Sliders();}
+function l2Sliders(){
+  var S=L2.st;
+  if(L2.mode==='c'){
+    aIn.min=(S.yb-1.5).toFixed(3);aIn.max=(S.yb+1.5).toFixed(3);aIn.step='0.001';
+    L2.ap=Math.max(S.yb-1.5,Math.min(S.yb+1.5,L2.ap));aIn.value=String(L2.ap);aLab.textContent='Altura en r̄ (a′)';
+  }else{
+    aIn.min='-25';aIn.max='30';aIn.step='0.01';aIn.value=String(L2.ap-L2.b*S.rb);aLab.textContent='Ordenada en r = 0 (a)';
+  }
+  bIn.value=String(L2.b);l2Out();
+}
+function l2Sync(){var S=L2.st;aIn.value=String(L2.mode==='c'?L2.ap:L2.ap-L2.b*S.rb);bIn.value=String(L2.b);l2Out();}
+function l2Out(){
+  var S=L2.st;
+  var mn=function(v){var s=Math.abs(v).toFixed(3);return (v<0&&+s!==0?'−':'')+s;};
+  aOut.textContent=mn(L2.mode==='c'?L2.ap:(L2.ap-L2.b*S.rb));
+  bOut.textContent=mn(L2.b);
+  [].forEach.call(document.querySelectorAll('#lab2 [data-mode]'),function(b){b.setAttribute('aria-pressed',b.getAttribute('data-mode')===L2.mode?'true':'false');});
+  sel2.value=String(L2.s);
+  document.getElementById('l2-meta').textContent=SAMPLES[L2.s].meta;
+}
+function hideTip2(){tip2.hidden=true;}
+function showTip2(p,x,y,lineVal){
+  var res=p.y-lineVal;tip2.replaceChildren();
+  var a=document.createElement('strong');a.textContent='residuo = '+fmtS(res,3);
+  var b=document.createElement('span');b.textContent=p.e.el+' · r = '+p.r.toFixed(3)+' Å';
+  var c=document.createElement('span');c.className='muted';c.textContent='y = '+p.y.toFixed(3)+' · recta = '+lineVal.toFixed(3)+' · residuo² = '+(res*res).toFixed(4);
+  tip2.append(a,b,c);tip2.hidden=false;
+  var bw=p2.clientWidth,tw=tip2.offsetWidth,th=tip2.offsetHeight;
+  var left=x+14;if(left+tw>bw-4)left=x-tw-14;left=Math.max(4,left);
+  var top=y-th-10;if(top<4)top=y+16;
+  tip2.style.left=left+'px';tip2.style.top=top+'px';
+}
+function drawL2(){
+  if(!p2.offsetParent||!L2.st)return;
+  hideTip2();
+  var S=L2.st,W=Math.max(300,Math.round(p2.clientWidth));
+  var ph1=Math.round(Math.max(180,Math.min(250,W*0.42))),ph2=78,gap=20;
+  var m={t:40,r:14,b:46,l:58},pw=W-m.l-m.r,H=m.t+ph1+gap+ph2+m.b;
+  var xmin=0.965,xmax=1.172,sx=function(r){return m.l+(r-xmin)/(xmax-xmin)*pw;};
+  var ylo=S.ymin-0.45,yhi=S.ymax+0.45,sy=function(v){return m.t+(1-(v-ylo)/(yhi-ylo))*ph1;};
+  var y2t=m.t+ph1+gap,RM=0.5,sy2=function(v){var c=Math.max(-RM,Math.min(RM,v));return y2t+ph2/2-c/RM*(ph2/2);};
+  svg2.replaceChildren();svg2.setAttribute('viewBox','0 0 '+W+' '+H);svg2.setAttribute('width',W);svg2.setAttribute('height',H);
+  var defs=mk('defs',null,svg2),cp=mk('clipPath',{id:'l2clip'},defs);mk('rect',{x:m.l,y:m.t,width:pw,height:ph1},cp);
+  var yt=niceTicks(ylo,yhi,5),d=decs(yt.step);
+  yt.vals.forEach(function(q){if(q<ylo||q>yhi)return;var y=sy(q);mk('line',{x1:m.l,x2:W-m.r,y1:y,y2:y,'class':'gl'},svg2);txt('text',{x:m.l-8,y:y+4,'text-anchor':'end','class':'tick'},svg2,q.toFixed(d));});
+  txt('text',{transform:'translate(14 '+(m.t+ph1/2)+') rotate(-90)','text-anchor':'middle','class':'atitle'},svg2,'y = ln([REE]/[REE]CI)');
+  var z=sy2(0);
+  [0.5,-0.5].forEach(function(q){var y=sy2(q);mk('line',{x1:m.l,x2:W-m.r,y1:y,y2:y,'class':'gl'},svg2);txt('text',{x:m.l-8,y:y+4,'text-anchor':'end','class':'tick'},svg2,(q>0?'+':'−')+Math.abs(q).toFixed(1));});
+  mk('line',{x1:m.l,x2:W-m.r,y1:z,y2:z,'class':'zero'},svg2);
+  txt('text',{x:m.l-8,y:z+4,'text-anchor':'end','class':'tick'},svg2,'0');
+  txt('text',{transform:'translate(14 '+(y2t+ph2/2)+') rotate(-90)','text-anchor':'middle','class':'atitle'},svg2,'residuo');
+  var yb=y2t+ph2;mk('line',{x1:m.l,x2:W-m.r,y1:yb,y2:yb,'class':'axis'},svg2);
+  var st=pw>430?0.02:0.04;
+  for(var q=0.98;q<=1.1601;q+=st){var qq=+q.toFixed(2),x=sx(qq);mk('line',{x1:x,x2:x,y1:yb,y2:yb+5,'class':'axis'},svg2);txt('text',{x:x,y:yb+18,'text-anchor':'middle','class':'tick'},svg2,qq.toFixed(2));}
+  txt('text',{x:m.l+pw/2,y:H-8,'text-anchor':'middle','class':'atitle'},svg2,pw>400?'Radio iónico r (Å) · el La a la derecha, como O’Neill':'Radio iónico r (Å) · La a la derecha');
+  var xr=sx(S.rb);mk('line',{x1:xr,x2:xr,y1:m.t,y2:yb,'class':'rbar'},svg2);
+  txt('text',{x:xr+5,y:m.t+ph1-6,'class':'rbar-t'},svg2,'r̄ = 1.0548');
+  var items=S.pts.map(function(p){return {x:sx(p.r),t:p.e.el};});items.push({x:sx(S.eu.r),t:'Eu',cls:'eu'});
+  elemRow(svg2,items,m.t-10);
+  var line=function(r){return L2.ap+L2.b*(r-S.rb);};
+  var g=mk('g',{'clip-path':'url(#l2clip)'},svg2);
+  S.pts.forEach(function(p){g.appendChild(spring(sx(p.r),sy(p.y),sy(line(p.r))));});
+  mk('line',{x1:sx(xmin),y1:sy(line(xmin)),x2:sx(xmax),y2:sy(line(xmax)),'class':'fitline'},g);
+  if(L2.mode==='c'){mk('circle',{cx:xr,cy:sy(L2.ap),r:6,'class':'pivot'},g);}
+  else{txt('text',{x:m.l+6,y:m.t+14,'class':'rbar-t halo'},svg2,pw>400?'← pivote en r = 0, a 1.05 Å a la izquierda':'← pivote en r = 0 (fuera)');}
+  var bw=Math.max(4,Math.min(10,pw/40));
+  S.pts.forEach(function(p){
+    var res=p.y-line(p.r),x=sx(p.r),y=sy2(res),top=Math.min(y,z),h=Math.max(1,Math.abs(y-z));
+    mk('rect',{x:x-bw/2,y:top,width:bw,height:h,rx:1.5,'class':'resbar'},svg2);
+    if(Math.abs(res)>RM){var e0=res>0?y2t+1:yb-1,e1=res>0?e0+6:e0-6;mk('polygon',{points:(x-bw/2+1)+','+e1+' '+(x+bw/2-1)+','+e1+' '+x+','+e0,'class':'clipmk'},svg2);}
+  });
+  var eg=mk('g',{'class':'pt eu'},svg2);mk('circle',{cx:sx(S.eu.r),cy:sy(S.eu.y),r:5,'class':'dot'},eg);
+  S.pts.forEach(function(p){
+    var x=sx(p.r),y=sy(p.y),lv=line(p.r);
+    var gp=mk('g',{'class':'pt',tabindex:'0',role:'img','aria-label':p.e.el+': y '+p.y.toFixed(3)+', recta '+lv.toFixed(3)+', residuo '+(p.y-lv).toFixed(3)},svg2);
+    mk('circle',{cx:x,cy:y,r:13,'class':'hit'},gp);mk('circle',{cx:x,cy:y,r:5,'class':'dot'},gp);
+    var sh=function(){showTip2(p,x,y,lv);};
+    gp.addEventListener('pointerenter',sh);gp.addEventListener('focus',sh);gp.addEventListener('pointerleave',hideTip2);gp.addEventListener('blur',hideTip2);
+  });
+  var F=0,T=0,SS=0;S.pts.forEach(function(p){var res=p.y-line(p.r);F+=res;T+=(p.r-S.rb)*res;SS+=res*res;});
+  document.getElementById('l2-f').textContent=fmtS(F,3);
+  document.getElementById('l2-t').textContent=fmtS(T,4);
+  document.getElementById('l2-ss').textContent=SS.toFixed(4);
+  document.getElementById('l2-ssmin').textContent='mínimo posible: '+S.ssmin.toFixed(4)+' · χ² (s = 2 %) = '+Math.round(SS/0.0004);
+  var scale=2*S.ss0,pct=function(v){return Math.min(100,100*v/scale);};
+  document.getElementById('l2-meter').style.width=pct(SS)+'%';
+  document.getElementById('l2-mkmin').style.left=pct(S.ssmin)+'%';
+  document.getElementById('l2-mkh').style.left=pct(S.ss0)+'%';
+  var a=L2.ap-L2.b*S.rb,sg=L2.b<0?'−':'+',bb=Math.abs(L2.b).toFixed(3);
+  var eq=document.getElementById('l2-eq');eq.replaceChildren();
+  var e1=document.createElement('span');e1.textContent='Centrada: ';var e1b=document.createElement('b');e1b.textContent='y = '+L2.ap.toFixed(3)+' '+sg+' '+bb+'·(r − 1.0548)';
+  var e2=document.createElement('span');e2.textContent='   ·   Desde el origen: ';var e2b=document.createElement('b');e2b.textContent='y = '+a.toFixed(3)+' '+sg+' '+bb+'·r';
+  eq.append(e1,e1b,e2,e2b);
+}
+window.__drawL2=function(){drawL2();drawOrigin();};
+function l2Relax(){
+  cancelAnimationFrame(L2.anim);
+  var S=L2.st,a0=L2.ap,b0=L2.b,a1=S.yb,b1=S.bs;
+  if(reduced){L2.ap=a1;L2.b=b1;l2Sync();drawL2();return;}
+  var t0=performance.now(),D=1500;
+  var f=function(now){
+    var t=Math.min(1,(now-t0)/D),k=t>=1?1:1-Math.exp(-6*t)*Math.cos(10*t);
+    L2.ap=a0+(a1-a0)*k;L2.b=b0+(b1-b0)*k;l2Sync();drawL2();
+    if(t<1)L2.anim=requestAnimationFrame(f);
+  };
+  L2.anim=requestAnimationFrame(f);
+}
+aIn.addEventListener('input',function(){cancelAnimationFrame(L2.anim);var v=+aIn.value;if(L2.mode==='c')L2.ap=v;else L2.ap=v+L2.b*L2.st.rb;l2Out();drawL2();});
+bIn.addEventListener('input',function(){cancelAnimationFrame(L2.anim);var S=L2.st,v=+bIn.value;if(L2.mode==='o'){var a=L2.ap-L2.b*S.rb;L2.b=v;L2.ap=a+v*S.rb;}else{L2.b=v;}l2Out();drawL2();});
+[].forEach.call(document.querySelectorAll('#lab2 [data-mode]'),function(btn){btn.addEventListener('click',function(){cancelAnimationFrame(L2.anim);L2.mode=btn.getAttribute('data-mode');l2Sliders();drawL2();});});
+sel2.addEventListener('change',function(){cancelAnimationFrame(L2.anim);l2Load(+sel2.value);drawL2();});
+document.getElementById('l2-relax').addEventListener('click',l2Relax);
+document.getElementById('l2-reset').addEventListener('click',function(){cancelAnimationFrame(L2.anim);L2.ap=L2.st.yb+0.35;L2.b=0;l2Sliders();drawL2();});
+[].forEach.call(document.querySelectorAll('#leccion-2 .goto'),function(b){
+  b.addEventListener('click',function(){
+    cancelAnimationFrame(L2.anim);
+    if(b.getAttribute('data-s')!==null&&+b.getAttribute('data-s')!==L2.s){l2Load(+b.getAttribute('data-s'));}
+    if(b.getAttribute('data-mode')){L2.mode=b.getAttribute('data-mode');l2Sliders();drawL2();}
+    var fig=document.getElementById('lab2'),r=fig.getBoundingClientRect();
+    if(r.top<nav.offsetHeight||r.bottom>window.innerHeight){fig.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});}
+    if(b.getAttribute('data-act')==='relax'){if(b.getAttribute('data-s')!==null){L2.mode='c';L2.ap=L2.st.yb+0.35;L2.b=0;l2Sliders();drawL2();}setTimeout(l2Relax,reduced?0:350);}
+  });
+});
+l2Load(0);
+
+/* ---------------- La trampa del origen (Fig. 1a) ---------------- */
+function drawOrigin(){
+  var box=document.getElementById('l2-origin');if(!box||!box.offsetParent)return;
+  var W=Math.max(290,Math.round(box.clientWidth)),H=Math.round(Math.max(240,Math.min(310,W*0.56)));
+  var m={t:22,r:74,b:44,l:34},pw=W-m.l-m.r,ph=H-m.t-m.b;
+  var sx=function(r){return m.l+r/1.22*pw;},sy=function(v){return m.t+(1-v/6)*ph;};
+  var s=box.querySelector('svg');
+  if(!s){s=mk('svg',{role:'img','aria-label':'Cuatro rectas A, B, C y D prolongadas hasta r = 0. En r = 0 sus valores son 5, 3, 4 y 2; en el radio medio, 1.84, 3, 4 y 5.16.'},box);}
+  s.replaceChildren();s.setAttribute('viewBox','0 0 '+W+' '+H);s.setAttribute('width',W);s.setAttribute('height',H);
+  mk('rect',{x:sx(0.977),y:m.t,width:sx(1.16)-sx(0.977),height:ph,'class':'band'},s);
+  txt('text',{x:(sx(0.977)+sx(1.16))/2,y:m.t-8,'text-anchor':'middle','class':'band-t'},s,'DATOS');
+  [0,1,2,3,4,5,6].forEach(function(v){var y=sy(v);mk('line',{x1:m.l,x2:m.l+pw,y1:y,y2:y,'class':'gl'},s);txt('text',{x:m.l-8,y:y+4,'text-anchor':'end','class':'tick'},s,String(v));});
+  mk('line',{x1:m.l,x2:m.l+pw,y1:m.t+ph,y2:m.t+ph,'class':'axis'},s);
+  [0,0.2,0.4,0.6,0.8,1.0,1.2].forEach(function(v){var x=sx(v);mk('line',{x1:x,x2:x,y1:m.t+ph,y2:m.t+ph+5,'class':'axis'},s);txt('text',{x:x,y:m.t+ph+18,'text-anchor':'middle','class':'tick'},s,v.toFixed(1));});
+  txt('text',{x:m.l+pw/2,y:H-8,'text-anchor':'middle','class':'atitle'},s,'Radio iónico r (Å), desde r = 0');
+  var xr=sx(1.0548);mk('line',{x1:xr,x2:xr,y1:m.t,y2:m.t+ph,'class':'rbar'},s);
+  [{n:'A',a:5,b:-3},{n:'B',a:3,b:0},{n:'C',a:4,b:0},{n:'D',a:2,b:3}].forEach(function(p){
+    var f=function(r){return p.a+p.b*r;};
+    mk('line',{x1:sx(0),y1:sy(f(0)),x2:sx(0.977),y2:sy(f(0.977)),'class':'extrap'},s);
+    mk('line',{x1:sx(0.977),y1:sy(f(0.977)),x2:sx(1.16),y2:sy(f(1.16)),'class':'fitline'},s);
+    mk('circle',{cx:sx(0),cy:sy(f(0)),r:4.5,'class':'odot'},s);
+    txt('text',{x:sx(0)+9,y:sy(f(0))+(p.b>0?14:-7),'class':'olab'},s,String(p.a));
+    mk('circle',{cx:xr,cy:sy(f(1.0548)),r:4.5,'class':'odot'},s);
+    var v=f(1.0548);
+    txt('text',{x:sx(1.16)+8,y:sy(f(1.16))+4,'class':'olab'},s,p.n+' ('+(Math.abs(v-Math.round(v))<0.005?String(Math.round(v)):v.toFixed(2))+')');
+  });
+}
+
+/* ---------------- Ejercicios de la Lección 2 ---------------- */
+document.getElementById('l2ex1').addEventListener('submit',function(ev){ev.preventDefault();
+  var v=num(document.getElementById('l2ex1-in').value);
+  if(isNaN(v)){feedback('l2ex1',false,'Escribe un número (vale el punto o la coma).');return;}
+  if(Math.abs(v-11.026)<0.05)feedback('l2ex1',true,'¡Correcto! 0.52063 / 0.04722 = 11.03. Es positivo: VG 4080 está enriquecida en REE ligeras y su patrón sube hacia el La.');
+  else if(Math.abs(v-0.0907)<0.003)feedback('l2ex1',false,'Has dividido al revés: es Σx′y entre Σx′².');
+  else feedback('l2ex1',false,'Aún no. Divide Σx′·y = 0.52063 entre Σx′² = 0.04722.');
+});
+document.getElementById('l2ex2').addEventListener('submit',function(ev){ev.preventDefault();
+  var v=num(document.getElementById('l2ex2-in').value);
+  if(isNaN(v)){feedback('l2ex2',false,'Escribe un número.');return;}
+  if(Math.abs(v)<1e-9)feedback('l2ex2',true,'Exacto: cero, sea cual sea la pendiente. Por eso la suma simple no sirve para elegir la recta y hacen falta los cuadrados.');
+  else feedback('l2ex2',false,'Piensa en la fuerza neta de la figura: si la recta pasa por (r̄, ȳ), los residuos positivos y negativos se compensan exactamente.');
+});
+[].forEach.call(document.querySelectorAll('[data-mc]'),function(b){b.addEventListener('click',function(){
+  var k=b.getAttribute('data-mc');
+  if(k==='l0')feedback('l2ex3',true,'¡Correcto! Doblar todas las REE suma ln 2 = 0.69 a todas las y (Lección 1): la recta sube 0.69 sin inclinarse. λ₀ aumenta 0.69 y λ₁ no cambia.');
+  else feedback('l2ex3',false,'Recuerda la Lección 1: multiplicar por 2 es sumar 0.69 a todas las y. ¿Cambia eso la inclinación de la recta?');
+});});
+
+/* ---------------- Laboratorio 3 (Lección 3) ---------------- */
+function gaussSolve(A,b){
+  var n=b.length,M=A.map(function(r){return r.slice();}),v=b.slice();
+  for(var i=0;i<n;i++){
+    var p=i;for(var k=i+1;k<n;k++){if(Math.abs(M[k][i])>Math.abs(M[p][i]))p=k;}
+    var t=M[i];M[i]=M[p];M[p]=t;var tv=v[i];v[i]=v[p];v[p]=tv;
+    for(var k2=i+1;k2<n;k2++){var f=M[k2][i]/M[i][i];for(var j=i;j<n;j++){M[k2][j]-=f*M[i][j];}v[k2]-=f*v[i];}
+  }
+  var x=new Array(n);
+  for(var i2=n-1;i2>=0;i2--){var s=v[i2];for(var j2=i2+1;j2<n;j2++){s-=M[i2][j2]*x[j2];}x[i2]=s/M[i2][i2];}
+  return x;
+}
+function binom(n,k){var r=1;for(var i=1;i<=k;i++){r=r*(n-k+i)/i;}return r;}
+function pts13(si){var s=SAMPLES[si],p=[];REE.forEach(function(e,i){if(e.el!=='Eu')p.push({e:e,r:e.r,y:Math.log(s.ppm[i]/e.ci)});});return p;}
+function polyFit(pts,m){
+  var N=pts.length,rb=0;pts.forEach(function(p){rb+=p.r;});rb/=N;var h=0.1,G=[],g=[];
+  for(var j=0;j<m;j++){
+    G.push([]);var s=0;pts.forEach(function(p){s+=Math.pow((p.r-rb)/h,j)*p.y;});g.push(s);
+    for(var k=0;k<m;k++){var t=0;pts.forEach(function(p){t+=Math.pow((p.r-rb)/h,j+k);});G[j].push(t);}
+  }
+  var c=gaussSolve(G,g),a=[];
+  for(var j2=0;j2<m;j2++){var s2=0;for(var k2=j2;k2<m;k2++){s2+=c[k2]*Math.pow(h,-k2)*binom(k2,j2)*Math.pow(-rb,k2-j2);}a.push(s2);}
+  var ev=function(r){var u=(r-rb)/h,s3=0;for(var k3=m-1;k3>=0;k3--){s3=s3*u+c[k3];}return s3;};
+  var SS=0;pts.forEach(function(p){var q=p.y-ev(p.r);SS+=q*q;});
+  return {a:a,ev:ev,SS:SS,m:m};
+}
+var L3={s:0,m:2,anim:0,cur:null,sym:false};
+var p3=document.getElementById('l3-plot'),svg3=p3.querySelector('svg'),tip3=p3.querySelector('.tip');
+var sel3=document.getElementById('l3-sample');
+SAMPLES.forEach(function(s,i){var o=document.createElement('option');o.value=String(i);o.textContent=s.name;sel3.appendChild(o);});
+var L3X=[];for(var q3=0;q3<=80;q3++){L3X.push(0.968+q3*(1.169-0.968)/80);}
+function fmtA(v){var a=Math.abs(v),s=a>=1000?a.toFixed(1):(a>=10?a.toFixed(2):a.toFixed(3));return (v<0?'−':'')+s;}
+function hideTip3(){tip3.hidden=true;}
+function l3State(){
+  var pts=pts13(L3.s),F=polyFit(pts,L3.m);
+  var st=pts.map(function(p){return {r:p.r,y:p.y,c:F.ev(p.r)};});
+  var cv=L3X.map(function(r){return F.ev(r);});
+  var mx=0;st.forEach(function(q){mx=Math.max(mx,Math.abs(q.y-q.c));});
+  var steps=[0.05,0.1,0.2,0.5,1,2],RM=steps[steps.length-1];for(var i=0;i<steps.length;i++){if(mx*1.12<=steps[i]){RM=steps[i];break;}}
+  return {pts:pts,F:F,st:st,cv:cv,RM:RM};
+}
+function drawL3frame(T,cv,cs){
+  var S=T,W=Math.max(300,Math.round(p3.clientWidth));
+  var ph1=Math.round(Math.max(180,Math.min(250,W*0.42))),ph2=78,gap=20;
+  var m={t:40,r:14,b:46,l:58},pw=W-m.l-m.r,H=m.t+ph1+gap+ph2+m.b;
+  var xmin=0.965,xmax=1.172,sx=function(r){return m.l+(r-xmin)/(xmax-xmin)*pw;};
+  var ymin=Infinity,ymax=-Infinity;S.pts.forEach(function(p){ymin=Math.min(ymin,p.y);ymax=Math.max(ymax,p.y);});
+  var eu={r:REE[5].r,y:Math.log(SAMPLES[L3.s].ppm[5]/REE[5].ci)};ymin=Math.min(ymin,eu.y);ymax=Math.max(ymax,eu.y);
+  var ylo=ymin-0.3,yhi=ymax+0.3,sy=function(v){return m.t+(1-(v-ylo)/(yhi-ylo))*ph1;};
+  var y2t=m.t+ph1+gap,RM=S.RM,sy2=function(v){var c=Math.max(-RM,Math.min(RM,v));return y2t+ph2/2-c/RM*(ph2/2);};
+  svg3.replaceChildren();svg3.setAttribute('viewBox','0 0 '+W+' '+H);svg3.setAttribute('width',W);svg3.setAttribute('height',H);
+  var defs=mk('defs',null,svg3),cp=mk('clipPath',{id:'l3clip'},defs);mk('rect',{x:m.l,y:m.t,width:pw,height:ph1},cp);
+  var yt=niceTicks(ylo,yhi,5),d=decs(yt.step);
+  yt.vals.forEach(function(q){if(q<ylo||q>yhi)return;var y=sy(q);mk('line',{x1:m.l,x2:W-m.r,y1:y,y2:y,'class':'gl'},svg3);txt('text',{x:m.l-8,y:y+4,'text-anchor':'end','class':'tick'},svg3,q.toFixed(d));});
+  txt('text',{transform:'translate(14 '+(m.t+ph1/2)+') rotate(-90)','text-anchor':'middle','class':'atitle'},svg3,'y = ln([REE]/[REE]CI)');
+  var z=sy2(0);
+  mk('rect',{x:m.l,y:sy2(0.02),width:pw,height:Math.max(1,sy2(-0.02)-sy2(0.02)),'class':'band2'},svg3);
+  [RM,-RM].forEach(function(q){var y=sy2(q);mk('line',{x1:m.l,x2:W-m.r,y1:y,y2:y,'class':'gl'},svg3);txt('text',{x:m.l-8,y:y+4,'text-anchor':'end','class':'tick'},svg3,(q>0?'+':'−')+Math.abs(q));});
+  mk('line',{x1:m.l,x2:W-m.r,y1:z,y2:z,'class':'zero'},svg3);
+  txt('text',{x:m.l-8,y:z+4,'text-anchor':'end','class':'tick'},svg3,'0');
+  txt('text',{x:W-m.r-2,y:sy2(0.02)-3,'text-anchor':'end','class':'band2-t'},svg3,'±2 %');
+  txt('text',{transform:'translate(14 '+(y2t+ph2/2)+') rotate(-90)','text-anchor':'middle','class':'atitle'},svg3,'residuo');
+  var yb=y2t+ph2;mk('line',{x1:m.l,x2:W-m.r,y1:yb,y2:yb,'class':'axis'},svg3);
+  var stp=pw>430?0.02:0.04;
+  for(var q=0.98;q<=1.1601;q+=stp){var qq=+q.toFixed(2),x=sx(qq);mk('line',{x1:x,x2:x,y1:yb,y2:yb+5,'class':'axis'},svg3);txt('text',{x:x,y:yb+18,'text-anchor':'middle','class':'tick'},svg3,qq.toFixed(2));}
+  txt('text',{x:m.l+pw/2,y:H-8,'text-anchor':'middle','class':'atitle'},svg3,pw>400?'Radio iónico r (Å) · el La a la derecha, como O’Neill':'Radio iónico r (Å) · La a la derecha');
+  var items=S.pts.map(function(p){return {x:sx(p.r),t:p.e.el};});items.push({x:sx(eu.r),t:'Eu',cls:'eu'});
+  elemRow(svg3,items,m.t-10);
+  var g=mk('g',{'clip-path':'url(#l3clip)'},svg3);
+  S.pts.forEach(function(p,i){g.appendChild(spring(sx(p.r),sy(p.y),sy(cs[i])));});
+  mk('polyline',{points:L3X.map(function(r,i){return sx(r).toFixed(1)+','+sy(cv[i]).toFixed(1);}).join(' '),'class':'curve'},g);
+  var bw=Math.max(4,Math.min(10,pw/40));
+  S.pts.forEach(function(p,i){
+    var res=p.y-cs[i],x=sx(p.r),y=sy2(res),top=Math.min(y,z),h=Math.max(1,Math.abs(y-z));
+    mk('rect',{x:x-bw/2,y:top,width:bw,height:h,rx:1.5,'class':'resbar'},svg3);
+  });
+  var eg=mk('g',{'class':'pt eu'},svg3);mk('circle',{cx:sx(eu.r),cy:sy(eu.y),r:5,'class':'dot'},eg);
+  S.pts.forEach(function(p,i){
+    var x=sx(p.r),y=sy(p.y),cvv=cs[i];
+    var gp=mk('g',{'class':'pt',tabindex:'0',role:'img','aria-label':p.e.el+': y '+p.y.toFixed(3)+', curva '+cvv.toFixed(3)},svg3);
+    mk('circle',{cx:x,cy:y,r:13,'class':'hit'},gp);mk('circle',{cx:x,cy:y,r:5,'class':'dot'},gp);
+    var sh=function(){
+      var res=p.y-cvv;tip3.replaceChildren();
+      var a=document.createElement('strong');a.textContent='residuo = '+fmtS(res,3);
+      var b=document.createElement('span');b.textContent=p.e.el+' · r = '+p.r.toFixed(3)+' Å';
+      var c=document.createElement('span');c.className='muted';c.textContent='y = '+p.y.toFixed(3)+' · curva = '+cvv.toFixed(3);
+      tip3.append(a,b,c);tip3.hidden=false;
+      var bw2=p3.clientWidth,tw=tip3.offsetWidth,th=tip3.offsetHeight,left=x+14;if(left+tw>bw2-4)left=x-tw-14;left=Math.max(4,left);
+      var top=y-th-10;if(top<4)top=y+16;tip3.style.left=left+'px';tip3.style.top=top+'px';
+    };
+    gp.addEventListener('pointerenter',sh);gp.addEventListener('focus',sh);gp.addEventListener('pointerleave',hideTip3);gp.addEventListener('blur',hideTip3);
+  });
+}
+function l3Readouts(T){
+  var F=T.F,nu=13-L3.m,s=Math.sqrt(F.SS/nu);
+  document.getElementById('l3-s').textContent=s.toFixed(3)+' (≈ '+Math.round(100*s)+' %)';
+  document.getElementById('l3-chi').textContent=(F.SS/0.0004/nu).toFixed(1);
+  document.getElementById('l3-nu').textContent=String(nu);
+  var cf=document.getElementById('l3-coefs');cf.replaceChildren();
+  var lead=document.createElement('span');lead.textContent='Coeficientes: ';cf.appendChild(lead);
+  F.a.forEach(function(v,k){if(k)cf.appendChild(document.createTextNode(' · '));var b=document.createElement('b');b.textContent='a'+['₀','₁','₂','₃','₄'][k]+' = '+fmtA(v);cf.appendChild(b);});
+  if(L3.m>=3){var n=document.createElement('span');n.textContent=' — números gigantes que se cancelan entre sí (Lección 4).';cf.appendChild(n);}
+  [].forEach.call(document.querySelectorAll('#lab3 [data-m]'),function(b){b.setAttribute('aria-pressed',+b.getAttribute('data-m')===L3.m?'true':'false');});
+  sel3.value=String(L3.s);document.getElementById('l3-meta').textContent=SAMPLES[L3.s].meta;
+}
+function drawL3(animate){
+  if(!p3.offsetParent)return;
+  hideTip3();cancelAnimationFrame(L3.anim);
+  var T=l3State(),cs=T.st.map(function(q){return q.c;});
+  l3Readouts(T);renderMatrix(T);
+  var from=L3.cur;
+  if(!animate||!from||reduced||from.cs.length!==cs.length){L3.cur={cv:T.cv,cs:cs};drawL3frame(T,T.cv,cs);return;}
+  var t0=performance.now(),D=650,ease=function(t){return t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;};
+  var f=function(now){
+    var k=Math.min(1,(now-t0)/D),e=ease(k);
+    var cv=T.cv.map(function(v,i){return from.cv[i]+(v-from.cv[i])*e;}),c2=cs.map(function(v,i){return from.cs[i]+(v-from.cs[i])*e;});
+    L3.cur={cv:cv,cs:c2};drawL3frame(T,cv,c2);
+    if(k<1)L3.anim=requestAnimationFrame(f);
+  };
+  L3.anim=requestAnimationFrame(f);
+}
+var SUP=['⁰','¹','²','³','⁴','⁵','⁶','⁷','⁸'];
+var SUB=['₀','₁','₂','₃','₄'];
+function renderMatrix(T){
+  var box=document.getElementById('l3-mtx');if(!box)return;
+  var m=L3.m,pts=T.pts,Sk=[],Bk=[];
+  for(var k=0;k<=8;k++){var t=0;pts.forEach(function(p){t+=Math.pow(p.r,k);});Sk.push(t);}
+  for(var j=0;j<5;j++){var u=0;pts.forEach(function(p){u+=Math.pow(p.r,j)*p.y;});Bk.push(u);}
+  document.getElementById('l3-mtx-title').textContent='El sistema de '+SAMPLES[L3.s].name+' con '+m+(m===1?' término':' términos');
+  box.replaceChildren();
+  var row=document.createElement('div');row.className='mtx-row';
+  var blk=function(label,cls,cols){var b=document.createElement('div');b.className='mblk';var l=document.createElement('div');l.className='mlab';l.textContent=label;var g=document.createElement('div');g.className='mtx '+cls;g.style.gridTemplateColumns='repeat('+cols+',auto)';b.append(l,g);return {b:b,g:g};};
+  var A=blk('α (solo radios)','al',m),U=blk('a','un',1),B=blk('β (datos)','be',1);
+  for(var r=0;r<m;r++){for(var c=0;c<m;c++){var n=r+c,sp=document.createElement('span');sp.setAttribute('data-n',String(n));
+      sp.textContent=L3.sym?(n===0?'N':(n===1?'Σr':'Σr'+SUP[n])):(n===0?'13':Sk[n].toFixed(3));A.g.appendChild(sp);}
+    var su=document.createElement('span');su.textContent='a'+SUB[r];U.g.appendChild(su);
+    var sb=document.createElement('span');sb.textContent=L3.sym?(r===0?'Σy':(r===1?'Σr·y':'Σr'+SUP[r]+'·y')):Bk[r].toFixed(3);B.g.appendChild(sb);}
+  var op1=document.createElement('div');op1.className='mtx-op';op1.textContent='·';
+  var op2=document.createElement('div');op2.className='mtx-op';op2.textContent='=';
+  row.append(A.b,op1,U.b,op2,B.b);box.appendChild(row);
+  [].forEach.call(A.g.children,function(sp){
+    sp.addEventListener('pointerenter',function(){var n=sp.getAttribute('data-n');[].forEach.call(A.g.children,function(o){o.classList.toggle('hl',o.getAttribute('data-n')===n);});});
+    sp.addEventListener('pointerleave',function(){[].forEach.call(A.g.children,function(o){o.classList.remove('hl');});});
+  });
+  var sol=document.createElement('p');sol.className='mtx-sol';
+  sol.appendChild(document.createTextNode('Solución, a = α⁻¹·β: '));
+  T.F.a.forEach(function(v,k){if(k)sol.appendChild(document.createTextNode(' · '));var b=document.createElement('b');b.textContent='a'+SUB[k]+' = '+fmtA(v);sol.appendChild(b);});
+  box.appendChild(sol);
+  document.getElementById('l3-sym').textContent=L3.sym?'Ver con números':'Ver con símbolos';
+}
+[].forEach.call(document.querySelectorAll('#lab3 [data-m]'),function(b){b.addEventListener('click',function(){L3.m=+b.getAttribute('data-m');drawL3(true);});});
+sel3.addEventListener('change',function(){L3.s=+sel3.value;L3.cur=null;drawL3(false);});
+document.getElementById('l3-sym').addEventListener('click',function(){L3.sym=!L3.sym;renderMatrix(l3State());});
+[].forEach.call(document.querySelectorAll('#leccion-3 .goto'),function(b){
+  b.addEventListener('click',function(){
+    if(b.getAttribute('data-m')){L3.m=+b.getAttribute('data-m');drawL3(true);}
+    var fig=document.getElementById('lab3'),r=fig.getBoundingClientRect();
+    if(r.top<nav.offsetHeight||r.bottom>window.innerHeight){fig.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});}
+  });
+});
+window.__drawL3=function(){L3.cur=null;drawL3(false);};
+document.getElementById('l3ex1').addEventListener('submit',function(ev){ev.preventDefault();
+  var v=num(document.getElementById('l3ex1-in').value);
+  if(isNaN(v)){feedback('l3ex1',false,'Escribe un número.');return;}
+  if(v===2)feedback('l3ex1',true,'¡Correcto! Hasta r³ el polinomio puede doblarse dos veces y dibujar una S. A partir de dos términos, el máximo de curvas es el número de términos menos 2.');
+  else if(v===3)feedback('l3ex1',false,'Tres curvas necesitan cinco términos (hasta r⁴), la W. Con cuatro, una menos.');
+  else feedback('l3ex1',false,'Mira los dibujos de arriba: con 3 términos, una curva; con 5, tres. ¿Y con 4?');
+});
+document.getElementById('l3ex3').addEventListener('submit',function(ev){ev.preventDefault();
+  var v=num(document.getElementById('l3ex3-in').value);
+  if(isNaN(v)){feedback('l3ex3',false,'Escribe un número.');return;}
+  if(v===8)feedback('l3ex3',true,'¡Correcto! 13 − 5 = 8. (La macro de O’Neill divide entre 9 al calcular su χ² reducido; lo comentaremos en la Lección 7.)');
+  else if(v===9)feedback('l3ex3',false,'Casi: ese es el número que usa la macro de O’Neill, pero cada uno de los 5 coeficientes gasta un punto: 13 − 5.');
+  else feedback('l3ex3',false,'Resta al número de puntos (13) el número de coeficientes (5).');
+});
+[].forEach.call(document.querySelectorAll('[data-mc3]'),function(b){b.addEventListener('click',function(){
+  if(b.getAttribute('data-mc3')==='no')feedback('l3ex2',true,'¡Correcto! α solo contiene sumas de potencias de los radios, así que es la misma para todas las muestras. Lo único que cambia es β.');
+  else feedback('l3ex2',false,'Mira sus elementos: Σr, Σr², Σr³… ¿Aparece en ellos algún dato de la muestra?');
+});});
+
+/* ---------------- Lección 4 ---------------- */
+var L4PTS=pts13(0),L4FIT={};[2,3,4,5].forEach(function(m){L4FIT[m]=polyFit(L4PTS,m);});
+function plotFrame(box,Hmin,Hmax,ratio){
+  var W=Math.max(280,Math.round(box.clientWidth)),H=Math.round(Math.max(Hmin,Math.min(Hmax,W*ratio)));
+  var s=box.querySelector('svg');if(!s){s=mk('svg',{role:'img'},box);}
+  s.replaceChildren();s.setAttribute('viewBox','0 0 '+W+' '+H);s.setAttribute('width',W);s.setAttribute('height',H);
+  return {s:s,W:W,H:H};
+}
+function axesXY(s,m,W,H,xlo,xhi,ylo,yhi,xfmt,yfmt,xt,yt,nx,ny){
+  var pw=W-m.l-m.r,ph=H-m.t-m.b;
+  var sx=function(v){return m.l+(v-xlo)/(xhi-xlo)*pw;},sy=function(v){return m.t+(1-(v-ylo)/(yhi-ylo))*ph;};
+  var ty=niceTicks(ylo,yhi,ny||5);ty.vals.forEach(function(q){if(q<ylo-1e-9||q>yhi+1e-9)return;var y=sy(q);mk('line',{x1:m.l,x2:W-m.r,y1:y,y2:y,'class':'gl'},s);txt('text',{x:m.l-7,y:y+4,'text-anchor':'end','class':'tick'},s,yfmt(q,ty.step));});
+  var tx=niceTicks(xlo,xhi,nx||6),yb=m.t+ph;mk('line',{x1:m.l,x2:W-m.r,y1:yb,y2:yb,'class':'axis'},s);
+  tx.vals.forEach(function(q){if(q<xlo-1e-9||q>xhi+1e-9)return;var x=sx(q);mk('line',{x1:x,x2:x,y1:yb,y2:yb+5,'class':'axis'},s);txt('text',{x:x,y:yb+17,'text-anchor':'middle','class':'tick'},s,xfmt(q,tx.step));});
+  if(xt)txt('text',{x:m.l+pw/2,y:H-6,'text-anchor':'middle','class':'atitle'},s,xt);
+  if(yt)txt('text',{transform:'translate(13 '+(m.t+ph/2)+') rotate(-90)','text-anchor':'middle','class':'atitle'},s,yt);
+  return {sx:sx,sy:sy,pw:pw,ph:ph};
+}
+function numFmt(q,step){var d=decs(step);var v=Math.abs(q)<1e-12?0:q;var t=Math.abs(v).toFixed(d);if(Math.abs(v)>=10000)t=String(Math.round(Math.abs(v))).replace(/\B(?=(\d{3})+(?!\d))/g,'\u2009');return (v<0?'−':'')+t;}
+function drawZoom(){
+  var box=document.getElementById('l4-zoom');if(!box||!box.offsetParent)return;
+  var t=+document.getElementById('l4-zoom-t').value/100,rmin=0.965*(1-t),rmax=1.172;
+  document.getElementById('l4-zoom-o').textContent='r desde '+rmin.toFixed(2)+' Å';
+  var F=plotFrame(box,250,340,0.52),m={t:14,r:14,b:44,l:62};
+  var n=260,xs=[];for(var i=0;i<n;i++){xs.push(rmin+(rmax-rmin)*i/(n-1));}
+  var lo=Infinity,hi=-Infinity,ys={};
+  [2,3,4,5].forEach(function(k){ys[k]=xs.map(function(r){return L4FIT[k].ev(r);});ys[k].forEach(function(v){lo=Math.min(lo,v);hi=Math.max(hi,v);});});
+  L4PTS.forEach(function(p){lo=Math.min(lo,p.y);hi=Math.max(hi,p.y);});
+  var pad=(hi-lo)*0.06;lo-=pad;hi+=pad;
+  var A=axesXY(F.s,m,F.W,F.H,rmin,rmax,lo,hi,function(q,st){return q.toFixed(Math.max(1,decs(st)));},numFmt,'Radio iónico r (Å)','y = ln([REE]/[REE]CI)',F.W>520?7:5,5);
+  mk('rect',{x:A.sx(0.977),y:m.t,width:Math.max(1,A.sx(1.160)-A.sx(0.977)),height:A.ph,'class':'band'},F.s);
+  if(F.s.firstChild){F.s.insertBefore(F.s.lastChild,F.s.firstChild);}
+  var cp='l4zc';var defs=mk('defs',null,F.s),c=mk('clipPath',{id:cp},defs);mk('rect',{x:m.l,y:m.t,width:A.pw,height:A.ph},c);
+  var g=mk('g',{'clip-path':'url(#'+cp+')'},F.s);
+  [2,3,4,5].forEach(function(k){mk('polyline',{points:xs.map(function(r,i){return A.sx(r).toFixed(1)+','+A.sy(ys[k][i]).toFixed(1);}).join(' '),'class':'kline k'+k},g);});
+  L4PTS.forEach(function(p){var pg=mk('g',{'class':'pt'},F.s);mk('circle',{cx:A.sx(p.r),cy:A.sy(p.y),r:3.5,'class':'dot'},pg);});
+  var rd=document.getElementById('l4-zoom-read');rd.replaceChildren();
+  rd.appendChild(document.createTextNode((t>=1?'En r = 0 (son los a₀): ':'Valor de cada curva en r = '+rmin.toFixed(2)+' Å: ')));
+  [2,3,4,5].forEach(function(k,j){if(j)rd.appendChild(document.createTextNode(' · '));var b=document.createElement('b');b.textContent=k+' t. '+fmtA(L4FIT[k].ev(rmin));rd.appendChild(b);});
+}
+function drawPieces(){
+  var box=document.getElementById('l4-pieces');if(!box||!box.offsetParent)return;
+  var F=plotFrame(box,220,300,0.46),m={t:12,r:14,b:44,l:52};
+  var A=axesXY(F.s,m,F.W,F.H,0.977,1.160,0,1,function(q,st){return q.toFixed(Math.max(2,decs(st)));},function(q,st){return q.toFixed(decs(st));},'Radio iónico r (Å)','valor reescalado',F.W>520?6:4,5);
+  var n=120;
+  [1,2,3,4].forEach(function(k){
+    var a=Math.pow(0.977,k),b=Math.pow(1.160,k),pts=[];
+    for(var i=0;i<n;i++){var r=0.977+(1.160-0.977)*i/(n-1);pts.push(A.sx(r).toFixed(1)+','+A.sy((Math.pow(r,k)-a)/(b-a)).toFixed(1));}
+    mk('polyline',{points:pts.join(' '),'class':'kline k'+(k+1)},F.s);
+  });
+}
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function gaussR(rnd){var u=0,v=0;while(u===0)u=rnd();while(v===0)v=rnd();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+var MC={seed:21,m:2,noise:null};
+function mcNoise(){var rnd=mulberry32(MC.seed),out=[];for(var s=0;s<300;s++){out.push(L4PTS.map(function(){return 0.02*gaussR(rnd);}));}MC.noise=out;}
+function stats(arr){var n=arr.length,mx=0,my=0;arr.forEach(function(p){mx+=p[0];my+=p[1];});mx/=n;my/=n;var sxx=0,syy=0,sxy=0;arr.forEach(function(p){sxx+=(p[0]-mx)*(p[0]-mx);syy+=(p[1]-my)*(p[1]-my);sxy+=(p[0]-mx)*(p[1]-my);});return {sx:Math.sqrt(sxx/(n-1)),sy:Math.sqrt(syy/(n-1)),r:sxy/Math.sqrt(sxx*syy)};}
+function scatterPanel(box,pts,ref,xl,yl){
+  var F=plotFrame(box,220,300,0.8),m={t:10,r:12,b:42,l:62};
+  var xs=pts.map(function(p){return p[0];}),ys=pts.map(function(p){return p[1];});
+  var xlo=Math.min.apply(null,xs),xhi=Math.max.apply(null,xs),ylo=Math.min.apply(null,ys),yhi=Math.max.apply(null,ys);
+  var px=(xhi-xlo)*0.08||1,py=(yhi-ylo)*0.08||1;xlo-=px;xhi+=px;ylo-=py;yhi+=py;
+  var A=axesXY(F.s,m,F.W,F.H,xlo,xhi,ylo,yhi,numFmt,numFmt,xl,yl,4,5);
+  pts.forEach(function(p){mk('circle',{cx:A.sx(p[0]).toFixed(1),cy:A.sy(p[1]).toFixed(1),r:2.3,'class':'mcpt'},F.s);});
+  mk('circle',{cx:A.sx(ref[0]),cy:A.sy(ref[1]),r:5,'class':'mc0'},F.s);
+}
+function drawMC(){
+  var ba=document.getElementById('l4-mc-a'),bl=document.getElementById('l4-mc-l');if(!ba||!ba.offsetParent)return;
+  if(!MC.noise)mcNoise();
+  var rb=0;L4PTS.forEach(function(p){rb+=p.r;});rb/=L4PTS.length;var sxx=0;L4PTS.forEach(function(p){sxx+=(p.r-rb)*(p.r-rb);});
+  var A=[],L=[];
+  MC.noise.forEach(function(nz){
+    var pts=L4PTS.map(function(p,i){return {r:p.r,y:p.y+nz[i],e:p.e};});
+    var Fm=polyFit(pts,MC.m);A.push([Fm.a[0],Fm.a[1]]);
+    var l0=0,l1=0;pts.forEach(function(p){l0+=p.y;l1+=(p.r-rb)*p.y;});L.push([l0/pts.length,l1/sxx]);
+  });
+  var F0=L4FIT[MC.m]||polyFit(L4PTS,MC.m);
+  var l00=0,l10=0;L4PTS.forEach(function(p){l00+=p.y;l10+=(p.r-rb)*p.y;});
+  scatterPanel(ba,A,[F0.a[0],F0.a[1]],'a₀','a₁');
+  scatterPanel(bl,L,[l00/L4PTS.length,l10/sxx],'λ₀','λ₁');
+  var sa=stats(A),sl=stats(L);
+  var put=function(id,s,n0,n1,d0,d1){var el=document.getElementById(id);el.replaceChildren();
+    el.appendChild(document.createTextNode('correlación = '));var b=document.createElement('b');b.textContent=fmtS(s.r,MC.m===5?5:3);el.appendChild(b);
+    el.appendChild(document.createTextNode(' · desviación típica: '+n0+' '));var b2=document.createElement('b');b2.textContent=s.sx.toFixed(d0);el.appendChild(b2);
+    el.appendChild(document.createTextNode(', '+n1+' '));var b3=document.createElement('b');b3.textContent=s.sy.toFixed(d1);el.appendChild(b3);};
+  put('l4-mc-as',sa,'a₀','a₁',MC.m===5?0:3,MC.m===5?0:3);
+  put('l4-mc-ls',sl,'λ₀','λ₁',4,3);
+  [].forEach.call(document.querySelectorAll('#l4-mc [data-mcm]'),function(b){b.setAttribute('aria-pressed',+b.getAttribute('data-mcm')===MC.m?'true':'false');});
+}
+function drawDD(){
+  var box=document.getElementById('l4-dd');if(!box||!box.offsetParent)return;
+  var l2=+document.getElementById('l4-l2').value;document.getElementById('l4-l2o').textContent='λ₂ = '+l2;
+  var L0=2+3*1.054769,L1=3,f1=function(r){return r-1.054769;},f2=function(r){return (r-1.005327429)*(r-1.128236038);};
+  var D=function(r){return 2+3*r;},Dd=function(r){return L0+L1*f1(r)+l2*f2(r);};
+  var F=plotFrame(box,220,300,0.46),m={t:12,r:14,b:44,l:52};
+  var xs=[];for(var i=0;i<=100;i++){xs.push(0.968+(1.169-0.968)*i/100);}
+  var lo=Infinity,hi=-Infinity;xs.forEach(function(r){[D(r),Dd(r)].forEach(function(v){lo=Math.min(lo,v);hi=Math.max(hi,v);});});
+  lo=Math.min(lo,4.6);hi=Math.max(hi,5.9);
+  var A=axesXY(F.s,m,F.W,F.H,0.965,1.172,lo,hi,function(q,st){return q.toFixed(Math.max(2,decs(st)));},function(q,st){return q.toFixed(Math.max(1,decs(st)));},'Radio iónico r (Å) · el La a la derecha','ln([REE]/[REE]CI)',F.W>520?6:4,5);
+  mk('polyline',{points:xs.map(function(r){return A.sx(r).toFixed(1)+','+A.sy(D(r)).toFixed(1);}).join(' '),'class':'dref'},F.s);
+  mk('polyline',{points:xs.map(function(r){return A.sx(r).toFixed(1)+','+A.sy(Dd(r)).toFixed(1);}).join(' '),'class':'kline k5'},F.s);
+  var a2=l2,a1=L1-2.133563*l2,a0=L0-1.054769*L1+1.134247*l2;
+  var tb=document.querySelector('#l4-dd-tab tbody');tb.replaceChildren();
+  var rowF=function(name,v){var tr=document.createElement('tr');var th=document.createElement('th');th.scope='row';th.style.textAlign='left';th.textContent=name;tr.appendChild(th);
+    v.forEach(function(x,k){var td=document.createElement('td');td.textContent=x;if(k>=3)td.className='lam';tr.appendChild(td);});tb.appendChild(tr);};
+  var f3=function(v){var s=Math.abs(v).toFixed(3);return (v<0&&+s!==0?'−':'')+s;};
+  rowF('D',['2.000','3.000','0',f3(L0),'3','0']);
+  rowF('D†',[f3(a0),f3(a1),String(a2),f3(L0),'3',String(l2)]);
+}
+document.getElementById('l4-zoom-t').addEventListener('input',drawZoom);
+document.getElementById('l4-l2').addEventListener('input',drawDD);
+[].forEach.call(document.querySelectorAll('#l4-mc [data-mcm]'),function(b){b.addEventListener('click',function(){MC.m=+b.getAttribute('data-mcm');drawMC();});});
+document.getElementById('l4-mc-run').addEventListener('click',function(){MC.seed=(MC.seed*48271+7)%2147483647;mcNoise();drawMC();});
+window.__drawL4=function(){drawZoom();drawPieces();drawMC();drawDD();};
+[].forEach.call(document.querySelectorAll('[data-mc4]'),function(b){b.addEventListener('click',function(){
+  if(b.getAttribute('data-mc4')==='c')feedback('l4ex1',true,'¡Correcto! a₀ es el valor de la curva en r = 0, lejísimos de los datos, y con 5 términos varía ±1100 solo por el ruido analítico. Para comparar el nivel medio de REE, compara λ₀.');
+  else feedback('l4ex1',false,'Cuidado: a₀ es el valor de la curva prolongada hasta r = 0, donde no hay datos, y cambia ±1100 solo por el ruido. ¿Dice algo sobre las REE de la muestra?');
+});});
+[].forEach.call(document.querySelectorAll('[data-mc4b]'),function(b){b.addEventListener('click',function(){
+  if(b.getAttribute('data-mc4b')==='curv')feedback('l4ex3',true,'¡Correcto! Mismo nivel (λ₀ = 5.16) y misma pendiente (λ₁ = 3); D† solo añade una curvatura λ₂ = 20.');
+  else feedback('l4ex3',false,'Si tienen el mismo λ₀ y el mismo λ₁, tienen el mismo nivel medio y la misma pendiente. ¿Qué queda?');
+});});
+document.getElementById('l4ex2').addEventListener('submit',function(ev){ev.preventDefault();
+  var v=num(document.getElementById('l4ex2-in').value);
+  if(isNaN(v)){feedback('l4ex2',false,'Escribe un número (vale el punto o la coma).');return;}
+  if(Math.abs(v-0.0139)<0.0005)feedback('l4ex2',true,'¡Correcto! 0.05 / √13 = 0.0139. Es lo que dice O’Neill al pie de su Tabla 2: con un 5 %, s(λ₀) = 5 × 0.0028 = 0.014.');
+  else if(Math.abs(v-0.05)<0.001)feedback('l4ex2',false,'Ese es el error de cada REE. λ₀ es la media de 13: divide por √13.');
+  else feedback('l4ex2',false,'Aún no. El error de una media de 13 valores es el error de cada uno dividido por √13.');
+});
+
+/* ---------------- Lección 5 ---------------- */
+var L5PTS=pts13(0),L5X=L5PTS.map(function(p){return p.r;}),L5Y=L5PTS.map(function(p){return p.y;});
+var SUBD=['₀','₁','₂','₃','₄'];
+/* Polinomios ortogonales mónicos sobre unos radios dados (recurrencia de tres términos, equivalente a la receta de Bevington) */
+function orthoRec(xs){
+  var N=xs.length,al=[],be=[0],P=[xs.map(function(){return 1;})],ss=[];
+  for(var n=0;n<=4;n++){
+    var p=P[n],s2=0,sx=0,i;
+    for(i=0;i<N;i++){s2+=p[i]*p[i];sx+=xs[i]*p[i]*p[i];}
+    ss.push(s2);if(n===4)break;
+    al.push(sx/s2);if(n>0)be.push(s2/ss[n-1]);
+    var q=[];for(i=0;i<N;i++){q.push((xs[i]-al[n])*p[i]-(n>0?be[n]*P[n-1][i]:0));}
+    P.push(q);
+  }
+  return {al:al,be:be,ss:ss,xs:xs};
+}
+function fEval(rec,n,x){if(n===0)return 1;var p0=1,p1=x-rec.al[0];for(var k=1;k<n;k++){var p2=(x-rec.al[k])*p1-rec.be[k]*p0;p0=p1;p1=p2;}return p1;}
+function fRoots(rec,n){
+  var lo=Math.min.apply(null,rec.xs)-0.05,hi=Math.max.apply(null,rec.xs)+0.05,M=3000,out=[],px=lo,pv=fEval(rec,n,lo);
+  for(var k=1;k<=M;k++){
+    var x=lo+(hi-lo)*k/M,v=fEval(rec,n,x);
+    if(pv*v<0){var a=px,b=x,fa=pv;for(var it=0;it<60;it++){var c=(a+b)/2,fc=fEval(rec,n,c);if(fa*fc<=0){b=c;}else{a=c;fa=fc;}}out.push((a+b)/2);}
+    else if(v===0){out.push(x);}
+    px=x;pv=v;
+  }
+  return out;
+}
+var L5R=orthoRec(L5X),L5RT=[[]];for(var n5=1;n5<=4;n5++){L5RT.push(fRoots(L5R,n5));}
+var L5F=[0,1,2,3,4].map(function(n){return L5X.map(function(r){return fEval(L5R,n,r);});});
+function dot5(u,v){var s=0;for(var i=0;i<u.length;i++){s+=u[i]*v[i];}return s;}
+function ang5(u,v){var c=dot5(u,v)/Math.sqrt(dot5(u,u)*dot5(v,v));return Math.acos(Math.max(-1,Math.min(1,c)))*180/Math.PI;}
+var L5LAM=L5F.map(function(f){return dot5(L5Y,f)/dot5(f,f);});
+function fmtM(v,d){var s=Math.abs(v).toFixed(d);if(+s===0)return (0).toFixed(d);return (v<0?'−':'')+s;}
+var SUPD={'-':'⁻','0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹'};
+function fmtSci(v){
+  var a=Math.abs(v),sg=v<0?'−':'+';
+  if(a>=0.01)return sg+a.toFixed(a>=1?3:4);
+  var e=Math.floor(Math.log(a)/Math.LN10),mt=a/Math.pow(10,e);if(+mt.toFixed(1)>=10){mt/=10;e+=1;}
+  return sg+mt.toFixed(1)+' × 10'+String(e).split('').map(function(ch){return SUPD[ch]||ch;}).join('');
+}
+function barsAt(g,A,vals,cls0){
+  var bw=Math.max(3,A.sx(1.0)-A.sx(0.9944));
+  L5X.forEach(function(r,i){var x=A.sx(r),y0=A.sy(0),y1=A.sy(vals[i]);
+    mk('rect',{x:(x-bw/2).toFixed(1),y:Math.min(y0,y1).toFixed(1),width:bw.toFixed(1),height:Math.max(0.8,Math.abs(y1-y0)).toFixed(1),'class':vals[i]>=0?'pbar':'nbar'},g);});
+}
+
+/* Figura 1: direcciones perpendiculares o casi paralelas */
+var AR={th:90,moved:false};
+function drawArrows(){
+  var box=document.getElementById('l5-ar');if(!box||!box.offsetParent)return;
+  var th=AR.th,t=th*Math.PI/180,ux=Math.cos(t),uy=Math.sin(t);
+  document.getElementById('l5-tho').textContent=(th<9.95?th.toFixed(1):th.toFixed(0))+'°';
+  var sol=function(p){var b=p[1]/uy;return [p[0]-b*ux,b];};
+  var P0=[3,4],P1=[3.1,3.9],P=AR.moved?P1:P0,c0=sol(P0),c=sol(P);
+  var xsb=[0,c0[0],c[0],P0[0],P1[0]],xmin=Math.min(-0.6,Math.min.apply(null,xsb)),xmax=Math.max(4.6,Math.max.apply(null,xsb)),ymin=-0.9,ymax=4.9;
+  var F=plotFrame(box,210,300,0.46),m={t:10,r:14,b:10,l:14},pw=F.W-m.l-m.r,ph=F.H-m.t-m.b;
+  var sc=Math.min(pw/(xmax-xmin),ph/(ymax-ymin)),cx=m.l+pw/2-(xmin+xmax)/2*sc,cy=m.t+ph/2+(ymin+ymax)/2*sc;
+  var X=function(x){return cx+x*sc;},Y=function(y){return cy-y*sc;},s=F.s;
+  F.s.setAttribute('aria-label','Camino hasta el punto (3, 4) caminando a unidades en la dirección A y b en la dirección B, que forma '+th.toFixed(1)+' grados con A.');
+  var defs=mk('defs',null,s),cp=mk('clipPath',{id:'l5arc'},defs);mk('rect',{x:m.l,y:m.t,width:pw,height:ph},cp);
+  ['3','4'].forEach(function(k){var mr=mk('marker',{id:'l5mh'+k,viewBox:'0 0 10 10',refX:'8',refY:'5',markerWidth:'4',markerHeight:'4',orient:'auto'},defs);mk('path',{d:'M0,0 L10,5 L0,10 z','class':'mh'+k},mr);});
+  var g=mk('g',{'clip-path':'url(#l5arc)'},s);
+  var vx0=(m.l-cx)/sc,vx1=(F.W-m.r-cx)/sc,vy0=(cy-F.H+m.b)/sc,vy1=(cy-m.t)/sc,st=niceTicks(0,Math.max(vx1-vx0,vy1-vy0),10).step;
+  for(var gx=Math.ceil(vx0/st)*st;gx<=vx1+1e-9;gx+=st){mk('line',{x1:X(gx),x2:X(gx),y1:m.t,y2:F.H-m.b,'class':'agrid'},g);}
+  for(var gy=Math.ceil(vy0/st)*st;gy<=vy1+1e-9;gy+=st){mk('line',{x1:m.l,x2:F.W-m.r,y1:Y(gy),y2:Y(gy),'class':'agrid'},g);}
+  var L=5000;
+  mk('line',{x1:X(-L),y1:Y(0),x2:X(L),y2:Y(0),'class':'dirl'},g);
+  mk('line',{x1:X(-L*ux),y1:Y(-L*uy),x2:X(L*ux),y2:Y(L*uy),'class':'dirl'},g);
+  var path=function(cc,pp,cls){
+    var gg=mk('g',cls?{'class':cls}:null,g);
+    if(Math.abs(cc[0])*sc>4)mk('line',{x1:X(0),y1:Y(0),x2:X(cc[0]),y2:Y(0),'class':'arw a3','marker-end':'url(#l5mh3)'},gg);
+    if(Math.abs(cc[1])*sc>4)mk('line',{x1:X(cc[0]),y1:Y(0),x2:X(pp[0]),y2:Y(pp[1]),'class':'arw a4','marker-end':'url(#l5mh4)'},gg);
+    return gg;
+  };
+  if(AR.moved){path(c0,P0,'ghost');mk('circle',{cx:X(P0[0]),cy:Y(P0[1]),r:5,'class':'pdot0'},g);}
+  path(c,P,null);
+  mk('circle',{cx:X(0),cy:Y(0),r:3.5,'class':'o0'},g);
+  mk('circle',{cx:X(P[0]),cy:Y(P[1]),r:5.5,'class':'pdot'},g);
+  var la=txt('text',{x:X(c[0]/2),y:Y(0)+17,'text-anchor':'middle','class':'alab a3 halo'},g,'a = '+fmtM(c[0],2));
+  var mx=(c[0]+P[0])/2,my=P[1]/2,off=uy>0.35?-10:-8;
+  txt('text',{x:X(mx)+(uy>0.35?10:0),y:Y(my)+(uy>0.35?4:off),'text-anchor':uy>0.35?'start':'middle','class':'alab a4 halo'},g,'b = '+fmtM(c[1],2));
+  if(Math.abs(c[0])*sc<40){la.setAttribute('y',Y(0)+17);}
+  document.getElementById('l5-a').textContent=fmtM(c[0],2);
+  document.getElementById('l5-b').textContent=fmtM(c[1],2);
+  document.getElementById('l5-as').textContent=AR.moved?('cambió '+fmtS(c[0]-c0[0],2)):'cuánto caminar en A';
+  document.getElementById('l5-bs').textContent=AR.moved?('cambió '+fmtS(c[1]-c0[1],2)):'cuánto caminar en B';
+  document.getElementById('l5-len').textContent=(Math.abs(c[0])+Math.abs(c[1])).toFixed(2);
+  document.getElementById('l5-lens').textContent='el punto está a '+Math.sqrt(P[0]*P[0]+P[1]*P[1]).toFixed(2);
+  [].forEach.call(document.querySelectorAll('#l5-arrows [data-th]'),function(b){b.setAttribute('aria-pressed',Math.abs(+b.getAttribute('data-th')-AR.th)<0.06?'true':'false');});
+}
+document.getElementById('l5-th').addEventListener('input',function(){AR.th=+this.value;drawArrows();});
+[].forEach.call(document.querySelectorAll('#l5-arrows [data-th]'),function(b){b.addEventListener('click',function(){AR.th=+b.getAttribute('data-th');document.getElementById('l5-th').value=AR.th;drawArrows();});});
+document.getElementById('l5-move').addEventListener('click',function(){AR.moved=!AR.moved;this.setAttribute('aria-pressed',AR.moved?'true':'false');this.textContent=AR.moved?'Volver al primer análisis':'Repetir el análisis';drawArrows();});
+
+/* Figura 2: la prueba del producto */
+var PCS=[['f0','f₀ = 1'],['f1','f₁ (pendiente)'],['f2','f₂ (curvatura)'],['f3','f₃ (S)'],['f4','f₄ (W)'],['r1','r'],['r2','r²'],['r3','r³'],['r4','r⁴']];
+function pieceVec(id){var k=+id.charAt(1);return id.charAt(0)==='f'?L5F[k]:L5X.map(function(r){return Math.pow(r,k);});}
+['l5-pa','l5-pb'].forEach(function(sid,j){var sel=document.getElementById(sid);
+  PCS.forEach(function(p){var o=document.createElement('option');o.value=p[0];o.textContent=p[1];sel.appendChild(o);});
+  sel.value=j?'f2':'f1';sel.addEventListener('change',function(){drawProd();});});
+function drawProd(){
+  var box=document.getElementById('l5-pp');if(!box||!box.offsetParent)return;
+  var u=pieceVec(document.getElementById('l5-pa').value),v=pieceVec(document.getElementById('l5-pb').value);
+  var nu=Math.sqrt(dot5(u,u)),nv=Math.sqrt(dot5(v,v)),pr=u.map(function(x,i){return x/nu*v[i]/nv;}),pos=0,neg=0;
+  pr.forEach(function(q){if(q>0)pos+=q;else neg+=q;});
+  var lo=Math.min(0,Math.min.apply(null,pr)),hi=Math.max(0,Math.max.apply(null,pr)),pad=Math.max(0.02,(hi-lo)*0.12);if(lo<0)lo-=pad;hi+=pad;
+  var F=plotFrame(box,220,300,0.44),m={t:34,r:14,b:44,l:56};
+  var A=axesXY(F.s,m,F.W,F.H,0.968,1.169,lo,hi,function(q,st){return q.toFixed(Math.max(2,decs(st)));},numFmt,F.W>520?'Radio iónico r (Å) · el La a la derecha':'Radio iónico r (Å)','producto en cada REE',F.W>520?6:4,5);
+  F.s.setAttribute('aria-label','Productos de las dos piezas elegidas en cada REE.');
+  mk('line',{x1:m.l,x2:F.W-m.r,y1:A.sy(0),y2:A.sy(0),'class':'zl'},F.s);
+  barsAt(F.s,A,pr);
+  elemRow(F.s,L5PTS.map(function(p){return {x:A.sx(p.r),t:p.e.el};}),26);
+  var tot=pos+neg,an=ang5(u,v);
+  document.getElementById('l5-pos').textContent=fmtS(pos,3);
+  document.getElementById('l5-neg').textContent=fmtS(neg,3);
+  document.getElementById('l5-sum').textContent=Math.abs(tot)<5e-4?'0.000':fmtS(tot,3);
+  document.getElementById('l5-ang').textContent=an.toFixed(1)+'°';
+}
+
+/* Figura 3: fabricar las piezas paso a paso */
+var B5={st:1,beta:1.1,g1:1.0,g2:1.1};
+var RNAME=[[],['β'],['γ₁','γ₂'],['δ₁','δ₂','δ₃'],['ε₁','ε₂','ε₃','ε₄']];
+var YSC=[1,1,1e3,1e3,1e6],YLAB=['','valor de f₁','valor de f₂ (×10⁻³)','valor de f₃ (×10⁻³)','valor de f₄ (×10⁻⁶)'];
+var STEPTXT=['',
+ 'f₁ = r − β. Una constante (β) y una prueba: ser ortogonal a f₀ = 1, es decir, que sus 13 valores sumen 0. Mueve β hasta que la prueba marque 90°.',
+ 'f₂ = (r − γ₁)(r − γ₂). Dos constantes y dos pruebas: ser ortogonal a f₀ y a f₁ (la f₁ correcta del paso 1). Busca las dos γ que cumplen las dos pruebas a la vez.',
+ 'f₃ = (r − δ₁)(r − δ₂)(r − δ₃). Tres constantes y tres pruebas (con f₀, f₁ y f₂), ya resueltas.',
+ 'f₄ = (r − ε₁)(r − ε₂)(r − ε₃)(r − ε₄). Cuatro constantes y cuatro pruebas (con f₀…f₃), ya resueltas.'];
+function curPiece(){
+  if(B5.st===1)return function(r){return r-B5.beta;};
+  if(B5.st===2)return function(r){return (r-B5.g1)*(r-B5.g2);};
+  var n=B5.st;return function(r){return fEval(L5R,n,r);};
+}
+function drawBuild(){
+  var box=document.getElementById('l5-bp');if(!box||!box.offsetParent)return;
+  var n=B5.st,f=curPiece(),sc=YSC[n];
+  [].forEach.call(document.querySelectorAll('#l5-sl .slider-row'),function(row){row.hidden=(+row.getAttribute('data-k')!==n);});
+  document.getElementById('l5-sl').hidden=(n>2);document.getElementById('l5-solve').hidden=(n>2);
+  document.getElementById('l5-betao').textContent=B5.beta.toFixed(4)+' Å';
+  document.getElementById('l5-g1o').textContent=B5.g1.toFixed(4)+' Å';
+  document.getElementById('l5-g2o').textContent=B5.g2.toFixed(4)+' Å';
+  document.getElementById('l5-stepline').textContent=STEPTXT[n];
+  [].forEach.call(document.querySelectorAll('#l5-build [data-st]'),function(b){b.setAttribute('aria-pressed',+b.getAttribute('data-st')===n?'true':'false');});
+  var xs=[],i;for(i=0;i<=240;i++){xs.push(0.955+(1.185-0.955)*i/240);}
+  var fv=L5X.map(f),lo=0,hi=0;
+  xs.forEach(function(r){if(r>=0.975&&r<=1.162){var q=f(r)*sc;lo=Math.min(lo,q);hi=Math.max(hi,q);}});
+  var span=(hi-lo)||1;lo-=span*0.12;hi+=span*0.12;
+  var F=plotFrame(box,230,320,0.46),m={t:34,r:14,b:44,l:58};
+  var A=axesXY(F.s,m,F.W,F.H,0.955,1.185,lo,hi,function(q,st){return q.toFixed(Math.max(2,decs(st)));},numFmt,F.W>520?'Radio iónico r (Å) · el La a la derecha':'Radio iónico r (Å)',YLAB[n],F.W>520?6:4,5);
+  F.s.setAttribute('aria-label','La pieza f'+n+' frente al radio, con su valor en cada REE.');
+  var cp=mk('clipPath',{id:'l5bc'},mk('defs',null,F.s));mk('rect',{x:m.l,y:m.t,width:A.pw,height:A.ph},cp);
+  var g=mk('g',{'clip-path':'url(#l5bc)'},F.s);
+  mk('line',{x1:m.l,x2:F.W-m.r,y1:A.sy(0),y2:A.sy(0),'class':'zl'},g);
+  barsAt(g,A,fv.map(function(q){return q*sc;}));
+  mk('polyline',{points:xs.map(function(r){return A.sx(r).toFixed(1)+','+A.sy(f(r)*sc).toFixed(1);}).join(' '),'class':'curve'},g);
+  L5X.forEach(function(r){mk('circle',{cx:A.sx(r).toFixed(1),cy:A.sy(f(r)*sc).toFixed(1),r:3,'class':'fdot'},g);});
+  var roots=n===1?[B5.beta]:n===2?[B5.g1,B5.g2]:L5RT[n];
+  roots.forEach(function(z,k){if(z<0.955||z>1.185)return;var x=A.sx(z),y=A.sy(0);mk('circle',{cx:x,cy:y,r:5,'class':'rootmk'},F.s);
+    txt('text',{x:x,y:y+(k%2?20:-11),'text-anchor':'middle','class':'roott halo'},F.s,RNAME[n][k]);});
+  elemRow(F.s,L5PTS.map(function(p){return {x:A.sx(p.r),t:p.e.el};}),26);
+  /* pruebas */
+  var tb=document.getElementById('l5-tests');tb.replaceChildren();
+  for(var k=0;k<n;k++){
+    var pk=L5F[k],sum=dot5(fv,pk),an=ang5(fv,pk),ok=Math.abs(an-90)<1,cs=Math.cos(an*Math.PI/180);
+    var row=document.createElement('div');row.className='trow'+(ok?' ok':'');
+    var tk=document.createElement('span');tk.className='tk';tk.textContent=ok?'✓':'✗';tk.setAttribute('aria-label',ok?'cumple':'no cumple');
+    var tl=document.createElement('span');tl.className='tl';
+    tl.appendChild(document.createTextNode('Prueba con f'+SUBD[k]+': Σ '+(k===0?'f'+SUBD[n]:'f'+SUBD[n]+'·f'+SUBD[k])+' = '));
+    var bb=document.createElement('b');bb.textContent=Math.abs(cs)<1e-7?'0':fmtSci(sum);tl.appendChild(bb);
+    var mt=document.createElement('span');mt.className='tmeter';var dt=document.createElement('i');dt.style.left=(an/180*100).toFixed(1)+'%';mt.appendChild(dt);
+    var ta=document.createElement('span');ta.className='ta';ta.textContent=an.toFixed(1)+'°';
+    row.append(tk,tl,mt,ta);tb.appendChild(row);
+  }
+  /* efecto en los λ de VG 189 */
+  var basis=L5F.slice(0,n).concat([fv]);
+  var G=basis.map(function(u){return basis.map(function(v){return dot5(u,v);});}),h=basis.map(function(u){return dot5(u,L5Y);});
+  var lam=gaussSolve(G,h),LD=[3,3,2,2,1];
+  document.getElementById('l5-lamhead').textContent='VG 189 ajustada con '+(n===1?'f₀':(n===2?'f₀, f₁':'f₀…f'+SUBD[n-1]))+' y la f'+SUBD[n]+' de arriba:';
+  var lb=document.getElementById('l5-lams');lb.replaceChildren();
+  for(var j=0;j<=n;j++){
+    var ro=document.createElement('div');ro.className='ro';
+    var kk=document.createElement('div');kk.className='k sym';kk.textContent='λ'+SUBD[j];
+    var vv=document.createElement('div');vv.className='v';vv.textContent=fmtM(lam[j],LD[j]);
+    var ss=document.createElement('div');ss.className='s';
+    if(j<n){var before=fmtM(L5LAM[j],LD[j]),same=vv.textContent===before;ss.textContent=same?'igual que antes':('antes '+before+': ha cambiado');if(!same)ro.classList.add('chg');}
+    else{ss.textContent='nuevo';}
+    ro.append(kk,vv,ss);lb.appendChild(ro);
+  }
+}
+[].forEach.call(document.querySelectorAll('#l5-build [data-st]'),function(b){b.addEventListener('click',function(){B5.st=+b.getAttribute('data-st');drawBuild();});});
+[['l5-beta','beta'],['l5-g1','g1'],['l5-g2','g2']].forEach(function(p){document.getElementById(p[0]).addEventListener('input',function(){B5[p[1]]=+this.value;drawBuild();});});
+document.getElementById('l5-solve').addEventListener('click',function(){
+  if(B5.st===1){B5.beta=L5RT[1][0];document.getElementById('l5-beta').value=B5.beta;}
+  if(B5.st===2){B5.g1=L5RT[2][0];B5.g2=L5RT[2][1];document.getElementById('l5-g1').value=B5.g1;document.getElementById('l5-g2').value=B5.g2;}
+  drawBuild();
+});
+
+/* Tabla f_n(r_i) (Tabla 1) */
+(function(){
+  var tb=document.querySelector('#l5-ftab tbody'),tf=document.querySelector('#l5-ftab tfoot'),SC=[1,1e3,1e3,1e6],DG=[4,3,3,2],sums=[0,0,0,0];
+  REE.forEach(function(e){
+    var tr=document.createElement('tr');if(e.el==='Eu'){tr.className='eu';tr.title='El Eu no entra en el ajuste; su fila servirá para el Eu* (Lección 7)';}
+    var th=document.createElement('th');th.scope='row';th.textContent=e.el+(e.el==='Eu'?' *':'');tr.appendChild(th);
+    var tr0=document.createElement('td');tr0.textContent=e.r.toFixed(3);tr.appendChild(tr0);
+    [1,2,3,4].forEach(function(n,k){var v=fEval(L5R,n,e.r);if(e.el!=='Eu')sums[k]+=v;var td=document.createElement('td');td.textContent=fmtM(v*SC[k],DG[k]);tr.appendChild(td);});
+    tb.appendChild(tr);
+  });
+  var tr=document.createElement('tr'),th=document.createElement('th');th.scope='row';th.colSpan=2;th.textContent='Suma (13 REE, sin Eu)';tr.appendChild(th);
+  sums.forEach(function(s,k){var td=document.createElement('td');td.textContent=fmtM(s*SC[k],DG[k]);tr.appendChild(td);});
+  tf.appendChild(tr);
+  var tr2=document.createElement('tr'),th2=document.createElement('td');th2.colSpan=6;th2.style.cssText='text-align:left;font-weight:400;font-style:italic;color:var(--muted);border-top:0';th2.textContent='* El Eu no entra en el ajuste ni en las sumas; su fila servirá para el Eu* (Lección 7).';tr2.appendChild(th2);tf.appendChild(tr2);
+})();
+
+/* Figura 4: qué REE entran en la receta */
+var SUB={on:{}};
+var SUBSETS={std:[],eu:['+Eu'],ce:['Ce'],mono:['Pr','Tb','Ho','Tm']};
+function subPreset(k){REE.forEach(function(e){SUB.on[e.el]=(e.el!=='Eu');});SUBSETS[k].forEach(function(s){if(s==='+Eu')SUB.on.Eu=true;else SUB.on[s]=false;});}
+function subMatch(k){var ok=true,ref={};REE.forEach(function(e){ref[e.el]=(e.el!=='Eu');});SUBSETS[k].forEach(function(s){if(s==='+Eu')ref.Eu=true;else ref[s]=false;});REE.forEach(function(e){if(!!SUB.on[e.el]!==ref[e.el])ok=false;});return ok;}
+subPreset('std');
+(function(){var box=document.getElementById('l5-chips');REE.forEach(function(e){var b=document.createElement('button');b.type='button';b.textContent=e.el;b.setAttribute('data-el',e.el);
+  b.addEventListener('click',function(){SUB.on[e.el]=!SUB.on[e.el];drawSub();});box.appendChild(b);});})();
+[].forEach.call(document.querySelectorAll('#l5-sub [data-set]'),function(b){b.addEventListener('click',function(){subPreset(b.getAttribute('data-set'));drawSub();});});
+var CNAMES=['β','γ₁','γ₂','δ₁','δ₂','δ₃','ε₁','ε₂','ε₃','ε₄'];
+function drawSub(){
+  var tb=document.querySelector('#l5-ctab tbody');if(!tb)return;
+  [].forEach.call(document.querySelectorAll('#l5-chips button'),function(b){b.setAttribute('aria-pressed',SUB.on[b.getAttribute('data-el')]?'true':'false');});
+  [].forEach.call(document.querySelectorAll('#l5-sub [data-set]'),function(b){b.setAttribute('aria-pressed',subMatch(b.getAttribute('data-set'))?'true':'false');});
+  var xs=REE.filter(function(e){return SUB.on[e.el];}).map(function(e){return e.r;});
+  var ref=[].concat(L5RT[1],L5RT[2],L5RT[3],L5RT[4]),cur=null;
+  if(xs.length>=6){var rec=orthoRec(xs);cur=[];for(var n=1;n<=4;n++){cur=cur.concat(fRoots(rec,n));}if(cur.length!==10)cur=null;}
+  tb.replaceChildren();
+  CNAMES.forEach(function(nm,i){
+    var tr=document.createElement('tr'),th=document.createElement('th');th.scope='row';th.textContent=nm;tr.appendChild(th);
+    var t1=document.createElement('td'),t2=document.createElement('td'),t3=document.createElement('td');t1.textContent=ref[i].toFixed(5);
+    if(cur){t2.textContent=cur[i].toFixed(5);var d=cur[i]-ref[i],z=Math.abs(d)<0.000005;t3.textContent=z?'0':fmtS(d,5);t3.className=z?'same':'dif';}
+    else{t2.textContent='—';t3.textContent='—';}
+    tr.append(t1,t2,t3);tb.appendChild(tr);
+  });
+  var rd=document.getElementById('l5-subread');
+  if(!cur){rd.textContent='Con menos de 6 REE no se pueden fabricar las cinco piezas y ajustar algo con sentido.';return;}
+  var fs=[0,1,2,3,4].map(function(n){return xs.map(function(r){return fEval(L5R,n,r);});}),amin=180,amax=0;
+  for(var j=0;j<5;j++){for(var k=j+1;k<5;k++){var a=ang5(fs[j],fs[k]);amin=Math.min(amin,a);amax=Math.max(amax,a);}}
+  if(amax-90<0.05&&90-amin<0.05)rd.textContent='Con esta selección ('+xs.length+' REE), las piezas de la Tabla 2 son exactamente perpendiculares entre sí: todos los ángulos valen 90.0°.';
+  else rd.textContent='Con esta selección ('+xs.length+' REE), las piezas de la Tabla 2 ya no son exactamente perpendiculares: los ángulos entre ellas van de '+amin.toFixed(1)+'° a '+amax.toFixed(1)+'° (deberían ser 90°).';
+}
+window.__drawL5=function(){drawArrows();drawProd();drawBuild();drawSub();};
+
+/* Ejercicios de la Lección 5 */
+[].forEach.call(document.querySelectorAll('[data-mc5]'),function(b){b.addEventListener('click',function(){
+  if(b.getAttribute('data-mc5')==='si')feedback('l5ex1',true,'¡Correcto! 1 × 2 + 2 × 0 + (−1) × 2 = 2 + 0 − 2 = 0. El producto positivo y el negativo se compensan: son ortogonales.');
+  else feedback('l5ex1',false,'Multiplica número a número y suma: 1 × 2 + 2 × 0 + (−1) × 2. ¿Cuánto da?');
+});});
+[].forEach.call(document.querySelectorAll('[data-mc5b]'),function(b){b.addEventListener('click',function(){
+  if(b.getAttribute('data-mc5b')==='lam')feedback('l5ex4',true,'¡Correcto! Las constantes solo dependen de los radios, que son los mismos para las dos muestras. Lo que cambia son los λ, que dependen de las concentraciones (Lección 6).');
+  else feedback('l5ex4',false,'Repasa la receta: ¿aparece en ella alguna concentración? Solo los radios, que no cambian de una muestra a otra.');
+});});
+document.getElementById('l5ex2').addEventListener('submit',function(ev){ev.preventDefault();
+  var v=num(document.getElementById('l5ex2-in').value);
+  if(isNaN(v)){feedback('l5ex2',false,'Escribe un número (vale el punto o la coma).');return;}
+  if(Math.abs(v+0.001994)<0.00002)feedback('l5ex2',true,'¡Correcto! 0.103673 × (−0.019236) = −0.001994. En la Tabla 1 aparece como −1.994 (×10⁻³).');
+  else if(Math.abs(v+1.994)<0.02)feedback('l5ex2',true,'¡Correcto, en unidades de 10⁻³, como en la Tabla 1! El valor es −0.001994.');
+  else if(Math.abs(v-0.001994)<0.00002||Math.abs(v-1.994)<0.02)feedback('l5ex2',false,'Casi: revisa el signo. El Nd (1.109 Å) está entre las dos γ, así que un factor es positivo y el otro negativo.');
+  else feedback('l5ex2',false,'Aún no. Calcula las dos restas, 1.109 − 1.005327 y 1.109 − 1.128236, y multiplícalas.');
+});
+document.getElementById('l5ex3').addEventListener('submit',function(ev){ev.preventDefault();
+  var v=num(document.getElementById('l5ex3-in').value);
+  if(isNaN(v)){feedback('l5ex3',false,'Escribe un número (vale el punto o la coma).');return;}
+  if(Math.abs(v-1.05557)<0.00006)feedback('l5ex3',true,'¡Correcto! (13.712 + 1.066) / 14 = 14.778 / 14 = 1.05557 Å. Con el Eu cambian todas las constantes: compruébalo con el botón «con Eu» de la última figura.');
+  else if(Math.abs(v-1.05477)<0.00006)feedback('l5ex3',false,'Esa es la β de O’Neill, con 13 radios. Añade el radio del Eu a la suma y divide entre 14.');
+  else feedback('l5ex3',false,'Aún no. β es la media de los radios: suma 13.712 + 1.066 y divide entre 14.');
+});
+SOL.l5ex2='Solución: (1.109 − 1.005327) × (1.109 − 1.128236) = 0.103673 × (−0.019236) = −0.001994, que en la Tabla 1 se escribe −1.994 (×10⁻³).';
+SOL.l5ex3='Solución: β = (13.712 + 1.066) / 14 = 14.778 / 14 = 1.05557 Å, en vez de 1.05477.';
+
+/* ---------------- Lección 6 ---------------- */
+var L6LAM=SAMPLES.map(function(s,si){var y=pts13(si).map(function(p){return p.y;});return L5F.map(function(f){return dot5(y,f)/dot5(f,f);});});
+var LD6=[3,3,2,2,1];
+function fmtL(n,v){return fmtM(v,LD6[n]);}
+function supN(e){return String(e).split('').map(function(ch){return SUPD[ch]||ch;}).join('');}
+function fmtG6(v,compact){
+  var a=Math.abs(v);if(a===0)return '0';
+  if(a>=1&&Math.abs(v-Math.round(v))<1e-9)return fmtM(v,0);
+  if(a>=0.01){var d=a>=100?2:(a>=10?3:(a>=1?4:5));return fmtM(v,d);}
+  var e=Math.floor(Math.log(a)/Math.LN10),mt=v/Math.pow(10,e);if(+Math.abs(mt).toFixed(3)>=10){mt/=10;e+=1;}
+  return fmtM(mt,3)+(compact?'·10':' × 10')+supN(e);
+}
+function segPress(sel,attr,val){[].forEach.call(document.querySelectorAll(sel),function(b){b.setAttribute('aria-pressed',b.getAttribute(attr)===String(val)?'true':'false');});}
+
+/* Figura 1: la sombra */
+var SH6={th:60};
+function drawShadow(){
+  var box=document.getElementById('l6-sh');if(!box||!box.offsetParent)return;
+  var th=SH6.th,t=th*Math.PI/180,ux=Math.cos(t),uy=Math.sin(t),b=4/uy,a=3-b*ux;
+  document.getElementById('l6-tho').textContent=th+'°';
+  var xmin=Math.min(-0.6,a-0.4),xmax=4.6,ymin=-1.4,ymax=4.8;
+  var F=plotFrame(box,200,280,0.42),m={t:10,r:14,b:10,l:14},pw=F.W-m.l-m.r,ph=F.H-m.t-m.b;
+  var sc=Math.min(pw/(xmax-xmin),ph/(ymax-ymin)),cx=m.l+pw/2-(xmin+xmax)/2*sc,cy=m.t+ph/2+(ymin+ymax)/2*sc;
+  var X=function(v){return cx+v*sc;},Y=function(v){return cy-v*sc;},s=F.s;
+  s.setAttribute('aria-label','Sombra del punto (3, 4) sobre la dirección A y coeficientes a y b con un ángulo de '+th+' grados.');
+  var defs=mk('defs',null,s),cp=mk('clipPath',{id:'l6shc'},defs);mk('rect',{x:m.l,y:m.t,width:pw,height:ph},cp);
+  ['3','4'].forEach(function(k){var mr=mk('marker',{id:'l6mh'+k,viewBox:'0 0 10 10',refX:'8',refY:'5',markerWidth:'4',markerHeight:'4',orient:'auto'},defs);mk('path',{d:'M0,0 L10,5 L0,10 z','class':'mh'+k},mr);});
+  var g=mk('g',{'clip-path':'url(#l6shc)'},s);
+  var vx0=(m.l-cx)/sc,vx1=(F.W-m.r-cx)/sc,vy0=(cy-F.H+m.b)/sc,vy1=(cy-m.t)/sc,st=niceTicks(0,Math.max(vx1-vx0,vy1-vy0),10).step;
+  for(var gx=Math.ceil(vx0/st)*st;gx<=vx1+1e-9;gx+=st){mk('line',{x1:X(gx),x2:X(gx),y1:m.t,y2:F.H-m.b,'class':'agrid'},g);}
+  for(var gy=Math.ceil(vy0/st)*st;gy<=vy1+1e-9;gy+=st){mk('line',{x1:m.l,x2:F.W-m.r,y1:Y(gy),y2:Y(gy),'class':'agrid'},g);}
+  var L=500;
+  mk('line',{x1:X(-L),y1:Y(0),x2:X(L),y2:Y(0),'class':'dirl'},g);
+  mk('line',{x1:X(-L*ux),y1:Y(-L*uy),x2:X(L*ux),y2:Y(L*uy),'class':'dirl'},g);
+  mk('line',{x1:X(0),y1:Y(0)+9,x2:X(3),y2:Y(0)+9,'class':'shbar'},g);
+  mk('line',{x1:X(3),y1:Y(4),x2:X(3),y2:Y(0)+9,'class':'shdrop'},g);
+  if(Math.abs(a)*sc>4)mk('line',{x1:X(0),y1:Y(0),x2:X(a),y2:Y(0),'class':'arw a3','marker-end':'url(#l6mh3)'},g);
+  mk('line',{x1:X(a),y1:Y(0),x2:X(3),y2:Y(4),'class':'arw a4','marker-end':'url(#l6mh4)'},g);
+  mk('circle',{cx:X(0),cy:Y(0),r:3.5,'class':'o0'},g);
+  mk('circle',{cx:X(3),cy:Y(4),r:5.5,'class':'pdot'},g);
+  txt('text',{x:X(1.5),y:Y(0)+28,'text-anchor':'middle','class':'shlab halo'},g,'sombra = 3.00');
+  txt('text',{x:X(a/2),y:Y(0)-9,'text-anchor':'middle','class':'alab a3 halo'},g,'a = '+fmtM(a,2));
+  document.getElementById('l6-shv').textContent='3.00';
+  document.getElementById('l6-av').textContent=fmtM(a,2);
+  document.getElementById('l6-as').textContent=Math.abs(a-3)<0.005?'coincide con la sombra':'no coincide con la sombra';
+  segPress('#l6-shadow [data-th6]','data-th6',th);
+}
+document.getElementById('l6-th').addEventListener('input',function(){SH6.th=+this.value;drawShadow();});
+[].forEach.call(document.querySelectorAll('#l6-shadow [data-th6]'),function(b){b.addEventListener('click',function(){SH6.th=+b.getAttribute('data-th6');document.getElementById('l6-th').value=SH6.th;drawShadow();});});
+
+/* Figura 2: la cuenta REE a REE */
+var PJ={si:0,n:2},YSC6=[1,1,1e3,1e3,1e6],YU6=['','','(×10⁻³)','(×10⁻³)','(×10⁻⁶)'];
+(function(){var sel=document.getElementById('l6-sample');SAMPLES.forEach(function(s,i){var o=document.createElement('option');o.value=String(i);o.textContent=s.name;sel.appendChild(o);});
+  sel.addEventListener('change',function(){PJ.si=+this.value;drawProj();});})();
+[].forEach.call(document.querySelectorAll('#l6-proj [data-n6]'),function(b){b.addEventListener('click',function(){PJ.n=+b.getAttribute('data-n6');drawProj();});});
+function drawProj(){
+  var box=document.getElementById('l6-pp');if(!box||!box.offsetParent)return;
+  var n=PJ.n,pts=pts13(PJ.si),y=pts.map(function(p){return p.y;}),sc=YSC6[n];
+  document.getElementById('l6-meta').textContent=SAMPLES[PJ.si].meta;
+  segPress('#l6-proj [data-n6]','data-n6',n);
+  var f=L5F[n],vals=y.map(function(v,i){return v*f[i]*sc;});
+  var lo=Math.min(0,Math.min.apply(null,vals)),hi=Math.max(0,Math.max.apply(null,vals)),pad=(hi-lo)*0.12||1;if(lo<0)lo-=pad;hi+=pad;
+  var F=plotFrame(box,220,300,0.42),m={t:34,r:14,b:44,l:58};
+  var A=axesXY(F.s,m,F.W,F.H,0.968,1.169,lo,hi,function(q,st){return q.toFixed(Math.max(2,decs(st)));},numFmt,F.W>520?'Radio iónico r (Å) · el La a la derecha':'Radio iónico r (Å)',(n===0?'y':'y·f'+SUBD[n])+' en cada REE '+YU6[n],F.W>520?6:4,5);
+  F.s.setAttribute('aria-label','Productos y por f'+n+' de '+SAMPLES[PJ.si].name+' en cada REE.');
+  mk('line',{x1:m.l,x2:F.W-m.r,y1:A.sy(0),y2:A.sy(0),'class':'zl'},F.s);
+  barsAt(F.s,A,vals);
+  elemRow(F.s,pts.map(function(p){return {x:A.sx(p.r),t:p.e.el};}),26);
+  var syf=dot5(y,f),sff=dot5(f,f),lam=syf/sff;
+  var rd=document.getElementById('l6-pread');rd.replaceChildren();
+  var put=function(t,bold){if(bold){var b=document.createElement('b');b.textContent=t;rd.appendChild(b);}else rd.appendChild(document.createTextNode(t));};
+  put('λ'+SUBD[n]+' = Σ y·f'+SUBD[n]+' / Σ f'+SUBD[n]+'² = ');put(fmtG6(syf),true);put(' / ');put(fmtG6(sff),true);put(' = ');put(fmtL(n,lam),true);
+  var tb=document.querySelector('#l6-ptab tbody');tb.replaceChildren();
+  for(var k=0;k<5;k++){
+    var fk=L5F[k],a1=dot5(y,fk),a2=dot5(fk,fk),tr=document.createElement('tr');if(k===n)tr.className='cur';
+    var th=document.createElement('th');th.scope='row';th.style.textAlign='left';th.textContent='λ'+SUBD[k];tr.appendChild(th);
+    [fmtG6(a1),fmtG6(a2),fmtL(k,a1/a2)].forEach(function(t){var td=document.createElement('td');td.textContent=t;tr.appendChild(td);});
+    tb.appendChild(tr);
+  }
+}
+
+/* Figura 3: el sistema de la macro */
+var MX={set:'all'},SET6={all:[],ce:['Ce'],mono:['Pr','Tb','Ho','Tm']};
+[].forEach.call(document.querySelectorAll('#l6-mtx [data-set6]'),function(b){b.addEventListener('click',function(){MX.set=b.getAttribute('data-set6');drawMtx();});});
+function drawMtx(){
+  var row=document.getElementById('l6-mrow');if(!row)return;
+  var excl=SET6[MX.set],pts=pts13(0).filter(function(p){return excl.indexOf(p.e.el)<0;});
+  var xs=pts.map(function(p){return p.r;}),ys=pts.map(function(p){return p.y;});
+  var Fs=[0,1,2,3,4].map(function(n){return xs.map(function(r){return fEval(L5R,n,r);});});
+  var A=[],Z=[],i,j,k;
+  for(i=0;i<5;i++){A.push([]);var z=0;for(k=0;k<xs.length;k++){z+=Math.pow(xs[k],i)*ys[k];}Z.push(z);
+    for(j=0;j<5;j++){var s=0;for(k=0;k<xs.length;k++){s+=Math.pow(xs[k],i)*Fs[j][k];}A[i].push(s);}}
+  var lamS=gaussSolve(A,Z),lamP=Fs.map(function(f){return dot5(ys,f)/dot5(f,f);});
+  row.replaceChildren();
+  var blk=function(label,cls,cols){var b=document.createElement('div');b.className='mblk';var l=document.createElement('div');l.className='mlab';l.textContent=label;var gg=document.createElement('div');gg.className='mtx '+cls;gg.style.gridTemplateColumns='repeat('+cols+',auto)';b.append(l,gg);row.appendChild(b);return gg;};
+  var op=function(t){var o=document.createElement('div');o.className='mtx-op';o.textContent=t;row.appendChild(o);};
+  var gA=blk('A = Σ r^(i−1)·f(j−1)  (solo radios)','al',5);
+  for(i=0;i<5;i++){for(j=0;j<5;j++){var sp=document.createElement('span'),v=A[i][j],zero=Math.abs(v)<1e-13;sp.textContent=zero?'0':fmtG6(v,true);
+    if(j>i)sp.className=zero?'z0':'nz';else if(j===i)sp.className='dg';gA.appendChild(sp);}}
+  op('·');var gL=blk('λ','un',1);SUBD.forEach(function(d){var sp=document.createElement('span');sp.textContent='λ'+d;gL.appendChild(sp);});
+  op('=');var gZ=blk('Z = Σ r^(i−1)·y','be',1);Z.forEach(function(v){var sp=document.createElement('span');sp.textContent=fmtM(v,3);gZ.appendChild(sp);});
+  var tb=document.querySelector('#l6-mtab tbody');tb.replaceChildren();
+  var suf=MX.set==='all'?'':' (sin '+excl.join(', ')+')';
+  var addRow=function(name,l,cls){var tr=document.createElement('tr');if(cls)tr.className=cls;var th=document.createElement('th');th.scope='row';th.style.textAlign='left';th.textContent=name;tr.appendChild(th);
+    l.forEach(function(v,n){var td=document.createElement('td');td.textContent=fmtL(n,v);tr.appendChild(td);});tb.appendChild(tr);};
+  addRow('Las 13 REE (referencia)',L6LAM[0]);
+  addRow('Sistema de la macro'+suf,lamS,'sys');
+  addRow('Fórmula directa'+suf,lamP,MX.set==='all'?'sys':'bad');
+  segPress('#l6-mtx [data-set6]','data-set6',MX.set);
+}
+
+/* Figura 4: qué significa cada λ y el diagrama λ2–λ1 */
+var REF6={"ofb": [[-1.66, -50.6], [-4.23, -62.8], [-1.66, -46.4], [-2.01, -56.3], [-2.08, -60.5], [-1.99, -55.4], [-2.47, -55.7], [-2.48, -55.2], [-1.57, -48.4], [8.01, 24.3], [7.83, 24.9], [8.07, 23.9], [5.37, 17.1], [5.69, 14.7], [5.2, 18.6], [-0.09, -42.7], [-0.32, -35.9], [-0.4, -38.2], [-0.25, -36.4], [-1.05, -41.8], [-0.07, -34.6], [0.14, -32.3], [0.0, -35.4], [-5.87, -47.7], [2.32, 7.9], [3.29, 14.3], [-0.82, -27.4], [4.56, 14.0], [2.73, 12.5], [2.31, 8.4], [2.31, 9.1], [2.15, 7.3], [2.8, 7.7], [-6.48, -59.5], [-3.95, -34.9], [-3.77, -40.2], [-3.75, -39.7], [-3.89, -36.3], [-3.93, -36.7], [-3.84, -37.2], [-3.98, -34.4], [-1.43, -41.7], [-0.7, -35.1], [-0.79, -32.8], [-1.23, -38.7], [-1.72, -41.1], [2.37, 4.2], [2.78, 13.9], [2.96, 10.1], [2.91, 12.2], [2.88, 12.4], [2.01, 11.3], [2.35, 10.8], [2.39, 9.5], [2.51, 6.6], [-0.62, -35.1], [-0.62, -35.6], [-0.57, -37.6], [-0.63, -35.6], [-0.52, -34.4], [0.16, -26.6], [-0.13, -37.0], [-0.21, -36.7], [-1.61, -44.1], [2.01, -16.7], [8.93, 31.7], [9.0, 35.8], [9.05, 34.8], [-6.99, -72.3], [8.91, 36.0], [-7.68, -70.3], [-6.86, -68.1], [-2.47, -48.8], [-2.23, -49.4], [-2.32, -48.8], [-2.31, -48.6], [-2.2, -50.3], [1.37, -8.1], [1.41, 0.6], [1.38, -0.1], [1.38, -0.4], [1.35, -1.3], [1.29, -0.8], [1.4, 0.7], [1.5, -1.1], [1.62, -1.2], [1.42, -1.4], [1.65, -1.7], [-5.98, -57.5], [-6.06, -56.4], [-6.1, -57.2], [-6.23, -60.6], [-5.17, -49.4], [-6.29, -57.7], [-5.71, -51.5], [-5.25, -47.3], [-5.16, -47.9], [-6.05, -57.3], [-4.6, -42.0], [-5.09, -45.1], [-5.04, -44.6], [-5.1, -42.9], [-5.05, -44.1], [-4.94, -43.2], [-4.94, -44.3], [-4.48, -53.7], [-4.49, -54.6], [-4.6, -47.8], [-3.58, -45.3], [-0.83, -36.4], [-2.95, -33.3], [-3.68, -52.0], [-3.56, -48.2], [-1.83, -45.0], [-2.07, -39.9], [-4.48, -29.2], [-4.33, -35.6], [-4.17, -34.7], [-4.36, -31.5], [-4.27, -32.6], [-4.22, -33.3], [-4.34, -32.3], [-4.22, -35.5], [-4.53, -28.1], [-4.1, -35.4], [-1.94, -38.1], [-4.35, -35.1], [-2.27, -45.2], [-1.81, -37.4], [-1.0, -41.2], [-0.18, -27.3], [1.21, 15.6], [2.59, 10.1], [2.29, 13.1], [0.09, -6.5], [1.37, 0.5], [7.96, -1.5], [7.14, 9.8], [6.93, 7.4], [-4.5, -32.0], [-4.29, -32.8], [0.06, -30.1], [0.49, -38.1], [-1.1, -36.9], [-1.41, -46.8], [-2.13, -50.6], [-1.67, -50.9], [-0.1, -29.8], [0.22, -26.8], [-1.48, -50.5], [-1.67, -49.0], [-1.61, -43.2], [-1.66, -48.5], [-1.38, -42.3], [-1.45, -43.3], [-1.39, -46.1], [-1.42, -43.0], [-1.43, -47.7], [-2.03, -51.8], [1.2, -15.4], [2.03, 6.6], [3.49, 3.5], [3.7, 21.4], [2.59, 14.7], [2.47, 10.8], [1.1, 8.2], [-0.47, -4.3], [-0.19, -5.3], [0.55, -1.3], [1.37, 6.1], [1.35, 10.5], [0.42, -0.3], [1.97, 4.8], [1.96, 10.4], [0.32, 2.1], [0.24, 0.1], [-0.84, -38.2], [0.06, -32.3], [0.09, -38.3], [0.07, -32.2], [0.09, -36.0], [0.05, -33.8], [2.09, 4.5], [2.03, 5.4], [1.99, 3.7], [2.06, 4.5], [2.58, 16.3], [2.62, 8.3], [2.16, 6.9], [2.1, 6.2], [0.37, -3.7], [-2.32, -18.1], [-0.63, -7.4], [1.39, 0.7], [-2.91, -26.9], [-0.24, -10.8], [0.22, -14.7], [0.52, 7.8], [2.19, 10.3], [2.12, 8.8], [0.56, -4.4], [11.03, 41.9], [11.2, 39.0], [10.86, 39.9], [10.89, 39.2], [10.91, 40.9], [10.86, 40.3], [-1.29, 3.5], [-1.33, 9.4], [-1.14, 6.8], [-1.09, -47.2], [4.32, 3.2], [7.46, 0.1], [7.94, 1.6], [8.22, 3.0], [8.06, -0.4], [7.71, 1.7], [7.73, 1.3], [8.27, 1.0], [7.55, 2.3], [7.98, -0.2], [-0.64, -29.6], [-1.19, -35.9], [-1.09, -36.2], [-1.14, -35.6], [-1.14, -37.3], [-1.15, -36.7], [-1.16, -35.6], [-5.78, -30.0], [-5.53, -30.5], [3.61, -9.2], [1.31, -20.0], [1.24, -20.5], [1.33, -20.1], [-0.22, -36.3], [1.26, -20.5], [2.15, -13.9], [1.91, -16.0], [0.01, -31.5], [0.3, -27.3], [1.87, -18.3], [1.65, -21.6], [1.04, -19.1], [2.22, -16.8], [0.45, -26.1], [-0.27, -22.7], [-0.27, -24.1], [-0.5, -19.2], [-1.55, -16.4], [-0.31, -25.3], [-0.27, -25.5], [-0.06, -25.4], [-0.4, -27.7], [-0.62, -31.0], [-0.48, -29.2], [-0.83, -32.0], [-0.95, -34.9], [-1.14, -30.5], [-1.85, -37.4], [-1.82, -39.6], [-1.73, -39.9], [-1.85, -39.3], [-1.89, -38.5], [-1.95, -38.6], [-1.96, -37.6], [-1.82, -39.9], [-1.87, -38.7], [0.36, -22.4], [0.4, -22.0], [0.4, -21.7], [0.38, -22.6], [2.56, -3.9], [2.45, -1.9], [1.76, -10.8], [1.94, -11.6], [1.96, -9.8], [1.09, 18.1], [0.96, 22.0], [-3.63, -41.3], [-3.66, -38.3], [-3.77, -42.2], [-3.7, -42.0], [-3.59, -44.2], [-3.42, -10.0], [-3.63, -9.7], [-3.57, -7.4], [-3.48, -12.0], [-3.62, -9.1], [-4.43, -37.2], [-3.9, -37.0], [-3.69, -42.3], [-3.52, -44.2], [-3.53, -43.9], [-3.51, -41.3], [-3.54, -43.1], [-3.58, -40.0], [-1.44, -40.2], [-5.22, -45.2], [-1.76, -42.7], [-1.61, -43.1], [-1.67, -39.5], [-0.36, -35.9], [-2.18, -45.1], [-2.42, -27.6], [-2.14, -48.2], [-6.61, -46.1], [-3.66, -25.9], [-7.26, -19.9], [-3.63, -25.0], [-1.72, -27.7], [-1.7, -30.4], [-2.48, -41.0], [-1.64, -29.3], [-1.25, -31.0], [-2.06, -37.7], [6.75, 17.6], [6.9, 17.3], [7.06, 17.0], [0.52, -22.0], [6.8, 16.7], [1.21, -16.9], [8.96, 16.0], [6.87, 17.5], [-1.84, -34.8], [0.37, -14.8], [-0.77, -32.2], [-1.46, -10.1], [9.13, 48.3], [0.38, -22.4], [0.24, -22.3], [0.25, -19.4], [0.19, -20.3], [0.15, -20.1], [0.22, -22.0], [1.06, -26.5], [1.0, -28.1], [0.95, -26.2], [1.08, -26.6], [0.97, -29.3], [-1.04, -29.0], [-1.28, -29.1], [-1.15, -38.5], [-1.28, -40.3], [-1.38, -41.0], [-1.77, -27.8], [-1.72, -27.6], [-1.87, -27.6], [-1.82, -28.2], [-1.64, -30.2], [-1.81, -29.3], [-1.72, -27.3], [-4.13, -69.8], [-3.17, -30.7], [-2.82, -37.1], [-1.49, -30.1], [-3.01, -34.1], [-1.21, -29.8], [-2.91, -35.3], [-0.72, -30.3], [-0.03, -36.1], [-0.96, -33.7], [-1.46, -42.0], [0.02, -31.6], [-1.04, -36.3], [-0.99, -36.2], [-0.27, -37.6], [0.69, -22.0], [0.1, -24.5], [-1.12, -17.6], [-1.1, -17.7], [-4.61, -37.8], [-0.7, -24.3], [-0.92, -29.7], [-0.02, -20.3], [-1.17, -31.1], [-1.23, -31.2], [-4.53, -61.2], [-4.43, -54.4], [-2.6, -33.3], [-1.97, -28.0], [-2.28, -32.3], [-1.94, -28.1], [-1.74, -29.7], [-1.69, -30.9], [-1.8, -29.4], [-2.23, -33.2], [9.05, 46.9], [-1.03, -34.5], [-1.02, -35.1], [-3.72, -41.2], [-3.72, -42.1], [-3.64, -40.7], [-0.23, -32.4], [-0.17, -30.3], [-1.39, -42.7], [-0.24, -28.9], [-0.38, -31.9], [-0.24, -30.7], [-0.62, -30.5], [-1.79, -31.2], [-1.24, -28.6], [-1.35, -23.8], [-1.38, -24.2], [-0.66, -15.3], [-4.06, -35.9], [-4.02, -34.8], [-4.16, -32.9], [-0.91, -18.4], [-0.91, -19.1], [-1.04, -18.0], [-0.9, -18.2], [-0.97, -19.7], [-0.96, -18.4], [-1.47, -29.9], [-1.38, -31.3], [-1.51, -31.0], [-1.43, -33.4], [-4.58, -67.6], [3.76, -25.5], [4.18, -22.6], [-4.56, -67.6], [3.75, -25.3], [-4.55, -66.2], [3.69, -24.3], [-4.75, -67.8], [-1.69, -29.7], [-2.41, -27.6], [-2.74, -28.4], [-2.66, -31.7], [-2.61, -30.0], [-2.62, -25.4], [-1.18, -18.8], [-2.81, -23.8], [-2.67, -27.7], [-2.74, -26.7], [8.91, 21.1], [0.84, -5.4], [10.49, 34.0], [10.53, 36.1], [-4.02, -32.5], [-3.7, -30.9], [-4.14, -32.4], [-4.34, -31.1], [-4.22, -33.0], [-4.08, -33.6], [-4.18, -31.4], [-3.94, -33.6], [-4.13, -33.1], [-3.54, -30.7], [-3.8, -40.3], [-3.73, -38.8], [-3.98, -36.8], [-3.67, -44.1], [-3.73, -42.1], [-3.69, -40.8], [-3.94, -36.6], [-3.75, -41.1], [-3.76, -41.8], [-5.56, -38.1], [1.68, -4.3], [1.63, -4.4], [1.6, -5.1], [1.75, -2.4], [1.96, -10.0], [1.92, -8.5], [1.85, -11.9], [1.9, -2.0], [1.64, -5.3], [6.15, 26.2], [2.77, 1.8], [2.83, 2.6], [2.72, 2.0], [2.7, 2.6], [-2.52, -51.5], [-2.65, -51.1], [-2.69, -52.7], [-2.83, -49.9], [-2.74, -50.8], [-2.79, -51.4], [-2.69, -50.3], [-2.66, -50.9], [-1.99, -46.6], [-1.98, -48.9], [-0.18, -25.7], [-0.12, -28.7], [0.82, -13.5], [-0.39, -20.4], [0.18, -24.8], [-0.4, -33.6], [-0.46, -27.4], [-0.45, -27.4], [-0.57, -25.0], [-0.51, -28.6], [-2.27, -31.3], [-2.04, -30.1], [-2.08, -29.2], [-0.44, -29.9], [8.26, 24.4], [-0.99, -37.0], [-1.1, -37.6], [-0.32, -30.2], [-0.51, -37.1], [-0.8, -34.7], [-0.56, -38.3], [-0.99, -36.8], [-1.05, -43.7], [-2.0, -51.3], [-2.01, -50.4], [-0.76, -39.0], [-0.77, -38.0], [-1.16, -37.4], [-0.93, -33.4], [0.96, -22.0], [1.2, -17.7], [-1.27, -15.0], [-1.17, -18.6], [-0.76, -23.5], [-0.58, -17.7], [1.28, -24.0], [2.33, -20.2], [0.72, -18.6], [-0.07, -24.7], [-0.51, -31.3], [-1.32, -33.3], [0.15, -41.8], [-0.11, -29.5], [-0.62, -30.1], [-1.83, -46.8], [6.86, 15.9], [-0.61, -33.0], [0.18, -19.0], [2.42, -16.9], [0.3, -16.3], [2.18, -17.6], [2.0, -18.1], [0.62, -19.4], [1.22, -21.7], [1.21, -23.2], [1.47, -22.0], [2.69, -21.3], [-3.83, -17.1], [2.65, -19.5], [2.5, -17.7], [3.05, -19.8], [-4.05, -17.7], [2.72, -10.9], [2.55, -16.4], [2.38, -13.1], [2.61, -17.1], [2.74, -17.4], [2.91, -11.8], [-0.64, -30.8], [2.33, -12.5], [2.41, -22.0], [0.13, -24.2], [-0.3, -26.4], [0.35, -31.8], [0.33, -33.2], [-0.58, -32.2], [-3.35, -63.9], [-0.89, -34.5], [-3.73, -67.6], [-0.87, -32.1], [9.75, 12.7], [9.79, 10.2], [9.86, 13.6], [-0.75, -34.3], [-5.04, -76.4], [-1.12, -41.0], [-0.99, -44.6], [1.2, -10.2], [-0.43, -25.9], [-0.52, -25.2], [1.19, -11.2], [-0.63, -23.8], [-0.73, -23.5], [-0.72, -23.6], [-0.64, -23.3], [-1.08, -33.3], [1.24, -9.9], [1.39, -17.9], [-3.03, -27.4], [0.17, -26.5], [4.33, -14.8], [1.07, -19.3], [1.11, -20.9], [1.11, -20.6], [-1.61, -50.6], [-2.68, -53.4], [-2.54, -50.6], [-2.51, -49.3], [-3.15, -64.4], [1.73, -29.4], [3.76, -13.5], [0.65, -32.4], [5.24, 6.1], [-4.76, -53.1], [-1.7, -38.0], [-2.18, -52.0], [-2.56, -60.4], [16.31, 50.7], [10.81, 35.7], [14.51, 49.1], [14.43, 49.1], [14.55, 50.7], [7.2, 27.4], [7.35, 26.6], [7.22, 26.8], [7.31, 24.4], [-0.3, -18.6], [-0.36, -18.2], [-0.29, -20.4], [-0.39, -35.5], [0.97, -13.6], [1.04, -21.4], [1.16, -13.5]], "oib": [[7.4, -43.0], [7.04, -41.3], [6.63, -44.1], [6.87, -42.9], [7.08, -42.2], [5.17, -42.5], [6.07, -48.9], [6.27, -45.8], [6.81, -47.1], [6.19, -46.0], [6.32, -47.8], [5.1, -40.5], [6.53, -47.3], [6.66, -46.3], [6.57, -41.8], [7.07, -42.5], [5.93, -47.0], [6.58, -42.8], [6.7, -46.8], [11.2, -35.6], [10.56, -48.5], [10.99, -46.2], [10.13, -44.3], [9.19, -51.0], [11.4, -50.8], [10.53, -46.7], [9.31, -49.3], [9.66, -46.0], [8.67, -50.1], [8.32, -50.4], [9.23, -52.9], [7.81, -52.2], [8.27, -51.1], [8.68, -50.0], [9.19, -51.2], [8.26, -53.9], [9.38, -43.0], [8.59, -50.0], [9.01, -46.4], [8.37, -52.9], [8.38, -50.0], [8.46, -50.0], [8.1, -45.6], [9.26, -43.8], [8.79, -49.6], [8.65, -46.2], [8.39, -48.3], [8.64, -47.4], [8.2, -51.2], [8.11, -46.4], [7.91, -48.3], [8.06, -46.0], [7.96, -49.2], [7.88, -42.6], [7.31, -47.9], [8.62, -50.3], [8.79, -45.9], [8.05, -43.8], [8.18, -47.8], [7.94, -47.0], [7.12, -49.3], [7.89, -49.1], [8.0, -47.6], [7.83, -50.0], [8.19, -41.8], [8.27, -44.3], [7.85, -49.9], [8.1, -41.9], [8.01, -46.4], [7.88, -44.4], [7.97, -46.5], [7.63, -48.0], [7.74, -47.3], [7.72, -49.4], [7.66, -48.4], [7.41, -48.6], [8.18, -45.2], [9.47, -45.9], [8.1, -42.4], [7.79, -47.3], [8.43, -43.7], [7.51, -47.8], [7.92, -47.9], [8.45, -47.5], [7.92, -49.5], [7.54, -53.5], [8.27, -37.9], [8.16, -38.2], [8.1, -38.4], [7.93, -40.0], [8.06, -38.4], [7.97, -47.2], [8.07, -48.5], [7.84, -50.1], [9.75, -47.6], [8.17, -41.6], [8.02, -42.1], [8.05, -40.0], [8.04, -39.9], [7.97, -41.2], [8.07, -42.2], [8.11, -48.0], [8.93, -43.9], [8.04, -46.7], [8.91, -43.3], [8.31, -37.2], [7.33, -45.2], [7.51, -46.2], [7.43, -49.5], [7.47, -46.8], [7.08, -52.1], [7.89, -47.6], [7.86, -47.3], [8.02, -49.2], [8.3, -44.6], [7.86, -48.7], [8.87, -43.4], [7.85, -46.7], [7.78, -47.2]]};
+var SHP={mode:0,free:[5,5],drag:false,raf:0},DIA={};
+var EXLAB=[[9,4,'start'],[0,21,'middle'],[-9,4,'end'],[9,4,'start']];
+function shapeLam(){return SHP.mode==='free'?[3,SHP.free[0],SHP.free[1],0,0]:L6LAM[SHP.mode];}
+var XS6=[];for(var q6=0;q6<=110;q6++){XS6.push(0.975+(1.162-0.975)*q6/110);}
+function drawPattern(){
+  var box=document.getElementById('l6-pat');if(!box||!box.offsetParent)return;
+  var lam=shapeLam(),free=SHP.mode==='free';
+  var ev=function(r){var s=0;for(var n=0;n<5;n++){s+=lam[n]*fEval(L5R,n,r);}return s;};
+  var ys=XS6.map(ev),lo=Math.min.apply(null,ys),hi=Math.max.apply(null,ys),dat=null;
+  if(!free){dat=REE.map(function(e,i){return {r:e.r,y:Math.log(SAMPLES[SHP.mode].ppm[i]/e.ci),eu:e.el==='Eu'};});dat.forEach(function(p){lo=Math.min(lo,p.y);hi=Math.max(hi,p.y);});}
+  lo=Math.min(lo,lam[0]);hi=Math.max(hi,lam[0]);var pad=Math.max(0.12,(hi-lo)*0.1);lo-=pad;hi+=pad;
+  var F=plotFrame(box,190,250,0.52),m={t:30,r:12,b:40,l:46};
+  var A=axesXY(F.s,m,F.W,F.H,0.968,1.169,lo,hi,function(q,st){return q.toFixed(Math.max(2,decs(st)));},function(q,st){return q.toFixed(Math.max(1,decs(st)));},'Radio iónico r (Å)','ln([REE]/[REE]CI)',F.W>420?5:4,4);
+  F.s.setAttribute('aria-label',free?'Patrón del punto libre elegido en el diagrama.':'Patrón de '+SAMPLES[SHP.mode].name+' y curva ajustada.');
+  mk('line',{x1:m.l,x2:F.W-m.r,y1:A.sy(lam[0]),y2:A.sy(lam[0]),'class':'l0line'},F.s);
+  mk('polyline',{points:XS6.map(function(r,i){return A.sx(r).toFixed(1)+','+A.sy(ys[i]).toFixed(1);}).join(' '),'class':'curve'},F.s);
+  if(dat){dat.forEach(function(p){var gp=mk('g',{'class':'pt'+(p.eu?' eu':'')},F.s);mk('circle',{cx:A.sx(p.r).toFixed(1),cy:A.sy(p.y).toFixed(1),r:3.8,'class':'dot'},gp);});}
+  else{L5X.forEach(function(r){mk('circle',{cx:A.sx(r).toFixed(1),cy:A.sy(ev(r)).toFixed(1),r:3,'class':'fdot'},F.s);});}
+  elemRow(F.s,L5PTS.map(function(p){return {x:A.sx(p.r),t:p.e.el};}),22);
+}
+function drawTerms(){
+  var box=document.getElementById('l6-terms');if(!box||!box.offsetParent)return;
+  var lam=shapeLam(),cs=[1,2,3,4].map(function(n){return XS6.map(function(r){return lam[n]*fEval(L5R,n,r);});}),lo=0,hi=0;
+  cs.forEach(function(c){c.forEach(function(v){lo=Math.min(lo,v);hi=Math.max(hi,v);});});
+  var pad=Math.max(0.03,(hi-lo)*0.1);lo-=pad;hi+=pad;
+  var F=plotFrame(box,160,220,0.4),m={t:10,r:12,b:40,l:46};
+  var A=axesXY(F.s,m,F.W,F.H,0.968,1.169,lo,hi,function(q,st){return q.toFixed(Math.max(2,decs(st)));},function(q,st){return q.toFixed(Math.max(1,decs(st)));},'Radio iónico r (Å)','aporte (ln)',F.W>420?5:4,4);
+  F.s.setAttribute('aria-label','Contribución de cada término λn·fn en cada radio.');
+  mk('line',{x1:m.l,x2:F.W-m.r,y1:A.sy(0),y2:A.sy(0),'class':'zl'},F.s);
+  cs.forEach(function(c,k){mk('polyline',{points:XS6.map(function(r,i){return A.sx(r).toFixed(1)+','+A.sy(c[i]).toFixed(1);}).join(' '),'class':'kline k'+(k+2)},F.s);});
+}
+function drawDia(){
+  var box=document.getElementById('l6-dia');if(!box||!box.offsetParent)return;
+  var F=plotFrame(box,250,360,0.88),m={t:12,r:14,b:44,l:50};
+  var A=axesXY(F.s,m,F.W,F.H,-10,20,-80,60,numFmt,numFmt,'λ₁ (pendiente)','λ₂ (curvatura)',F.W>380?6:4,7);
+  DIA={sx:A.sx,sy:A.sy,m:m,W:F.W,H:F.H,pw:A.pw,ph:A.ph};
+  F.s.setAttribute('aria-label','Diagrama de λ2 frente a λ1 con los vidrios OFB, los basaltos de Hawái y las muestras de ejemplo.');
+  var cp=mk('clipPath',{id:'l6dc'},mk('defs',null,F.s));mk('rect',{x:m.l,y:m.t,width:A.pw,height:A.ph},cp);
+  var g=mk('g',{'clip-path':'url(#l6dc)'},F.s);
+  mk('line',{x1:A.sx(0),x2:A.sx(0),y1:m.t,y2:m.t+A.ph,'class':'zl'},g);mk('line',{x1:m.l,x2:m.l+A.pw,y1:A.sy(0),y2:A.sy(0),'class':'zl'},g);
+  REF6.ofb.forEach(function(p){mk('circle',{cx:A.sx(p[0]).toFixed(1),cy:A.sy(p[1]).toFixed(1),r:2.1,'class':'ofb'},g);});
+  REF6.oib.forEach(function(p){mk('circle',{cx:A.sx(p[0]).toFixed(1),cy:A.sy(p[1]).toFixed(1),r:2.3,'class':'oib'},g);});
+  mk('line',{x1:A.sx(-10),y1:A.sy(-22.6-53.6),x2:A.sx(20),y2:A.sy(-22.6+107.2),'class':'trend'},g);
+  txt('text',{x:A.sx(5),y:A.sy(46),'text-anchor':'end','class':'trendt halo'},g,'λ₂ = −22.6 + 5.36·λ₁');
+  L6LAM.forEach(function(l,i){var x=A.sx(l[1]),y=A.sy(l[2]),on=SHP.mode===i;
+    var c=mk('circle',{cx:x,cy:y,r:on?7:6,'class':'exm'+(on?' on':''),'data-s6':String(i)},g);var tt=mk('title',null,c);tt.textContent=SAMPLES[i].name;
+    txt('text',{x:x+EXLAB[i][0],y:y+EXLAB[i][1],'text-anchor':EXLAB[i][2],'class':'exl halo','data-s6':String(i)},F.s,SAMPLES[i].name);});
+  if(SHP.mode==='free'){mk('circle',{cx:A.sx(SHP.free[0]),cy:A.sy(SHP.free[1]),r:8,'class':'handle'},g);}
+  box.classList.toggle('drag',SHP.mode==='free');
+}
+function drawLro(){
+  var lam=shapeLam(),box=document.getElementById('l6-lro');if(!box)return;box.replaceChildren();
+  for(var n=0;n<5;n++){
+    var ro=document.createElement('div');ro.className='ro';
+    var k=document.createElement('div');k.className='k sym';k.textContent='λ'+SUBD[n];
+    var v=document.createElement('div');v.className='v';v.textContent=SHP.mode==='free'&&n===0?'3 (fijo)':fmtL(n,lam[n]);
+    var s=document.createElement('div');s.className='s';
+    if(n===0)s.textContent=Math.exp(lam[0]).toFixed(0)+' veces el condrito';
+    else{var mx=0;for(var i=0;i<L5X.length;i++){mx=Math.max(mx,Math.abs(Math.exp(lam[n]*L5F[n][i])-1));}s.textContent='cambia el patrón hasta un '+(mx*100<9.5?(mx*100).toFixed(1):(mx*100).toFixed(0))+' %';}
+    ro.append(k,v,s);box.appendChild(ro);
+  }
+}
+function drawShape(){drawDia();drawPattern();drawTerms();drawLro();}
+function schedShape(){if(SHP.raf)return;SHP.raf=requestAnimationFrame(function(){SHP.raf=0;drawShape();});}
+function syncFree(){var a=document.getElementById('l6-l1'),b=document.getElementById('l6-l2');a.value=SHP.free[0];b.value=SHP.free[1];
+  document.getElementById('l6-l1o').textContent=fmtM(SHP.free[0],1);document.getElementById('l6-l2o').textContent=fmtM(SHP.free[1],0);}
+function setShape(mode){SHP.mode=mode;document.getElementById('l6-free').hidden=(mode!=='free');segPress('#l6-shape [data-s6]','data-s6',mode);if(mode==='free')syncFree();drawShape();}
+[].forEach.call(document.querySelectorAll('#l6-shape button[data-s6]'),function(b){b.addEventListener('click',function(){var v=b.getAttribute('data-s6');setShape(v==='free'?'free':+v);});});
+document.getElementById('l6-l1').addEventListener('input',function(){SHP.free[0]=+this.value;syncFree();schedShape();});
+document.getElementById('l6-l2').addEventListener('input',function(){SHP.free[1]=+this.value;syncFree();schedShape();});
+(function(){
+  var box=document.getElementById('l6-dia');
+  var toVal=function(ev){var sv=box.querySelector('svg');if(!sv||!DIA.sx)return null;var rc=sv.getBoundingClientRect();
+    var px=(ev.clientX-rc.left)*(DIA.W/rc.width),py=(ev.clientY-rc.top)*(DIA.H/rc.height);
+    var l1=-10+(px-DIA.m.l)/DIA.pw*30,l2=60-(py-DIA.m.t)/DIA.ph*140;
+    return [Math.round(Math.max(-10,Math.min(20,l1))*10)/10,Math.round(Math.max(-80,Math.min(60,l2)))];};
+  box.addEventListener('click',function(ev){var t=ev.target,v=t&&t.getAttribute?t.getAttribute('data-s6'):null;if(v!==null&&v!==undefined){setShape(+v);}});
+  box.addEventListener('pointerdown',function(ev){if(SHP.mode!=='free')return;var t=ev.target;if(t&&t.getAttribute&&t.getAttribute('data-s6')!==null)return;
+    var v=toVal(ev);if(!v)return;SHP.drag=true;try{box.setPointerCapture(ev.pointerId);}catch(e){}SHP.free=v;syncFree();schedShape();ev.preventDefault();});
+  box.addEventListener('pointermove',function(ev){if(!SHP.drag)return;var v=toVal(ev);if(!v)return;SHP.free=v;syncFree();schedShape();});
+  var end=function(){SHP.drag=false;};box.addEventListener('pointerup',end);box.addEventListener('pointercancel',end);
+})();
+window.__drawL6=function(){drawShadow();drawProj();drawMtx();segPress('#l6-shape [data-s6]','data-s6',SHP.mode);drawShape();};
+
+/* Ejercicios de la Lección 6 */
+document.getElementById('l6ex1').addEventListener('submit',function(ev){ev.preventDefault();
+  var v=num(document.getElementById('l6ex1-in').value);
+  if(isNaN(v)){feedback('l6ex1',false,'Escribe un número (vale el punto o la coma).');return;}
+  if(Math.abs(v+50.60)<0.1)feedback('l6ex1',true,'¡Correcto! −0.0052060 / 0.00010288 = −50.60, el mismo λ₂ que da la macro.');
+  else if(Math.abs(v-50.60)<0.1)feedback('l6ex1',false,'Casi: revisa el signo. Una suma negativa dividida por un número positivo da un resultado negativo.');
+  else feedback('l6ex1',false,'Aún no. Divide Σ y·f₂ entre Σ f₂²: −0.0052060 / 0.00010288.');
+});
+[].forEach.call(document.querySelectorAll('[data-mc6]'),function(b){b.addEventListener('click',function(){
+  if(b.getAttribute('data-mc6')==='l0')feedback('l6ex2',true,'¡Correcto! Reducir todas las concentraciones al 50 % resta ln 2 = 0.693 a las 13 y. Como f₁…f₄ suman 0, solo cambia λ₀: de 3.187 a 2.494.');
+  else feedback('l6ex2',false,'Diluir multiplica todas las concentraciones por 0.5, es decir, suma ln 0.5 a todas las y por igual. ¿A qué λ afecta sumar lo mismo a todas?');
+});});
+[].forEach.call(document.querySelectorAll('[data-mc6b]'),function(b){b.addEventListener('click',function(){
+  var k=b.getAttribute('data-mc6b');
+  if(k==='miss')feedback('l6ex3',true,'¡Correcto! El sistema es el ajuste por mínimos cuadrados completo y no necesita que las piezas sean perpendiculares. Con las 13 REE da lo mismo que la fórmula directa; si falta un dato, sigue valiendo.');
+  else if(k==='exact')feedback('l6ex3',false,'Con las 13 REE los dos caminos dan exactamente lo mismo. Mira qué pasa en la figura de la tabla A al quitar el Ce.');
+  else feedback('l6ex3',false,'La fórmula directa sirve para todos los λ, incluido λ₄, siempre que estén las 13 REE. ¿Y si falta alguna?');
+});});
+[].forEach.call(document.querySelectorAll('[data-mc6c]'),function(b){b.addEventListener('click',function(){
+  if(b.getAttribute('data-mc6c')==='a')feedback('l6ex4',true,'¡Correcto! λ₁ positivo: el patrón sube hacia el La (ligeras enriquecidas). λ₂ positivo: la pieza en U suma en los extremos y resta en el centro, así que las REE medias quedan por debajo de una recta.');
+  else feedback('l6ex4',false,'Recuerda: λ₁ > 0 significa que el patrón sube hacia el La, y λ₂ > 0 que la U se suma tal cual, hundiendo el centro. Pruébalo con el punto libre.');
+});});
+SOL.l6ex1='Solución: λ₂ = Σ y·f₂ / Σ f₂² = −0.0052060 / 0.00010288 = −50.60.';
+
+/* ---------------- Lección 7 ---------------- */
+var OFBCHI={"chi": [3.667, 4.429, 5.982, 4.655, 3.762, 3.055, 3.212, 1.407, 4.112, 5.291, 3.906, 2.042, 1.474, 3.797, 3.587, 8.575, 2.747, 4.157, 7.928, 5.279, 3.699, 5.594, 4.03, 7.259, 3.47, 6.379, 4.284, 6.871, 5.485, 8.798, 17.697, 3.75, 7.426, 6.827, 19.186, 5.461, 6.694, 9.235, 1.876, 6.249, 6.664, 6.372, 3.026, 3.293, 3.004, 4.74, 2.327, 4.624, 5.514, 5.731, 2.521, 2.543, 4.857, 7.932, 7.067, 3.701, 2.899, 9.883, 7.454, 6.056, 5.305, 2.166, 1.828, 1.053, 4.018, 2.918, 3.127, 1.996, 5.244, 5.166, 5.71, 10.494, 3.951, 4.011, 2.427, 3.853, 1.518, 0.796, 0.987, 3.084, 1.424, 1.746, 2.04, 1.961, 2.311, 1.858, 2.243, 2.064, 2.712, 3.261, 4.226, 3.556, 3.062, 3.421, 4.072, 1.59, 3.447, 3.321, 2.922, 2.501, 2.919, 2.811, 4.369, 1.394, 3.192, 8.349, 6.495, 10.563, 3.823, 3.953, 3.37, 4.055, 3.711, 8.746, 4.262, 4.963, 8.003, 20.636, 4.746, 9.019, 5.0, 3.572, 11.072, 5.049, 5.735, 2.94, 1.79, 2.106, 3.185, 1.035, 2.852, 11.953, 4.389, 2.562, 6.189, 8.316, 2.639, 8.447, 7.632, 4.232, 3.287, 2.673, 2.353, 2.29, 1.732, 2.38, 1.835, 1.773, 1.655, 7.881, 1.496, 3.483, 1.495, 1.04, 1.377, 2.654, 1.612, 1.869, 2.554, 1.325, 4.708, 12.499, 11.131, 13.558, 10.879, 10.352, 4.286, 7.203, 2.944, 15.327, 4.333, 3.639, 6.05, 5.093, 7.451, 11.421, 8.134, 2.462, 10.945, 1.213, 4.214, 1.045, 9.889, 0.982, 1.915, 2.192, 3.563, 5.14, 3.609, 3.143, 2.757, 2.071, 5.083, 3.162, 0.992, 2.779, 2.635, 2.586, 3.667, 1.837, 4.154, 8.208, 5.267, 2.752, 2.041, 2.895, 6.454, 4.535, 3.998, 1.673, 4.283, 3.763, 2.5, 2.938, 9.393, 5.706, 4.573, 7.682, 3.744, 2.239, 3.639, 3.549, 2.131, 2.768, 2.515, 4.387, 2.692, 2.434, 2.788, 3.727, 3.206, 0.999, 4.436, 2.525, 3.531, 2.218, 4.73, 3.48, 1.834, 4.723, 0.853, 3.001, 3.877, 4.454, 2.906, 2.477, 2.644, 3.078, 1.781, 4.289, 1.711, 0.622, 1.728, 3.132, 1.266, 2.742, 5.36, 4.932, 1.832, 3.641, 2.761, 2.704, 3.079, 7.723, 4.649, 5.93, 7.017, 2.799, 4.438, 2.256, 2.151, 2.466, 1.521, 5.218, 4.3, 1.895, 3.54, 5.307, 5.891, 4.399, 1.759, 2.855, 5.485, 4.733, 6.367, 3.324, 2.303, 8.146, 2.777, 5.507, 2.882, 7.92, 7.325, 4.96, 5.272, 5.42, 2.143, 3.661, 3.921, 2.677, 6.268, 7.335, 1.471, 1.791, 1.676, 8.348, 6.47, 19.599, 6.116, 8.635, 5.224, 2.183, 1.161, 3.156, 3.194, 2.159, 10.68, 2.551, 6.861, 8.197, 6.131, 5.588, 5.787, 7.766, 20.111, 3.981, 10.912, 1.76, 2.551, 3.626, 2.49, 1.266, 0.856, 3.542, 6.346, 6.384, 2.603, 5.251, 5.159, 8.275, 9.091, 4.972, 6.993, 6.602, 1.783, 5.496, 1.902, 1.585, 5.995, 1.869, 3.035, 6.843, 8.295, 11.193, 0.944, 2.659, 4.858, 1.739, 2.951, 2.593, 3.341, 2.167, 2.093, 4.163, 1.708, 3.71, 2.599, 2.248, 1.613, 2.016, 6.682, 1.41, 1.866, 0.666, 1.169, 2.454, 5.23, 5.41, 5.84, 2.501, 2.53, 3.363, 2.103, 7.144, 1.558, 2.512, 3.28, 0.673, 1.676, 1.369, 1.876, 1.908, 2.828, 3.569, 4.476, 1.403, 2.717, 2.112, 1.527, 5.377, 3.032, 1.463, 0.997, 2.937, 3.859, 3.816, 2.044, 1.888, 3.001, 2.57, 1.606, 2.756, 3.815, 3.31, 7.135, 3.322, 13.405, 1.485, 2.337, 3.636, 2.41, 2.951, 1.846, 3.607, 5.536, 4.01, 3.771, 5.984, 2.901, 2.172, 6.952, 10.068, 7.619, 11.264, 14.523, 1.684, 2.824, 2.12, 2.113, 2.226, 3.908, 7.107, 13.275, 4.842, 5.83, 3.53, 8.68, 4.716, 4.868, 3.734, 4.476, 2.214, 5.004, 3.571, 1.863, 2.111, 5.363, 3.487, 3.21, 5.153, 5.345, 4.958, 6.274, 4.774, 6.033, 3.361, 0.798, 6.147, 4.054, 3.991, 5.442, 2.075, 7.265, 2.364, 2.545, 2.318, 1.962, 2.035, 1.216, 1.457, 1.111, 1.287, 3.588, 0.966, 4.397, 4.579, 4.644, 5.281, 4.685, 3.962, 3.201, 2.23, 0.897, 14.295, 6.838, 7.668, 5.236, 13.726, 5.713, 4.301, 3.68, 2.95, 6.09, 7.924, 5.511, 7.296, 2.258, 1.596, 2.255, 2.523, 7.24, 11.458, 4.663, 2.427, 2.996, 2.206, 5.293, 5.204, 3.255, 2.871, 8.263, 2.536, 5.256, 10.739, 7.009, 4.288, 6.57, 5.231, 6.209, 9.463, 3.78, 4.701, 5.44, 2.648, 2.503, 4.774, 4.4, 3.622, 7.658, 5.757, 12.029, 6.688, 8.399, 6.89, 7.84, 4.995, 6.166, 3.18, 4.128, 5.173, 6.657, 6.322, 1.438, 6.128, 2.972, 5.839, 12.821, 10.572, 7.149, 7.912, 1.731, 3.375, 2.061, 2.109, 4.653, 7.97, 3.801, 19.077, 0.885, 3.151, 3.119, 3.174, 9.489, 7.792, 6.343, 3.43, 5.299, 2.621, 10.245, 4.451, 10.401, 5.917, 1.331, 8.733, 1.738, 2.262, 2.217, 1.634, 3.309, 5.063, 3.48, 2.919, 1.585, 4.133, 8.327, 8.576, 13.058, 7.851, 14.624, 14.145, 9.41, 7.944, 5.335, 6.512, 4.819, 3.272, 3.95, 3.485, 2.146, 6.914, 1.036, 8.815, 2.744, 3.5, 10.634, 20.483], "N": [13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13, 13]};
+function lnSample(si){return REE.map(function(e,i){return Math.log(SAMPLES[si].ppm[i]/e.ci);});}
+function curveAt(lam,nt,r){var s=0;for(var n=0;n<nt;n++){s+=lam[n]*fEval(L5R,n,r);}return s;}
+function fillSampleSelect(id,onch){var sel=document.getElementById(id);SAMPLES.forEach(function(s,i){var o=document.createElement('option');o.value=String(i);o.textContent=s.name;sel.appendChild(o);});sel.addEventListener('change',function(){onch(+this.value);});}
+function fmtPct(v,d){return fmtS(v,d)+' %';}
+
+/* Figura 1: observado/calculado */
+var RS7={si:0,nt:5};
+fillSampleSelect('l7-sample',function(v){RS7.si=v;drawRes();});
+[].forEach.call(document.querySelectorAll('#l7-res [data-t7]'),function(b){b.addEventListener('click',function(){RS7.nt=+b.getAttribute('data-t7');drawRes();});});
+function drawRes(){
+  var box=document.getElementById('l7-rp');if(!box||!box.offsetParent)return;
+  var Y=lnSample(RS7.si),lam=L6LAM[RS7.si],nt=RS7.nt;
+  var yc=REE.map(function(e){return curveAt(lam,nt,e.r);}),dev=REE.map(function(e,i){return (Math.exp(Y[i]-yc[i])-1)*100;});
+  document.getElementById('l7-meta').textContent=SAMPLES[RS7.si].meta;
+  segPress('#l7-res [data-t7]','data-t7',nt);
+  var lo=Math.min(-7,Math.min.apply(null,dev)),hi=Math.max(7,Math.max.apply(null,dev)),pad=(hi-lo)*0.06;lo-=pad;hi+=pad;
+  var F=plotFrame(box,220,300,0.42),m={t:34,r:14,b:44,l:52};
+  var A=axesXY(F.s,m,F.W,F.H,0.968,1.169,lo,hi,function(q,st){return q.toFixed(Math.max(2,decs(st)));},numFmt,F.W>520?'Radio iónico r (Å) · el La a la derecha':'Radio iónico r (Å)','obs/calc − 1 (%)',F.W>520?6:4,6);
+  F.s.setAttribute('aria-label','Desviación de cada REE respecto a la curva de '+nt+' términos, en porcentaje.');
+  var band=mk('rect',{x:m.l,y:A.sy(5),width:A.pw,height:Math.max(0,A.sy(-5)-A.sy(5)),'class':'band5'},F.s);F.s.insertBefore(band,F.s.firstChild);
+  txt('text',{x:F.W-m.r-4,y:A.sy(5)-4,'text-anchor':'end','class':'band5t'},F.s,'±5 %');
+  mk('line',{x1:m.l,x2:F.W-m.r,y1:A.sy(0),y2:A.sy(0),'class':'zl'},F.s);
+  var bw=Math.max(3,A.sx(1.0)-A.sx(0.9944));
+  REE.forEach(function(e,i){var x=A.sx(e.r),y0=A.sy(0),y1=A.sy(dev[i]),eu=e.el==='Eu';
+    mk('rect',{x:(x-bw/2).toFixed(1),y:Math.min(y0,y1).toFixed(1),width:bw.toFixed(1),height:Math.max(0.8,Math.abs(y1-y0)).toFixed(1),'class':eu?'rbareu':(Math.abs(dev[i])>5?'rbarx':'rbar5')},F.s);});
+  elemRow(F.s,REE.map(function(e){return {x:A.sx(e.r),t:e.el,cls:e.el==='Eu'?'eu':''};}),26);
+  var SS=0,mx=0,mxe='';REE.forEach(function(e,i){if(e.el==='Eu')return;var q=Y[i]-yc[i];SS+=q*q;if(Math.abs(dev[i])>Math.abs(mx)){mx=dev[i];mxe=e.el;}});
+  var nu=13-nt;
+  document.getElementById('l7-max').textContent=fmtPct(mx,1);document.getElementById('l7-maxs').textContent='en el '+mxe+' (sin contar el Eu)';
+  document.getElementById('l7-s').textContent=(100*Math.sqrt(SS/nu)).toFixed(2)+' %';document.getElementById('l7-ss').textContent='√(Σ residuos² / ν), ν = '+nu;
+  var chi=SS/1e-4/nu;document.getElementById('l7-chi').textContent=chi>=100?chi.toFixed(0):chi.toFixed(2);
+  document.getElementById('l7-chis').textContent='σ = 1 %, ν = '+nu+(nt===5?' · la macro (÷ 9) da '+(SS/1e-4/9).toFixed(3):'');
+  document.getElementById('l7-eu').textContent=Math.exp(Y[5]-yc[5]).toFixed(3);
+}
+
+/* Figura 2: Eu* */
+var EU7={si:0,gd:false};
+[].forEach.call(document.querySelectorAll('#l7-eu [data-e7]'),function(b){b.addEventListener('click',function(){EU7.si=+b.getAttribute('data-e7');drawEu();});});
+document.getElementById('l7-gd').addEventListener('click',function(){EU7.gd=!EU7.gd;this.setAttribute('aria-pressed',EU7.gd?'true':'false');drawEu();});
+function euCalc(Y){
+  var y13=[];REE.forEach(function(e,i){if(e.el!=='Eu')y13.push(Y[i]);});
+  var lam=L5F.map(function(f){return dot5(y13,f)/dot5(f,f);}),star=curveAt(lam,5,1.066),mid=(Y[4]+Y[6])/2;
+  return {lam:lam,star:star,mid:mid,e1:Math.exp(Y[5]-star),e2:Math.exp(Y[5]-mid)};
+}
+function drawEu(){
+  var box=document.getElementById('l7-ep');if(!box||!box.offsetParent)return;
+  segPress('#l7-eu [data-e7]','data-e7',EU7.si);
+  var Y0=lnSample(EU7.si),Y=Y0.slice();if(EU7.gd)Y[6]+=Math.log(1.05);
+  var c0=euCalc(Y0),c=euCalc(Y),xlo=1.019,xhi=1.117;
+  var show=REE.map(function(e,i){return {e:e,y:Y[i],i:i};}).filter(function(p){return p.e.r>=xlo&&p.e.r<=xhi;});
+  var lo=Infinity,hi=-Infinity;show.forEach(function(p){lo=Math.min(lo,p.y);hi=Math.max(hi,p.y);});[c.star,c.mid,Y0[6]].forEach(function(v){lo=Math.min(lo,v);hi=Math.max(hi,v);});
+  var xs=[];for(var q=0;q<=80;q++){xs.push(xlo+(xhi-xlo)*q/80);}xs.forEach(function(r){var v=curveAt(c.lam,5,r);lo=Math.min(lo,v);hi=Math.max(hi,v);});
+  var pad=Math.max(0.04,(hi-lo)*0.14);lo-=pad;hi+=pad;
+  var F=plotFrame(box,220,300,0.44),m={t:16,r:14,b:44,l:52};
+  var A=axesXY(F.s,m,F.W,F.H,xlo,xhi,lo,hi,function(q,st){return q.toFixed(Math.max(2,decs(st)));},function(q,st){return q.toFixed(Math.max(2,decs(st)));},'Radio iónico r (Å)','ln([REE]/[REE]CI)',F.W>520?6:4,5);
+  F.s.setAttribute('aria-label','Ampliación del patrón alrededor del Eu con la curva ajustada y la recta entre Sm y Gd.');
+  mk('line',{x1:A.sx(1.066),x2:A.sx(1.066),y1:m.t,y2:m.t+A.ph,'class':'euline'},F.s);
+  txt('text',{x:A.sx(1.066)+5,y:m.t+A.ph-6,'class':'rlab'},F.s,'1.066 Å');
+  mk('polyline',{points:xs.map(function(r){return A.sx(r).toFixed(1)+','+A.sy(curveAt(c.lam,5,r)).toFixed(1);}).join(' '),'class':'curve'},F.s);
+  mk('line',{x1:A.sx(1.079),y1:A.sy(Y[4]),x2:A.sx(1.053),y2:A.sy(Y[6]),'class':'chord'},F.s);
+  if(EU7.gd){mk('circle',{cx:A.sx(1.053),cy:A.sy(Y0[6]),r:4.5,'class':'ghostpt'},F.s);}
+  show.forEach(function(p){var eu=p.e.el==='Eu',g=mk('g',{'class':'pt'+(eu?' eu':'')},F.s);mk('circle',{cx:A.sx(p.e.r),cy:A.sy(p.y),r:4.2,'class':'dot'},g);
+    txt('text',{x:A.sx(p.e.r),y:A.sy(p.y)+(eu?18:-10),'text-anchor':'middle','class':'plab halo'+(eu?' eu':'')},F.s,p.e.el);});
+  var xd=A.sx(1.066)+7;mk('line',{x1:xd,x2:xd,y1:A.sy(c.star),y2:A.sy(Y[5]),'class':'defl'},F.s);
+  txt('text',{x:xd+6,y:(A.sy(c.star)+A.sy(Y[5]))/2+4,'class':'defl-t halo'},F.s,'Eu/Eu* = '+c.e1.toFixed(3));
+  mk('circle',{cx:A.sx(1.066),cy:A.sy(c.mid),r:5,'class':'eustar2'},F.s);
+  mk('circle',{cx:A.sx(1.066),cy:A.sy(c.star),r:5,'class':'eustar'},F.s);
+  txt('text',{x:A.sx(1.066)-9,y:A.sy(c.star)-9,'text-anchor':'end','class':'plab halo'},F.s,'Eu*');
+  document.getElementById('l7-eu1').textContent=c.e1.toFixed(3);
+  document.getElementById('l7-eu2').textContent=c.e2.toFixed(3);
+  document.getElementById('l7-eu1s').textContent=EU7.gd?('con el Gd alterado: '+fmtPct((c.e1/c0.e1-1)*100,1)):'Eu / curva en 1.066 Å';
+  document.getElementById('l7-eu2s').textContent=EU7.gd?('con el Gd alterado: '+fmtPct((c.e2/c0.e2-1)*100,1)):'Eu / √(Sm·Gd)';
+}
+
+/* Figura 3: histograma de χ²ν de los 616 OFB */
+var H7={sig:1,nu:9};
+function chiPdf(u,k){var x=k*u;if(x<=0)return 0;var g=k===8?6:11.631728;return k*Math.pow(x,k/2-1)*Math.exp(-x/2)/(Math.pow(2,k/2)*g);}
+function chiTail(u0,k){var s=0,h=0.005;for(var u=u0;u<30;u+=h){s+=chiPdf(u+h/2,k)*h;}return s;}
+function h7vals(){var d=H7.nu===9?9:8,s2=H7.sig*H7.sig;return OFBCHI.chi.map(function(c,i){return c*(OFBCHI.N[i]-4)/(OFBCHI.N[i]-13+d)/s2;});}
+document.getElementById('l7-sig').addEventListener('input',function(){H7.sig=+this.value;drawHist();});
+[].forEach.call(document.querySelectorAll('#l7-hist [data-nu7]'),function(b){b.addEventListener('click',function(){H7.nu=+b.getAttribute('data-nu7');drawHist();});});
+document.getElementById('l7-fit').addEventListener('click',function(){var H=H7.sig;H7.sig=1;var v=h7vals(),mn=0;v.forEach(function(q){mn+=q;});mn/=v.length;H7.sig=Math.round(Math.sqrt(mn)*100)/100;document.getElementById('l7-sig').value=H7.sig;drawHist();});
+function drawHist(){
+  var box=document.getElementById('l7-hp');if(!box||!box.offsetParent)return;
+  segPress('#l7-hist [data-nu7]','data-nu7',H7.nu);
+  document.getElementById('l7-sigo').textContent=H7.sig.toFixed(2)+' %';
+  var v=h7vals(),bw=0.25,nb=32,cnt=[],i,over=0,mn=0,big=0;for(i=0;i<nb;i++)cnt.push(0);
+  v.forEach(function(q){mn+=q;if(q>3)big++;var b=Math.floor(q/bw);if(b>=nb)over++;else cnt[b]++;});mn/=v.length;
+  var theo=[];for(i=0;i<=160;i++){var u=8*i/160;theo.push([u,v.length*bw*chiPdf(u,H7.nu)]);}
+  var hi=Math.max(Math.max.apply(null,cnt),Math.max.apply(null,theo.map(function(t){return t[1];})))*1.1;
+  var F=plotFrame(box,220,300,0.42),m={t:14,r:14,b:44,l:52};
+  var A=axesXY(F.s,m,F.W,F.H,0,8,0,hi,function(q,st){return q.toFixed(decs(st));},numFmt,'χ² reducido de cada muestra, con la σ elegida','número de muestras',8,5);
+  F.s.setAttribute('aria-label','Histograma de los chi cuadrado reducidos de 616 vidrios OFB y curva teórica.');
+  cnt.forEach(function(c,k){if(!c)return;var x0=A.sx(k*bw),x1=A.sx((k+1)*bw);mk('rect',{x:(x0+0.5).toFixed(1),y:A.sy(c).toFixed(1),width:Math.max(1,x1-x0-1).toFixed(1),height:(A.sy(0)-A.sy(c)).toFixed(1),'class':'hbar'},F.s);});
+  mk('polyline',{points:theo.map(function(t){return A.sx(t[0]).toFixed(1)+','+A.sy(t[1]).toFixed(1);}).join(' '),'class':'theo'},F.s);
+  mk('line',{x1:A.sx(1),x2:A.sx(1),y1:m.t,y2:m.t+A.ph,'class':'euline'},F.s);
+  document.getElementById('l7-mean').textContent=mn.toFixed(2);
+  var exp=v.length*chiTail(3,H7.nu);
+  document.getElementById('l7-out').textContent=String(big);
+  document.getElementById('l7-outs').textContent='esperadas por azar: '+(exp<10?exp.toFixed(1):exp.toFixed(0))+(over?' · '+over+' fuera del gráfico (> 8)':'');
+}
+
+/* Figura 4: significación de los λ */
+var SG7={si:0,s:2.14};
+fillSampleSelect('l7-sample2',function(v){SG7.si=v;drawSig();});
+document.getElementById('l7-sp').addEventListener('input',function(){SG7.s=+this.value;drawSig();});
+function drawSig(){
+  var tb=document.querySelector('#l7-stab tbody');if(!tb)return;
+  document.getElementById('l7-spo').textContent=SG7.s.toFixed(2)+' %';
+  var lam=L6LAM[SG7.si],DD=[3,3,2,1,0];tb.replaceChildren();
+  for(var n=1;n<5;n++){
+    var z=1/Math.sqrt(dot5(L5F[n],L5F[n])),two=2*z*SG7.s/100,ratio=Math.abs(lam[n])/two,ok=ratio>1;
+    var tr=document.createElement('tr'),th=document.createElement('th');th.scope='row';th.style.textAlign='left';th.textContent='λ'+SUBD[n];tr.appendChild(th);
+    var t1=document.createElement('td');t1.textContent=fmtL(n,lam[n]);var t2=document.createElement('td');t2.textContent='± '+fmtM(two,DD[n]);
+    var t3=document.createElement('td');t3.className='mcol';var mt=document.createElement('div');mt.className='smeter'+(ok?' ok':'');var bar=document.createElement('i');
+    var pos=Math.max(0.02,Math.min(1,(Math.log(ratio)/Math.LN10+1)/4));bar.style.width=(pos*100).toFixed(1)+'%';mt.appendChild(bar);t3.appendChild(mt);
+    mt.title='|λ| / 2·s(λ) = '+ratio.toFixed(2);
+    var t4=document.createElement('td');t4.className=ok?'yes':'no';t4.textContent=ok?('Sí ('+ratio.toFixed(1)+' ×)'):('No ('+ratio.toFixed(2)+' ×)');
+    tr.append(t1,t2,t3,t4);tb.appendChild(tr);
+  }
+}
+window.__drawL7=function(){drawRes();drawEu();drawHist();drawSig();};
+
+/* Ejercicios de la Lección 7 */
+document.getElementById('l7ex1').addEventListener('submit',function(ev){ev.preventDefault();
+  var v=num(document.getElementById('l7ex1-in').value);
+  if(isNaN(v)){feedback('l7ex1',false,'Escribe un número (vale el punto o la coma).');return;}
+  if(Math.abs(v-0.911)<0.003)feedback('l7ex1',true,'¡Correcto! e^(3.2547 − 3.3479) = e^(−0.0932) = 0.911: al VG 189 le falta un 9 % de Eu.');
+  else if(Math.abs(v-1.098)<0.004)feedback('l7ex1',false,'Has calculado Eu*/Eu. Resta en el otro orden: y(Eu) − curva.');
+  else if(Math.abs(v+0.0932)<0.002)feedback('l7ex1',false,'Vas bien: ese es el logaritmo del cociente. Falta deshacerlo con e elevado a…');
+  else feedback('l7ex1',false,'Aún no. Eu/Eu* = e elevado a (y(Eu) − curva en 1.066 Å).');
+});
+document.getElementById('l7ex2').addEventListener('submit',function(ev){ev.preventDefault();
+  var v=num(document.getElementById('l7ex2-in').value);
+  if(isNaN(v)){feedback('l7ex2',false,'Escribe un número (vale el punto o la coma).');return;}
+  if(Math.abs(v-3)<0.1)feedback('l7ex2',true,'¡Correcto! √9 = 3: los residuos son tres veces mayores que el 1 % supuesto, así que la precisión real ronda el 3 %.');
+  else if(Math.abs(v-9)<0.1)feedback('l7ex2',false,'χ²ν compara cuadrados. Para volver a porcentajes hay que tomar la raíz.');
+  else feedback('l7ex2',false,'Aún no. s ≈ σ × √χ²ν, con σ = 1 %.');
+});
+[].forEach.call(document.querySelectorAll('[data-mc7]'),function(b){b.addEventListener('click',function(){
+  if(b.getAttribute('data-mc7')==='no')feedback('l7ex3',true,'¡Correcto! s(λ₃) = 1980 × 0.03 = 59.4, y 2·s = 119. Como |−100| < 119, no es significativo.');
+  else feedback('l7ex3',false,'Calcula el umbral: 2 × ζ₃ × 0.03 = 2 × 1980 × 0.03. ¿Supera 100 ese valor?');
+});});
+[].forEach.call(document.querySelectorAll('[data-mc7b]'),function(b){b.addEventListener('click',function(){
+  if(b.getAttribute('data-mc7b')==='piece')feedback('l7ex4',true,'¡Correcto! ζ₄ = 1/√Σf₄², y Σf₄² = 5.6·10⁻¹⁰ porque f₄ es una pieza diminuta. Solo depende de los radios, no de las muestras ni de los análisis.');
+  else feedback('l7ex4',false,'Mira la fórmula ζₙ = 1/√Σfₙ²: ¿intervienen en ella las muestras o los análisis?');
+});});
+SOL.l7ex1='Solución: Eu/Eu* = e^(3.2547 − 3.3479) = e^(−0.0932) = 0.911.';
+SOL.l7ex2='Solución: s ≈ 1 % × √9 = 3 %.';
+
+/* ---------------- Lección 8 ---------------- */
+var M8={si:0,m:5,inc:{}};
+var PRE8={eu:['Eu'],euce:['Eu','Ce'],zr:['Eu','Ce','La','Pr'],mono:['Eu','Pr','Tb','Ho','Tm']};
+function set8(k){REE.forEach(function(e){M8.inc[e.el]=PRE8[k].indexOf(e.el)<0;});}
+function match8(k){var ok=true;REE.forEach(function(e){if(M8.inc[e.el]!==(PRE8[k].indexOf(e.el)<0))ok=false;});return ok;}
+set8('eu');
+(function(){var box=document.getElementById('l8-chips');REE.forEach(function(e){var b=document.createElement('button');b.type='button';b.textContent=e.el;b.setAttribute('data-el8',e.el);
+  b.addEventListener('click',function(){M8.inc[e.el]=!M8.inc[e.el];draw8();});box.appendChild(b);});})();
+[].forEach.call(document.querySelectorAll('#l8-miss [data-s8]'),function(b){b.addEventListener('click',function(){M8.si=+b.getAttribute('data-s8');draw8();});});
+[].forEach.call(document.querySelectorAll('#l8-miss [data-p8]'),function(b){b.addEventListener('click',function(){set8(b.getAttribute('data-p8'));draw8();});});
+[].forEach.call(document.querySelectorAll('#l8-miss [data-t8]'),function(b){b.addEventListener('click',function(){M8.m=+b.getAttribute('data-t8');draw8();});});
+function invSym(G){var n=G.length,out=[];for(var j=0;j<n;j++){var e=[];for(var k=0;k<n;k++)e.push(j===k?1:0);out.push(gaussSolve(G,e));}return out;}
+function draw8(){
+  var box=document.getElementById('l8-pp');if(!box||!box.offsetParent)return;
+  [].forEach.call(document.querySelectorAll('#l8-chips button'),function(b){b.setAttribute('aria-pressed',M8.inc[b.getAttribute('data-el8')]?'true':'false');});
+  segPress('#l8-miss [data-s8]','data-s8',M8.si);segPress('#l8-miss [data-t8]','data-t8',M8.m);
+  [].forEach.call(document.querySelectorAll('#l8-miss [data-p8]'),function(b){b.setAttribute('aria-pressed',match8(b.getAttribute('data-p8'))?'true':'false');});
+  var Y=lnSample(M8.si),m=M8.m,idx=[];REE.forEach(function(e,i){if(M8.inc[e.el])idx.push(i);});
+  var tb=document.querySelector('#l8-tab tbody');tb.replaceChildren();
+  var cr=document.getElementById('l8-corr');
+  if(idx.length<6){cr.textContent='Hacen falta al menos 6 REE en el ajuste.';box.replaceChildren();['l8-ce','l8-eu','l8-la','l8-chi'].forEach(function(id){document.getElementById(id).textContent='—';});return;}
+  var xs=idx.map(function(i){return REE[i].r;}),ys=idx.map(function(i){return Y[i];});
+  var Fx=[];for(var n=0;n<m;n++){Fx.push(xs.map(function(r){return fEval(L5R,n,r);}));}
+  var G=Fx.map(function(u){return Fx.map(function(v){return dot5(u,v);});}),h=Fx.map(function(u){return dot5(u,ys);});
+  var lf=gaussSolve(G,h),Gi=invSym(G),sf=Gi.map(function(r,j){return 0.02*Math.sqrt(r[j]);}),cm=0;
+  for(var a=0;a<m;a++){for(var b2=0;b2<m;b2++){if(a!==b2)cm=Math.max(cm,Math.abs(Gi[a][b2]/Math.sqrt(Gi[a][a]*Gi[b2][b2])));}}
+  var rec=orthoRec(xs),lr=[];for(n=0;n<m;n++){var fr=xs.map(function(r){return fEval(rec,n,r);});lr.push(dot5(ys,fr)/dot5(fr,fr));}
+  var yc=function(r){var s=0;for(var n2=0;n2<m;n2++){s+=lf[n2]*fEval(L5R,n2,r);}return s;};
+  var SS=0;idx.forEach(function(i){var q=Y[i]-yc(REE[i].r);SS+=q*q;});var nu=idx.length-m;
+  // plot
+  var xsP=[];for(var q=0;q<=120;q++){xsP.push(0.968+(1.169-0.968)*q/120);}
+  var lo=Infinity,hi=-Infinity;Y.forEach(function(v){lo=Math.min(lo,v);hi=Math.max(hi,v);});xsP.forEach(function(r){var v=yc(r);lo=Math.min(lo,v);hi=Math.max(hi,v);});
+  var pad=Math.max(0.1,(hi-lo)*0.08);lo-=pad;hi+=pad;
+  var F=plotFrame(box,220,300,0.44),mm={t:30,r:14,b:44,l:52};
+  var A=axesXY(F.s,mm,F.W,F.H,0.968,1.169,lo,hi,function(q2,st){return q2.toFixed(Math.max(2,decs(st)));},function(q2,st){return q2.toFixed(Math.max(1,decs(st)));},F.W>520?'Radio iónico r (Å) · el La a la derecha':'Radio iónico r (Å)','ln([REE]/[REE]CI)',F.W>520?6:4,5);
+  F.s.setAttribute('aria-label','Patrón con las REE que entran en el ajuste, las excluidas y la curva ajustada.');
+  var cp=mk('clipPath',{id:'l8c'},mk('defs',null,F.s));mk('rect',{x:mm.l,y:mm.t,width:A.pw,height:A.ph},cp);
+  var g=mk('g',{'clip-path':'url(#l8c)'},F.s);
+  mk('polyline',{points:xsP.map(function(r){return A.sx(r).toFixed(1)+','+A.sy(yc(r)).toFixed(1);}).join(' '),'class':'curve'},g);
+  REE.forEach(function(e,i){var inc=M8.inc[e.el];mk('circle',{cx:A.sx(e.r).toFixed(1),cy:A.sy(Y[i]).toFixed(1),r:inc?4.2:4.5,'class':inc?'pdot':'xpt'},F.s);});
+  elemRow(F.s,REE.map(function(e){return {x:A.sx(e.r),t:e.el,cls:M8.inc[e.el]?'':'ghost'};}),22);
+  var ratio=function(i){return Math.exp(Y[i]-yc(REE[i].r));};
+  document.getElementById('l8-ce').textContent=ratio(1).toFixed(3);
+  document.getElementById('l8-eu').textContent=ratio(5).toFixed(3);
+  document.getElementById('l8-la').textContent=ratio(0).toFixed(3);
+  document.getElementById('l8-las').textContent=M8.inc.La?'el La entra en el ajuste':'el La está fuera: extrapolado';
+  document.getElementById('l8-chi').textContent=nu>0?(SS/1e-4/nu).toFixed(2):'—';
+  document.getElementById('l8-chis').textContent='σ = 1 %, ν = '+idx.length+' − '+m+' = '+nu;
+  var ref=L6LAM[M8.si];
+  var row=function(name,vals,cls){var tr=document.createElement('tr');if(cls)tr.className=cls;var th=document.createElement('th');th.scope='row';th.style.textAlign='left';th.textContent=name;tr.appendChild(th);
+    for(var k=0;k<5;k++){var td=document.createElement('td');td.textContent=k<m&&vals[k]!==null?vals[k]:'';tr.appendChild(td);}tb.appendChild(tr);};
+  row('Las 13 REE (O’Neill)',ref.map(function(v,k){return fmtL(k,v);}),'ref');
+  row('Tabla 2 con tu selección',lf.map(function(v,k){return fmtL(k,v);}),'fix');
+  row('± 2 % (Tabla 2)',sf.map(function(v,k){return '± '+fmtM(v,[3,3,2,1,0][k]);}),'err');
+  row('Constantes recalculadas',lr.map(function(v,k){return fmtL(k,v);}),'rec');
+  cr.textContent='Correlación máxima entre los λ con la Tabla 2: '+cm.toFixed(3)+(cm>0.9?' (muy alta: los λ dejan de ser independientes)':'')+'. Con constantes recalculadas: 0.';
+}
+window.__drawL8=function(){draw8();};
+
+/* Ejercicios de la Lección 8 */
+[].forEach.call(document.querySelectorAll('[data-mc8]'),function(b){b.addEventListener('click',function(){
+  var k=b.getAttribute('data-mc8');
+  if(k==='base')feedback('l8ex1',true,'¡Correcto! Con params=None, pyrolite fabrica las piezas con los 14 radios, incluido el del Eu. Las piezas ya no son ortogonales sobre las 13 REE del ajuste y los λ cambian. Usa params="ONeill2016".');
+  else if(k==='log')feedback('l8ex1',false,'Con log₁₀ todos los λ saldrían divididos por 2.303 (λ₀ ≈ 1.38). La diferencia aquí es mucho menor.');
+  else feedback('l8ex1',false,'Por defecto pyrolite excluye Pm y Eu, no el Ce (salvo que una llamada anterior con anomalies haya modificado la lista). Piensa en cómo fabrica las piezas.');
+});});
+document.getElementById('l8ex2').addEventListener('submit',function(ev){ev.preventDefault();
+  var v=num(document.getElementById('l8ex2-in').value);
+  if(isNaN(v)){feedback('l8ex2',false,'Escribe un número (vale el punto o la coma).');return;}
+  if(Math.abs(v-2.3026)<0.005)feedback('l8ex2',true,'¡Correcto! ln x = 2.303 × log₁₀ x, así que todas las y, y con ellas todos los λ, salen 2.303 veces más pequeñas con log₁₀.');
+  else if(Math.abs(v-0.4343)<0.003)feedback('l8ex2',false,'Ese es el factor inverso (log₁₀ e). Los λ con log₁₀ son más pequeños: hay que multiplicarlos por un número mayor que 1.');
+  else feedback('l8ex2',false,'Aún no. Piensa en la relación entre logaritmos: ln x = ln(10) × log₁₀ x.');
+});
+[].forEach.call(document.querySelectorAll('[data-mc8b]'),function(b){b.addEventListener('click',function(){
+  var k=b.getAttribute('data-mc8b');
+  if(k==='terms')feedback('l8ex3',true,'¡Correcto! Sin La ni Pr, el Ce queda fuera de los datos y su valor esperado es una extrapolación muy sensible al número de términos. VG 189, sin anomalía de Ce, daría 0.67, 0.92, 0.99 o 1.47 según el número de términos.');
+  else if(k==='recalc')feedback('l8ex3',false,'Recalcular las constantes no cambia la curva: Ce/Ce* saldría exactamente igual. Solo cambian los λ.');
+  else feedback('l8ex3',false,'Puede que sí, pero sin La ni Pr el Ce se extrapola. Compruébalo en la figura con VG 189, que no tiene anomalía de Ce.');
+});});
+SOL.l8ex2='Solución: ln 10 = 2.303. Como ln x = 2.303 · log₁₀ x, los λ con log₁₀ son 2.303 veces menores.';
+
+/* ---------------- Lección 9 ---------------- */
+(function(){
+/* Coeficientes de la Tabla 7 (D = δ0 + δ1·f1 + … + δ4·f4) */
+var MIN9={
+  ol:{n:'Olivino',ref:'O’Neill & Jenner, 2012',d:[0.01,-0.10,1.4,-12,52]},
+  pl:{n:'Plagioclasa',ref:'O’Neill & Jenner, 2012',d:[0.02,0.10,1.3,0,0]},
+  opx:{n:'Ortopiroxeno',ref:'Yao et al., 2012',d:[0.04,-0.55,3.8,-5,-62]},
+  cpx1:{n:'Cpx 1',ref:'O’Neill & Jenner, 2012',d:[0.44,-2.92,-20.7,227,0]},
+  cpx2:{n:'Cpx 2',ref:'Sun & Liang, 2012',d:[0.39,-3.00,-4.2,121,-252]},
+  amp:{n:'Anfíbol',ref:'Tiepolo et al., 2000, con D(Yb) = 0.7',d:[0.89,-4.09,-61.3,0,0].map(function(v){return v*0.7;})},
+  gt:{n:'Granate',ref:'Van Westrenen & Draper, 2007',d:[2.35,-35.4,365,-1855,3276]}
+};
+var ORD9=['ol','pl','opx','cpx1','cpx2','amp','gt'];
+var S9={m:'cpx1',x:80,o:0};
+var PAR9=[2.36,-3.42,-34.4];
+var RG9=[];for(var q9=0;q9<=100;q9++){RG9.push(0.968+(1.169-0.968)*q9/100);}
+var R13=REE.filter(function(e){return e.el!=='Eu';});
+var RAF9={};
+function sched9(k,fn){if(RAF9[k])return;RAF9[k]=requestAnimationFrame(function(){RAF9[k]=0;fn();});}
+function Dr9(d,r){var s=0;for(var n=0;n<5;n++){s+=d[n]*fEval(L5R,n,r);}return s;}
+function sfx9(d,x){if(x<=0)return [0,0,0,0,0];var l=Math.log(1-x);return [l*(d[0]-1),l*d[1],l*d[2],l*d[3],l*d[4]];}
+function rAx9(q,st){return q.toFixed(Math.max(2,decs(st)));}
+function markers9(defs,pref){
+  [['k','mh9k'],['g','mh9g'],['i','mh9i']].forEach(function(a){
+    var mr=mk('marker',{id:pref+a[0],viewBox:'0 0 10 10',refX:'8',refY:'5',markerWidth:'4.2',markerHeight:'4.2',orient:'auto'},defs);
+    mk('path',{d:'M0,0 L10,5 L0,10 z','class':a[1]},mr);});
+}
+function clip9(s,id,m,A){var defs=mk('defs',null,s),cp=mk('clipPath',{id:id},defs);mk('rect',{x:m.l,y:m.t,width:A.pw,height:A.ph},cp);return defs;}
+function cloud9(g,A){
+  REF6.ofb.forEach(function(p){mk('circle',{cx:A.sx(p[0]).toFixed(1),cy:A.sy(p[1]).toFixed(1),r:2,'class':'ofb'},g);});
+  REF6.oib.forEach(function(p){mk('circle',{cx:A.sx(p[0]).toFixed(1),cy:A.sy(p[1]).toFixed(1),r:2.2,'class':'oib'},g);});
+}
+function zero9(g,A,m){
+  mk('line',{x1:A.sx(0),x2:A.sx(0),y1:m.t,y2:m.t+A.ph,'class':'zl'},g);
+  mk('line',{x1:m.l,x2:m.l+A.pw,y1:A.sy(0),y2:A.sy(0),'class':'zl'},g);
+}
+function poly9(pts,A,fx,fy){return pts.map(function(p){return A.sx(fx(p)).toFixed(1)+','+A.sy(fy(p)).toFixed(1);}).join(' ');}
+function inside9(x,y,m,A){return x>=m.l+2&&x<=m.l+A.pw-2&&y>=m.t+2&&y<=m.t+A.ph-2;}
+/* etiqueta junto a un punto, desplazada en la dirección (ux, uy) de la pantalla */
+function labAt9(g,x,y,ux,uy,dist,t,cls){
+  var ax=ux>0.35?'start':(ux<-0.35?'end':'middle'),dy=uy>0.35?10:(uy<-0.35?-2:4);
+  return txt('text',{x:(x+ux*dist).toFixed(1),y:(y+uy*dist+dy).toFixed(1),'text-anchor':ax,'class':cls+' halo'},g,t);
+}
+function roSet9(id,items){
+  var box=document.getElementById(id);if(!box)return;box.replaceChildren();
+  items.forEach(function(it){var ro=document.createElement('div');ro.className='ro';
+    var k=document.createElement('div');k.className='k'+(it.c?' '+it.c:'');k.textContent=it.k;
+    var v=document.createElement('div');v.className='v';v.textContent=it.v;
+    var s=document.createElement('div');s.className='s';s.textContent=it.s||'';
+    ro.append(k,v,s);box.appendChild(ro);});
+}
+
+/* ---------- Figura 9.1: cristalización fraccionada ---------- */
+function drawD9(){
+  var box=document.getElementById('l9-d');if(!box||!box.offsetParent)return;
+  var mn=MIN9[S9.m],d=mn.d,cv=RG9.map(function(r){return Dr9(d,r);});
+  document.getElementById('l9-dt').textContent='Coeficientes de reparto D · '+mn.n+' ('+mn.ref+')';
+  var hi=Math.max(1.15,Math.max.apply(null,cv)*1.1),lo=Math.min(0,Math.min.apply(null,cv));
+  var F=plotFrame(box,170,240,0.52),m={t:30,r:14,b:40,l:46};
+  var A=axesXY(F.s,m,F.W,F.H,0.968,1.169,lo,hi,rAx9,numFmt,'Radio iónico r (Å)','D',F.W>420?6:4,4);
+  F.s.setAttribute('aria-label','Coeficientes de reparto de '+mn.n+' frente al radio iónico, según la Tabla 7 de O’Neill.');
+  clip9(F.s,'l9dc',m,A);var g=mk('g',{'clip-path':'url(#l9dc)'},F.s);
+  mk('line',{x1:m.l,x2:m.l+A.pw,y1:A.sy(1),y2:A.sy(1),'class':'l9one'},g);
+  txt('text',{x:m.l+6,y:A.sy(1)-5,'class':'l9t1 halo'},g,'D = 1');
+  mk('polyline',{points:RG9.map(function(r,i){return A.sx(r).toFixed(1)+','+A.sy(cv[i]).toFixed(1);}).join(' '),'class':'l9c'},g);
+  R13.forEach(function(e){mk('circle',{cx:A.sx(e.r).toFixed(1),cy:A.sy(Dr9(d,e.r)).toFixed(1),r:3.6,'class':'l9dot'},g);});
+  elemRow(F.s,R13.map(function(e){return {x:A.sx(e.r),t:e.el};}),22);
+}
+function drawG9(){
+  var box=document.getElementById('l9-g');if(!box||!box.offsetParent)return;
+  var d=MIN9[S9.m].d,x=S9.x/100,l=x>0?Math.log(1-x):0;
+  var gv=function(r){return l*(Dr9(d,r)-1);},cv=RG9.map(gv),psi0=l*(d[0]-1);
+  var lo=Math.min(0,Math.min.apply(null,cv)),hi=Math.max(0,Math.max.apply(null,cv));
+  if(hi-lo<0.2){var c=(hi+lo)/2;lo=c-0.1;hi=c+0.1;}
+  var pad=(hi-lo)*0.1;lo-=pad;hi+=pad;
+  var F=plotFrame(box,170,240,0.52),m={t:30,r:14,b:40,l:52};
+  var A=axesXY(F.s,m,F.W,F.H,0.968,1.169,lo,hi,rAx9,numFmt,'Radio iónico r (Å)','ln([REE]/[REE]⁰)',F.W>420?6:4,4);
+  F.s.setAttribute('aria-label','Función del proceso de cristalización fraccionada en cada REE.');
+  clip9(F.s,'l9gc',m,A);var g=mk('g',{'clip-path':'url(#l9gc)'},F.s);
+  mk('line',{x1:m.l,x2:m.l+A.pw,y1:A.sy(0),y2:A.sy(0),'class':'zl'},g);
+  if(x>0){mk('line',{x1:m.l,x2:m.l+A.pw,y1:A.sy(psi0),y2:A.sy(psi0),'class':'l9mean'},g);
+    var yl=A.sy(psi0);txt('text',{x:m.l+6,y:yl+(yl-m.t>18?-5:13),'class':'l9t1 halo'},g,'ψ₀ = '+fmtM(psi0,3));}
+  mk('polyline',{points:RG9.map(function(r,i){return A.sx(r).toFixed(1)+','+A.sy(cv[i]).toFixed(1);}).join(' '),'class':'l9c'},g);
+  R13.forEach(function(e){mk('circle',{cx:A.sx(e.r).toFixed(1),cy:A.sy(gv(e.r)).toFixed(1),r:3.6,'class':'l9dot'},g);});
+  elemRow(F.s,R13.map(function(e){return {x:A.sx(e.r),t:e.el};}),22);
+}
+function drawV9(){
+  var box=document.getElementById('l9-dia');if(!box||!box.offsetParent)return;
+  var F=plotFrame(box,260,400,0.98),m={t:12,r:14,b:44,l:50};
+  var A=axesXY(F.s,m,F.W,F.H,-10,20,-80,80,numFmt,numFmt,'λ₁ (pendiente)','λ₂ (curvatura)',F.W>380?6:4,8);
+  F.s.setAttribute('aria-label','Vectores de cristalización fraccionada en el diagrama λ2–λ1.');
+  var defs=clip9(F.s,'l9vc',m,A);markers9(defs,'l9v');
+  var g=mk('g',{'clip-path':'url(#l9vc)'},F.s);zero9(g,A,m);cloud9(g,A);
+  var gf=mk('g',null,g),gs=mk('g',null,g),gl=mk('g',null,F.s);
+  var p0=S9.o?[PAR9[1],PAR9[2]]:[0,0],x=S9.x/100,x0=A.sx(p0[0]),y0=A.sy(p0[1]);
+  var pct=S9.x+' %';
+  ORD9.forEach(function(k){
+    var on=k===S9.m,ps=sfx9(MIN9[k].d,x),x1=A.sx(p0[0]+ps[1]),y1=A.sy(p0[1]+ps[2]),dx=x1-x0,dy=y1-y0,len=Math.sqrt(dx*dx+dy*dy);
+    if(len<3){
+      if(on)labAt9(gl,x0,y0,0.6,0.7,10,MIN9[k].n+': casi no se mueve','l9lab');
+      return;
+    }
+    var ux=dx/len,uy=dy/len;
+    mk('line',{x1:x0.toFixed(1),y1:y0.toFixed(1),x2:x1.toFixed(1),y2:y1.toFixed(1),'class':on?'l9arr':'l9arrf','marker-end':'url(#l9v'+(on?'k':'g')+')'},on?gs:gf);
+    // punto de la flecha que queda dentro del gráfico
+    var t=1;if(!inside9(x1,y1,m,A)){var lo2=0,hi2=1;for(var it=0;it<40;it++){var mid=(lo2+hi2)/2;if(inside9(x0+dx*mid,y0+dy*mid,m,A))lo2=mid;else hi2=mid;}t=lo2;}
+    var lx=x0+dx*t,ly=y0+dy*t;
+    if(on){
+      var tt=MIN9[k].n+', '+pct+(t<1?' (se sale del gráfico)':'');
+      if(t<1){var ax=lx<m.l+A.pw/2?'start':'end';txt('text',{x:(lx+(ax==='start'?8:-8)).toFixed(1),y:(ly+(uy>0?-6:14)).toFixed(1),'text-anchor':ax,'class':'l9lab halo'},gl,tt);}
+      else labAt9(gl,lx,ly,ux,uy,9,tt,'l9lab');
+    }else if(t===1&&len>34){labAt9(gl,lx,ly,ux,uy,8,MIN9[k].n,'l9labf');}
+  });
+  mk('circle',{cx:x0,cy:y0,r:5,'class':'l9start'},F.s);
+  if(S9.o)txt('text',{x:x0,y:y0+22,'text-anchor':'middle','class':'l9lab halo'},F.s,'OFB parental');
+}
+function roV9(){
+  var mn=MIN9[S9.m],x=S9.x/100,ps=sfx9(mn.d,x);
+  document.getElementById('l9-xo').textContent=S9.x+' % (F = '+(1-x).toFixed(2)+')';
+  roSet9('l9-ro',[
+    {k:'ψ₀',c:'sym',v:x>0?fmtS(ps[0],3):'0',s:'nivel medio × '+Math.exp(ps[0]).toFixed(2)},
+    {k:'ψ₁',c:'sym',v:x>0?fmtS(ps[1],2):'0',s:'pendiente'},
+    {k:'ψ₂',c:'sym',v:x>0?fmtS(ps[2],1):'0',s:'curvatura'},
+    {k:'DIRECCIÓN δ₂/δ₁',c:'nc',v:fmtM(mn.d[2]/mn.d[1],1),s:'la fija el mineral, no el %'}
+  ]);
+  var sum=document.getElementById('l9-sum');
+  if(x<=0){sum.textContent='Sin cristalizar (F = 1), ln F = 0 y la flecha no tiene longitud.';return;}
+  var head='F = '+(1-x).toFixed(2)+', ln F = '+fmtM(Math.log(1-x),3)+'. ';
+  if(!S9.o)sum.textContent=head+'Desde (0, 0), la punta de la flecha es el propio vector: (ψ₁, ψ₂) = ('+fmtM(ps[1],2)+', '+fmtM(ps[2],1)+').';
+  else sum.textContent=head+'Punto final: λ₁ = '+fmtM(PAR9[1],2)+' + '+fmtM(ps[1],2).replace(/^−/,'(−')+(ps[1]<0?')':'')+' = '+fmtM(PAR9[1]+ps[1],2)+'; λ₂ = '+fmtM(PAR9[2],1)+' + '+fmtM(ps[2],1).replace(/^−/,'(−')+(ps[2]<0?')':'')+' = '+fmtM(PAR9[2]+ps[2],1)+'.';
+}
+function draw9a(){
+  segPress('#l9-sfx [data-m9]','data-m9',S9.m);segPress('#l9-sfx [data-o9]','data-o9',S9.o);
+  drawD9();drawG9();drawV9();roV9();
+}
+[].forEach.call(document.querySelectorAll('#l9-sfx [data-m9]'),function(b){b.addEventListener('click',function(){S9.m=b.getAttribute('data-m9');draw9a();});});
+[].forEach.call(document.querySelectorAll('#l9-sfx [data-o9]'),function(b){b.addEventListener('click',function(){S9.o=+b.getAttribute('data-o9');draw9a();});});
+document.getElementById('l9-x').addEventListener('input',function(){S9.x=+this.value;roV9();sched9('a',function(){drawG9();drawV9();});});
+
+/* ---------- Figura 9.2: fusión en equilibrio ---------- */
+var SRC9={
+  sp10:{n:'espinela, 10 kbar',m:[0.51,0.275,0.19,0.025],p:[-0.167,0.652,0.466,0.049],gt:false,c:'s1'},
+  gt30:{n:'granate, 30 kbar',m:[0.52,0.145,0.30,0.035],p:[0.05,-0.15,0.96,0.14],gt:true,c:'s2'},
+  gt40:{n:'granate, 40 kbar',m:[0.53,0.03,0.30,0.14],p:[0.25,-0.89,1.23,0.41],gt:true,c:'s3'}
+};
+var ORDS9=['sp10','gt30','gt40'];
+/* olivino (O’Neill & Jenner, 2012), opx y cpx (Yao et al., 2012), granate (Van Westrenen & Draper, 2007); espinela: D = 0 */
+var DM9=[[0.01,-0.10,1.4,-12,52],[0.04,-0.55,3.8,-5,-62],[0.30,-2.44,-6.6,142,-298],[2.35,-35.4,365,-1855,3276]];
+function bulk9(s,r){var D0=0,P=0;for(var k=0;k<4;k++){var v=(k===3&&!s.gt)?0:Dr9(DM9[k],r);D0+=s.m[k]*v;P+=s.p[k]*v;}return [D0,P];}
+function melt9(s,Fm){var g=s.b13.map(function(b){return -Math.log(b[0]-Fm*b[1]+Fm);});var psi=L5F.map(function(f){return dot5(g,f)/dot5(f,f);});return {g:g,psi:psi};}
+ORDS9.forEach(function(k){var s=SRC9[k];s.b13=L5X.map(function(r){return bulk9(s,r);});s.tr=[];for(var i=0;i<=76;i++){var Fp=1+i*0.25;s.tr.push({F:Fp,p:melt9(s,Fp/100).psi});}});
+var TKS9=[1,2,5,10,15,20];
+var SM9={s:'sp10',F:10,arrow:false};
+var AS9=[-8,-40],AT9=(function(){var p=melt9(SRC9.gt30,0.05).psi;return [p[1],p[2]];})(),AM9=[AS9[0]+AT9[0],AS9[1]+AT9[1]];
+function drawB9(){
+  var box=document.getElementById('l9-bulk');if(!box||!box.offsetParent)return;
+  var s=SRC9[SM9.s],bb=RG9.map(function(r){return bulk9(s,r);});
+  var all=[];bb.forEach(function(b){all.push(b[0],b[1]);});
+  var hi=Math.max.apply(null,all)*1.12,lo=Math.min(0,Math.min.apply(null,all));
+  var F=plotFrame(box,160,230,0.5),m={t:30,r:14,b:40,l:46};
+  var A=axesXY(F.s,m,F.W,F.H,0.968,1.169,lo,hi,rAx9,numFmt,'Radio iónico r (Å)','D',F.W>420?6:4,4);
+  F.s.setAttribute('aria-label','Coeficientes de reparto globales de la fuente ('+s.n+'): D0 y P frente al radio.');
+  clip9(F.s,'l9bc',m,A);var g=mk('g',{'clip-path':'url(#l9bc)'},F.s);
+  if(hi>1){mk('line',{x1:m.l,x2:m.l+A.pw,y1:A.sy(1),y2:A.sy(1),'class':'l9one'},g);txt('text',{x:m.l+A.pw-6,y:A.sy(1)-5,'text-anchor':'end','class':'l9t1 halo'},g,'D = 1');}
+  mk('polyline',{points:RG9.map(function(r,i){return A.sx(r).toFixed(1)+','+A.sy(bb[i][0]).toFixed(1);}).join(' '),'class':'l9bulk'},g);
+  mk('polyline',{points:RG9.map(function(r,i){return A.sx(r).toFixed(1)+','+A.sy(bb[i][1]).toFixed(1);}).join(' '),'class':'l9bulk p'},g);
+  txt('text',{x:A.sx(RG9[8]),y:A.sy(bb[8][0])-7,'text-anchor':'middle','class':'l9t1 halo'},g,'D⁰');txt('text',{x:A.sx(RG9[60]),y:A.sy(bb[60][1])-7,'text-anchor':'middle','class':'l9t1 halo'},g,'P');
+  elemRow(F.s,R13.map(function(e){return {x:A.sx(e.r),t:e.el};}),22);
+}
+function drawMG9(){
+  var box=document.getElementById('l9-mg');if(!box||!box.offsetParent)return;
+  var s=SRC9[SM9.s],Fm=SM9.F/100,res=melt9(s,Fm),g13=res.g,psi=res.psi,lnF=-Math.log(Fm);
+  var fit=function(r){var v=0;for(var n=0;n<5;n++){v+=psi[n]*fEval(L5R,n,r);}return v;},cv=RG9.map(fit);
+  var all=g13.concat(cv,[lnF]),lo=Math.min.apply(null,all),hi=Math.max.apply(null,all),pad=Math.max(0.08,(hi-lo)*0.1);lo-=pad;hi+=pad;
+  var F=plotFrame(box,170,240,0.52),m={t:30,r:14,b:40,l:52};
+  var A=axesXY(F.s,m,F.W,F.H,0.968,1.169,lo,hi,rAx9,numFmt,'Radio iónico r (Å)','ln([REE]/[REE]⁰)',F.W>420?6:4,4);
+  F.s.setAttribute('aria-label','Función del proceso de fusión en las 13 REE y su ajuste con cinco términos.');
+  clip9(F.s,'l9mgc',m,A);var g=mk('g',{'clip-path':'url(#l9mgc)'},F.s);
+  mk('line',{x1:m.l,x2:m.l+A.pw,y1:A.sy(lnF),y2:A.sy(lnF),'class':'l9lnf'},g);
+  var yl=A.sy(lnF);txt('text',{x:m.l+6,y:yl+(yl-m.t>18?-5:13),'class':'l9t1 halo'},g,'−ln F = '+fmtM(lnF,2));
+  mk('polyline',{points:RG9.map(function(r,i){return A.sx(r).toFixed(1)+','+A.sy(cv[i]).toFixed(1);}).join(' '),'class':'l9fit'},g);
+  L5X.forEach(function(r,i){mk('circle',{cx:A.sx(r).toFixed(1),cy:A.sy(g13[i]).toFixed(1),r:4,'class':'pdot'},g);});
+  elemRow(F.s,R13.map(function(e){return {x:A.sx(e.r),t:e.el};}),22);
+}
+function drawMD9(){
+  var box=document.getElementById('l9-mdia');if(!box||!box.offsetParent)return;
+  var F=plotFrame(box,260,400,0.98),m={t:12,r:14,b:44,l:50};
+  var A=axesXY(F.s,m,F.W,F.H,-10,25,-80,60,numFmt,numFmt,'λ₁ (pendiente)','λ₂ (curvatura)',F.W>380?7:5,7);
+  F.s.setAttribute('aria-label','Trayectorias de los vectores de fusión en equilibrio para tres fuentes, en el diagrama λ2–λ1.');
+  var defs=clip9(F.s,'l9mc',m,A);markers9(defs,'l9m');
+  var g=mk('g',{'clip-path':'url(#l9mc)'},F.s);zero9(g,A,m);cloud9(g,A);
+  var gl=mk('g',null,F.s);
+  var order=ORDS9.filter(function(k){return k!==SM9.s;}).concat([SM9.s]);
+  var placed=[];
+  order.forEach(function(k){
+    var s=SRC9[k],on=k===SM9.s;
+    mk('polyline',{points:poly9(s.tr,A,function(p){return p.p[1];},function(p){return p.p[2];}),'class':'l9tr '+s.c+(on?' on':'')},g);
+    TKS9.forEach(function(Fp){
+      var i=Math.round((Fp-1)/0.25),p=s.tr[i].p,x=A.sx(p[1]),y=A.sy(p[2]);
+      var a=s.tr[Math.max(0,i-1)].p,b=s.tr[Math.min(s.tr.length-1,i+1)].p,tx=A.sx(b[1])-A.sx(a[1]),ty=A.sy(b[2])-A.sy(a[2]),tl=Math.sqrt(tx*tx+ty*ty)||1;
+      var nx=-ty/tl,ny=tx/tl;if(ny<0){nx=-nx;ny=-ny;}
+      var hl=on?6:4;
+      mk('line',{x1:(x-nx*hl).toFixed(1),y1:(y-ny*hl).toFixed(1),x2:(x+nx*hl).toFixed(1),y2:(y+ny*hl).toFixed(1),'class':'l9tk '+s.c},g);
+      if(on&&inside9(x,y,m,A)){var lx=x+nx*9,ly=y+ny*9,free=placed.every(function(q){return Math.abs(q[0]-lx)>26||Math.abs(q[1]-ly)>13;});
+        if(free){placed.push([lx,ly]);labAt9(gl,x,y,nx,ny,9,Fp+' %','l9tl');}}
+    });
+  });
+  var s0=SRC9[SM9.s],p=melt9(s0,SM9.F/100).psi,cx=A.sx(p[1]),cy=A.sy(p[2]);
+  if(Math.abs(cx-A.sx(0))+Math.abs(cy-A.sy(0))>8)mk('line',{x1:A.sx(0),y1:A.sy(0),x2:cx,y2:cy,'class':'l9vec','marker-end':'url(#l9mi)'},g);
+  if(SM9.arrow){
+    var sx=A.sx(AS9[0]),sy=A.sy(AS9[1]),mx=A.sx(AM9[0]),my=A.sy(AM9[1]),tx2=A.sx(AT9[0]),ty2=A.sy(AT9[1]);
+    var shorten=function(x1,y1,x2,y2,d){var dx=x2-x1,dy=y2-y1,l=Math.sqrt(dx*dx+dy*dy)||1;return [x2-dx/l*d,y2-dy/l*d];};
+    var e1=shorten(sx,sy,mx,my,7);mk('line',{x1:sx,y1:sy,x2:e1[0],y2:e1[1],'class':'l9am','marker-end':'url(#l9mi)'},g);
+    var e2=shorten(A.sx(0),A.sy(0),tx2,ty2,2);mk('line',{x1:A.sx(0),y1:A.sy(0),x2:e2[0],y2:e2[1],'class':'l9amc','marker-end':'url(#l9mi)'},g);
+    mk('circle',{cx:tx2,cy:ty2,r:8,'class':'l9tip'},g);
+    mk('rect',{x:sx-5,y:sy-5,width:10,height:10,'class':'l9S'},g);mk('rect',{x:mx-5,y:my-5,width:10,height:10,'class':'l9M'},g);
+    txt('text',{x:sx-9,y:sy-7,'text-anchor':'end','class':'l9lab halo'},gl,'S');
+    txt('text',{x:mx+9,y:my+4,'class':'l9lab halo'},gl,'M');
+  }
+  mk('circle',{cx:cx,cy:cy,r:6,'class':'l9cur'},g);
+}
+function roM9(){
+  var s=SRC9[SM9.s],Fm=SM9.F/100,res=melt9(s,Fm),psi=res.psi,dev=0;
+  L5X.forEach(function(r,i){var f=0;for(var n=0;n<5;n++){f+=psi[n]*L5F[n][i];}dev=Math.max(dev,Math.abs(Math.exp(res.g[i]-f)-1));});
+  document.getElementById('l9-Fo').textContent=(SM9.F%1?SM9.F.toFixed(1):SM9.F)+' %';
+  roSet9('l9-mro',[
+    {k:'ψ₀',c:'sym',v:fmtM(psi[0],2),s:'−ln F = '+fmtM(-Math.log(Fm),2)},
+    {k:'ψ₁',c:'sym',v:fmtM(psi[1],2),s:'pendiente'},
+    {k:'ψ₂',c:'sym',v:fmtM(psi[2],1),s:'curvatura'},
+    {k:'AJUSTE, 5 TÉRMINOS',c:'nc',v:(dev*100).toFixed(2)+' %',s:'desviación máxima en las 13 REE'}
+  ]);
+  var msg=document.getElementById('l9-msg'),bL=s.b13[0],bU=s.b13[12],fL=1/(bL[0]-Fm*bL[1]+Fm),fU=1/(bU[0]-Fm*bU[1]+Fm);
+  var fx=function(v){return '×'+(v<10?v.toFixed(2):v.toFixed(1));};
+  msg.classList.remove('hit');
+  if(!SM9.arrow){msg.textContent='Con F = '+(SM9.F%1?SM9.F.toFixed(1):SM9.F)+' % ('+s.n+'), el La del fundido es '+fx(fL)+' el de la fuente y el Lu, '+fx(fU)+'.';return;}
+  var d=Math.sqrt(Math.pow((psi[1]-AT9[0])/35,2)+Math.pow((psi[2]-AT9[1])/140,2));
+  if(d<0.012){msg.classList.add('hit');msg.textContent='¡Coincide! La flecha S→M corresponde a la fusión de una fuente con granate a 30 kbar con F = 5 %. Comprobación con λ₀: el modelo da ψ₀ = '+fmtM(psi[0],2)+', así que la muestra debería tener un λ₀ '+fmtM(psi[0],2)+' mayor que la fuente.';}
+  else if(d<0.05)msg.textContent='Cerca. Ajusta F poco a poco hasta que el círculo de la trayectoria caiga dentro del anillo.';
+  else msg.textContent='Método de la flecha: la flecha continua va de la fuente supuesta S a la muestra M (inventadas); la discontinua es la misma flecha, trasladada a (0, 0). Cambia de fuente y mueve F hasta que el punto de la trayectoria caiga en el anillo de su punta.';
+}
+function draw9b(){
+  segPress('#l9-melt [data-f9]','data-f9',SM9.s);document.getElementById('l9-arw').setAttribute('aria-pressed',SM9.arrow?'true':'false');
+  drawB9();drawMG9();drawMD9();roM9();
+}
+[].forEach.call(document.querySelectorAll('#l9-melt [data-f9]'),function(b){b.addEventListener('click',function(){SM9.s=b.getAttribute('data-f9');draw9b();});});
+document.getElementById('l9-arw').addEventListener('click',function(){SM9.arrow=!SM9.arrow;draw9b();});
+document.getElementById('l9-F').addEventListener('input',function(){SM9.F=+this.value;roM9();sched9('b',function(){drawMG9();drawMD9();});});
+
+/* ---------- Figura 9.3: mezclas ---------- */
+var X9={b:1,p:50};
+var XC9={1:'b1',2:'b2'};
+function lamP9(ppm){var y=[];REE.forEach(function(e,i){if(e.el!=='Eu')y.push(Math.log(ppm[i]/e.ci));});return L5F.map(function(f){return dot5(y,f)/dot5(f,f);});}
+function mix9(b,x){var P=SAMPLES[3].ppm,Q=SAMPLES[b].ppm;return P.map(function(v,i){return (1-x)*v+x*Q[i];});}
+var CUR9={};[1,2].forEach(function(b){CUR9[b]=[];for(var i=0;i<=100;i++){CUR9[b].push(lamP9(mix9(b,i/100)));}});
+function drawXP9(){
+  var box=document.getElementById('l9-xpat');if(!box||!box.offsetParent)return;
+  var b=X9.b,x=X9.p/100,P=SAMPLES[3].ppm,Q=SAMPLES[b].ppm,Mx=mix9(b,x);
+  var yy=function(ppm){var o=[];REE.forEach(function(e,i){if(e.el!=='Eu')o.push({r:e.r,y:Math.log(ppm[i]/e.ci)});});return o;};
+  var sets=[{d:yy(P),c:'l9pa',dc:'pa'},{d:yy(Q),c:'l9pb '+XC9[b],dc:XC9[b]},{d:yy(Mx),c:'l9pm',dc:'pm'}];
+  var all=[];sets.forEach(function(s){s.d.forEach(function(p){all.push(p.y);});});
+  var lo=Math.min.apply(null,all),hi=Math.max.apply(null,all),pad=(hi-lo)*0.08;lo-=pad;hi+=pad;
+  var F=plotFrame(box,200,280,0.62),m={t:30,r:14,b:40,l:46};
+  var A=axesXY(F.s,m,F.W,F.H,0.968,1.169,lo,hi,rAx9,numFmt,'Radio iónico r (Å)','ln([REE]/[REE]CI)',F.W>420?6:4,5);
+  F.s.setAttribute('aria-label','Patrones de REE de 8-2.70, de '+SAMPLES[b].name+' y de su mezcla.');
+  clip9(F.s,'l9xpc',m,A);var g=mk('g',{'clip-path':'url(#l9xpc)'},F.s);
+  sets.forEach(function(s){
+    mk('polyline',{points:s.d.map(function(p){return A.sx(p.r).toFixed(1)+','+A.sy(p.y).toFixed(1);}).join(' '),'class':s.c},g);
+    s.d.forEach(function(p){mk('circle',{cx:A.sx(p.r).toFixed(1),cy:A.sy(p.y).toFixed(1),r:s.dc==='pm'?3.6:2.8,'class':'l9pd '+s.dc},g);});
+  });
+  elemRow(F.s,R13.map(function(e){return {x:A.sx(e.r),t:e.el};}),22);
+  var leg=document.getElementById('l9-xleg');
+  leg.innerHTML='<span><i class="pa"></i>8-2.70 (Hawái)</span><span><i class="'+XC9[b]+'"></i>'+SAMPLES[b].name+'</span><span><i class="pm"></i>mezcla con un '+X9.p+' % de '+SAMPLES[b].name+'</span>';
+}
+function drawXD9(){
+  var box=document.getElementById('l9-xdia');if(!box||!box.offsetParent)return;
+  var F=plotFrame(box,260,380,0.95),m={t:12,r:14,b:44,l:50};
+  var A=axesXY(F.s,m,F.W,F.H,-10,20,-80,60,numFmt,numFmt,'λ₁ (pendiente)','λ₂ (curvatura)',F.W>380?6:4,7);
+  F.s.setAttribute('aria-label','Curvas de mezcla de 8-2.70 con VG 304 y con VG 4080 en el diagrama λ2–λ1.');
+  clip9(F.s,'l9xdc',m,A);var g=mk('g',{'clip-path':'url(#l9xdc)'},F.s);zero9(g,A,m);cloud9(g,A);
+  var gl=mk('g',null,F.s),x=X9.p;
+  var order=[1,2].filter(function(b){return b!==X9.b;}).concat([X9.b]);
+  order.forEach(function(b){
+    var c=CUR9[b],on=b===X9.b,cl=XC9[b];
+    mk('line',{x1:A.sx(c[0][1]),y1:A.sy(c[0][2]),x2:A.sx(c[100][1]),y2:A.sy(c[100][2]),'class':'l9ch '+cl},g);
+    mk('polyline',{points:poly9(c,A,function(p){return p[1];},function(p){return p[2];}),'class':'l9x '+cl+(on?' on':'')},g);
+    [20,40,60,80].forEach(function(t){
+      var p=c[t],px=A.sx(p[1]),py=A.sy(p[2]);mk('circle',{cx:px.toFixed(1),cy:py.toFixed(1),r:on?3.4:2.6,'class':'l9xd '+cl},g);
+      if(on){var a=c[t-1],bq=c[t+1],tx=A.sx(bq[1])-A.sx(a[1]),ty=A.sy(bq[2])-A.sy(a[2]),tl=Math.sqrt(tx*tx+ty*ty)||1,nx=-ty/tl,ny=tx/tl;
+        if(b===1){if(ny>0){nx=-nx;ny=-ny;}}else{if(nx<0){nx=-nx;ny=-ny;}}
+        labAt9(gl,px,py,nx,ny,8,t+' %','l9tl');}
+    });
+    var q=c[x];
+    if(on&&x>0&&x<100){var sl=[c[0][1]+(c[100][1]-c[0][1])*x/100,c[0][2]+(c[100][2]-c[0][2])*x/100];
+      mk('line',{x1:A.sx(sl[0]).toFixed(1),y1:A.sy(sl[1]).toFixed(1),x2:A.sx(q[1]).toFixed(1),y2:A.sy(q[2]).toFixed(1),'class':'l9gap'},g);
+      mk('circle',{cx:A.sx(sl[0]).toFixed(1),cy:A.sy(sl[1]).toFixed(1),r:4.5,'class':'l9st'},g);}
+    mk('circle',{cx:A.sx(q[1]).toFixed(1),cy:A.sy(q[2]).toFixed(1),r:on?6.5:4.5,'class':'l9cur'},g);
+  });
+  var ends=[{i:3,dx:9,dy:4,a:'start'},{i:1,dx:0,dy:18,a:'middle'},{i:2,dx:9,dy:4,a:'start'}];
+  ends.forEach(function(e){var l=L6LAM[e.i],px=A.sx(l[1]),py=A.sy(l[2]);mk('circle',{cx:px,cy:py,r:5.5,'class':'exm'},F.s);txt('text',{x:px+e.dx,y:py+e.dy,'text-anchor':e.a,'class':'exl halo'},gl,SAMPLES[e.i].name);});
+}
+function roX9(){
+  var b=X9.b,x=X9.p/100,l=CUR9[b][X9.p],c=CUR9[b],st=[c[0][1]+(c[100][1]-c[0][1])*x,c[0][2]+(c[100][2]-c[0][2])*x],nm=SAMPLES[b].name;
+  document.getElementById('l9-po').textContent=X9.p+' % de '+nm;
+  roSet9('l9-xro',[
+    {k:'λ₀',c:'sym',v:fmtM(l[0],3),s:'mezcla'},
+    {k:'λ₁',c:'sym',v:fmtM(l[1],2),s:'mezcla'},
+    {k:'λ₂',c:'sym',v:fmtM(l[2],1),s:'mezcla'},
+    {k:'EN LA RECTA',v:'('+fmtM(st[0],2)+', '+fmtM(st[1],1)+')',s:'si se interpolaran los λ'}
+  ]);
+  var P=SAMPLES[3].ppm,Q=SAMPLES[b].ppm,Mx=mix9(b,x);
+  document.getElementById('l9-xmsg').textContent='Con un '+X9.p+' % de '+nm+': La = '+Mx[0].toFixed(2)+' ppm (entre '+P[0].toFixed(2)+' y '+Q[0].toFixed(2)+') y Lu = '+Mx[13].toFixed(3)+' ppm (entre '+P[13].toFixed(3)+' y '+Q[13].toFixed(3)+').';
+}
+function draw9c(){segPress('#l9-mix [data-x9]','data-x9',X9.b);drawXP9();drawXD9();roX9();}
+[].forEach.call(document.querySelectorAll('#l9-mix [data-x9]'),function(b){b.addEventListener('click',function(){X9.b=+b.getAttribute('data-x9');draw9c();});});
+document.getElementById('l9-p').addEventListener('input',function(){X9.p=+this.value;roX9();sched9('c',function(){drawXP9();drawXD9();});});
+
+window.__drawL9=function(){draw9a();draw9b();draw9c();};
+
+/* Ejercicios de la Lección 9 */
+document.getElementById('l9ex1').addEventListener('submit',function(ev){ev.preventDefault();
+  var v=num(document.getElementById('l9ex1-in').value);
+  if(isNaN(v)){feedback('l9ex1',false,'Escribe un número (vale el punto o la coma).');return;}
+  if(Math.abs(v+52.26)<0.3)feedback('l9ex1',true,'¡Correcto! ψ₂ = ln(0.9) × 496 = −0.1054 × 496 = −52.3. La flecha baja: el granate se lleva las REE pesadas y el patrón gana joroba.');
+  else if(Math.abs(v-52.26)<0.3)feedback('l9ex1',false,'Casi: revisa el signo. ln(0.9) es negativo.');
+  else if(Math.abs(v+38.46)<0.3)feedback('l9ex1',false,'Ese es el resultado con los coeficientes de Van Westrenen & Draper (δ₂ = 365). Aquí δ₂ = 496.');
+  else if(Math.abs(Math.abs(v)-4.18)<0.05)feedback('l9ex1',false,'Ese sería ψ₁, que se calcula con δ₁. Para ψ₂ usa δ₂ = 496.');
+  else if(Math.abs(Math.abs(v)-1142.1)<3)feedback('l9ex1',false,'F es la fracción de líquido que queda: 0.9, no 0.1.');
+  else feedback('l9ex1',false,'Aún no. Si cristaliza un 10 %, F = 0.9. Multiplica ln(0.9) por δ₂.');
+});
+SOL.l9ex1='Solución: F = 0.9 y ln(0.9) = −0.1054, así que ψ₂ = −0.1054 × 496 = −52.3 (y ψ₁ = −0.1054 × (−39.7) = +4.18).';
+[].forEach.call(document.querySelectorAll('[data-mc9]'),function(b){b.addEventListener('click',function(){
+  var k=b.getAttribute('data-mc9');
+  if(k==='l0')feedback('l9ex2',true,'¡Correcto! Los cristales de olivino casi no llevan REE: las diluyen todas por igual, en un factor 0.8. Solo cambia λ₀, que baja ln(0.8) = −0.22 (ecuación 8). La forma, λ₁ y λ₂, no cambia.');
+  else if(k==='l12')feedback('l9ex2',false,'No. El olivino casi no lleva REE, así que las diluye todas por igual. Un cambio igual en todas las REE solo mueve el nivel, λ₀.');
+  else feedback('l9ex2',false,'Casi: todas las concentraciones bajan en la misma proporción, pero en logaritmos eso es restar la misma cantidad a todas las y, y eso solo cambia λ₀. λ₁ y λ₂ miden la forma, que no cambia.');
+});});
+document.getElementById('l9ex3').addEventListener('submit',function(ev){ev.preventDefault();
+  var v=num(document.getElementById('l9ex3-in').value);
+  if(isNaN(v)){feedback('l9ex3',false,'Escribe un número (vale el punto o la coma).');return;}
+  if(Math.abs(v-0.2231)<0.006||Math.abs(v-22.31)<0.6)feedback('l9ex3',true,'¡Correcto! ψ₀ = 2.36 − 0.86 = 1.50 ≈ −ln F, así que F ≈ e^(−1.50) = 0.22: un 22 % de fusión. Es la estimación de O’Neill con la Tierra silicatada no condrítica de O’Neill & Palme (2008).');
+  else if(Math.abs(v-4.48)<0.05)feedback('l9ex3',false,'Has invertido la resta. El magma tiene más REE que su fuente, así que −ln F es positivo y F = e^(λ₀⁰ − λ₀) es menor que 1.');
+  else if(Math.abs(Math.abs(v)-1.5)<0.01)feedback('l9ex3',false,'Ese es ψ₀ = −ln F. Ahora deshaz el logaritmo: F = e^(−1.5).');
+  else feedback('l9ex3',false,'Aún no. ψ₀ = λ₀ − λ₀⁰ = 1.5 y ψ₀ ≈ −ln F, así que F = e^(−1.5).');
+});
+SOL.l9ex3='Solución: ψ₀ = 2.36 − 0.86 = 1.50 ≈ −ln F, así que F = e^(−1.50) = 0.22 (un 22 %).';
+[].forEach.call(document.querySelectorAll('[data-mc9b]'),function(b){b.addEventListener('click',function(){
+  var k=b.getAttribute('data-mc9b');
+  if(k==='log')feedback('l9ex4',true,'¡Correcto! Al mezclar se suman concentraciones (en ppm), pero los λ salen de ln([REE]/CI), y el logaritmo de una suma no es la suma de los logaritmos. Por eso la mezcla dibuja una curva.');
+  else if(k==='orto')feedback('l9ex4',false,'Las piezas son las mismas para todas las muestras y siguen siendo ortogonales. El problema está en qué se suma al mezclar.');
+  else feedback('l9ex4',false,'Los radios son propiedades de los iones y no cambian al mezclar. Piensa en qué se suma al mezclar: ¿concentraciones o logaritmos?');
+});});
+})();
+
+/* ---------------- Arranque ---------------- */
+var initial=(location.hash||'').replace('#','');
+if(!initial){try{initial=localStorage.getItem('oneill-curso-tab')||'';}catch(e){}}
+showTab(initial||'programa',{hash:false});
+renderTable();updateText();
+window.addEventListener('hashchange',function(){showTab((location.hash||'').replace('#',''),{hash:false});});
+var rt=0,lastW=0;
+var onResize=function(){
+  var w=document.querySelector('.page').clientWidth;if(w===lastW)return;lastW=w;
+  clearTimeout(rt);rt=setTimeout(function(){lab.cur=null;renderLab(false);renderRulers();if(window.__drawL2)window.__drawL2();if(window.__drawL3)window.__drawL3();if(window.__drawL4)window.__drawL4();if(window.__drawL5)window.__drawL5();if(window.__drawL6)window.__drawL6();if(window.__drawL7)window.__drawL7();if(window.__drawL8)window.__drawL8();if(window.__drawL9)window.__drawL9();},120);
+};
+if(window.ResizeObserver){new ResizeObserver(onResize).observe(document.querySelector('.page'));}else{window.addEventListener('resize',onResize);}
+})();
+</script>
+
+</body></html>
